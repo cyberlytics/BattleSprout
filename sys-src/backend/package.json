@@ -1,0 +1,15 @@
+{
+  "name": "battlesprout_backend",
+  "version": "1.0.0",
+  "description": "This is the backend for BattleSprout",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "jest": "^29.5.0"
+  }
+}
