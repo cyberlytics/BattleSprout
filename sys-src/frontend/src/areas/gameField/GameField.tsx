@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material';
 
-export const MainMenu = () => {
+//Spielfeld Komponente
+export const GameFIeld = () => {
     return <Typography variant='h2'>{'Spielfeld'}</Typography>;
 };
