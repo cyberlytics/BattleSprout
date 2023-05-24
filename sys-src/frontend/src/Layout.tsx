@@ -52,6 +52,12 @@ export const Layout = () => {
                         >
                             Spielfeld
                         </Button>
+                        <Button
+                            onClick={() => navigate('/CreateGame')}
+                            style={{ color: 'white' }}
+                        >
+                            Spiel erstellen
+                        </Button>
                     </Box>
                 </Toolbar>
             </AppBar>
