@@ -2,8 +2,9 @@
   "name": "battlesprout_backend",
   "version": "1.0.0",
   "description": "This is the backend for BattleSprout",
-  "main": "src/index.js",
+  "main": "src/index.ts",
   "scripts": {
+    "start": "nodemon src/index.ts",
     "test": "jest"
   },
   "author": "",
@@ -16,6 +17,8 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@types/uuid": "^9.0.1"
+    "@types/express": "^4.17.17",
+    "@types/uuid": "^9.0.1",
+    "ts-node": "^10.9.1"
   }
 }
