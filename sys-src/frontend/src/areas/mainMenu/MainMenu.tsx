@@ -44,7 +44,7 @@ export const MainMenu = () => {
                 </Grid>
                 <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                     <MenuTile
-                        icon={<AddCircleOutlined fontSize='large' />}
+                        icon={AddCircleOutlined}
                         title='Spiel erstellen'
                         content='Erstelle ein Spiel, dem ein anderer beitreten kann'
                         link='/createGame'
@@ -52,7 +52,7 @@ export const MainMenu = () => {
                 </Grid>
                 <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                     <MenuTile
-                        icon={<GroupAdd fontSize='large' />}
+                        icon={GroupAdd}
                         title='Spiel beitreten'
                         content='Tritt einem Spiel bei'
                         link='/joinGame'
@@ -60,7 +60,7 @@ export const MainMenu = () => {
                 </Grid>
                 <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                     <MenuTile
-                        icon={<FormatListNumbered fontSize='large' />}
+                        icon={FormatListNumbered}
                         title='Rangliste'
                         content='Sehe dir deine und andere Statistiken an'
                         link='/leaderBoard'

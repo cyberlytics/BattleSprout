@@ -3,13 +3,18 @@ import {
     ButtonBase,
     Divider,
     Grid,
+    Icon,
     Paper,
+    SvgIconTypeMap,
     Typography,
 } from '@mui/material';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { useNavigate } from 'react-router-dom';
 
 interface IProps {
-    icon: JSX.Element;
+    icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & {
+        muiName: string;
+    };
     title: string;
     content: string;
     link: string;
@@ -38,7 +43,7 @@ export const MenuTile = (props: IProps) => {
                 }}
                 onClick={() => navigate(link)}
             >
-                {icon}
+                <Icon component={icon} fontSize='large' />
                 <Divider
                     orientation='vertical'
                     flexItem
