@@ -1,7 +1,15 @@
-import { ButtonBase, Grid, Paper, Typography } from '@mui/material';
+import {
+    Box,
+    ButtonBase,
+    Divider,
+    Grid,
+    Paper,
+    Typography,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 interface IProps {
+    icon: JSX.Element;
     title: string;
     content: string;
     link: string;
@@ -10,7 +18,7 @@ interface IProps {
 
 //Ein Element auf der Startseite
 export const MenuTile = (props: IProps) => {
-    const { title, content, link, children } = props;
+    const { icon, title, content, link, children } = props;
 
     const navigate = useNavigate();
 
@@ -30,19 +38,27 @@ export const MenuTile = (props: IProps) => {
                 }}
                 onClick={() => navigate(link)}
             >
-                <Grid>
-                    <Grid item xs={12}>
-                        <Typography variant='h4'>{title}</Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Typography variant='body1'>{content}</Typography>
-                    </Grid>
-                    {children && (
+                {icon}
+                <Divider
+                    orientation='vertical'
+                    flexItem
+                    style={{ marginLeft: 15, marginRight: 15 }}
+                />
+                <Box style={{ display: 'flex', flexDirection: 'column' }}>
+                    <Grid>
                         <Grid item xs={12}>
-                            {children}
+                            <Typography variant='h4'>{title}</Typography>
                         </Grid>
-                    )}
-                </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant='body1'>{content}</Typography>
+                        </Grid>
+                        {children && (
+                            <Grid item xs={12}>
+                                {children}
+                            </Grid>
+                        )}
+                    </Grid>
+                </Box>
             </ButtonBase>
         </Paper>
     );
