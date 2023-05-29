@@ -1,8 +1,0 @@
-{
-    "name": "battlesprout-root",
-    "version": "1.0.0",
-    "scripts": {
-        "start": "cd sys-src && cd frontend && npm start",
-        "install": "cd sys-src && cd frontend && npm install"
-    }
-}
