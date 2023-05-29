@@ -7,7 +7,7 @@ import {
     Toolbar,
     Typography,
 } from '@mui/material';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 //zum Teste  der Navigation und der Komponenten
 export const Layout = () => {
