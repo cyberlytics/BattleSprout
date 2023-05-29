@@ -14,8 +14,12 @@ import {
 } from '@mui/icons-material'
 import background from './../../assets/background.png'
 
+//import db from './../../../../backend/src/db';
+
 //Login ist das erste, was der Nutzter sieht, wenn er die Website aufruft
 export const Login = () => {
+    const [Password, setPasswort] = React.useState('')
+    const [Username, setUsername] = React.useState('')
     const [checked, setChecked] = React.useState(true);
     const handleChange = (event: {
         target: { checked: boolean | ((prevState: boolean) => boolean) };
@@ -55,6 +59,7 @@ export const Login = () => {
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <TextField
+                            onChange={handleUsernameChange}
                                 label='Benutzername'
                                 style={{ background: '#bbd8b1'}}
                                 InputProps={{
@@ -68,6 +73,7 @@ export const Login = () => {
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <TextField
+                            onChange={handlePasswordChange}
                                 label='Passwort'
                                 type="password"
                                 style={{ background: '#bbd8b1'}}
@@ -94,6 +100,7 @@ export const Login = () => {
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <Button
+                            onClick={CheckLoginData}
                                 fullWidth
                                 style={{
                                     background: '#bbd8b1',
@@ -119,4 +126,35 @@ export const Login = () => {
             </Grid>
         </>
     );
+    
+function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
+    setPasswort(event.target.value);
+  }
+
+  function handleUsernameChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
+    setUsername(event.target.value);
+  }
+
+  function CheckLoginData(){
+    var query = {
+        "$and": [
+            {
+                "Usercredentails.password": Password
+            },
+            {
+                "Usercredentails.username": Username
+            }
+        ]
+    };    
+
+    //Connect to DB
+   // db.connect()
+    
+    //var test = db.FindOne('Usercredentials', 'Usercredentials', query)
+    //console.log(test)
+   
+    
+   
+    
+  }
 };
