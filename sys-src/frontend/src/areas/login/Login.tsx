@@ -8,14 +8,18 @@ import {
     Typography,
     InputAdornment,
 } from '@mui/material';
-import { AccountCircle, Lock } from '@mui/icons-material';
+import {
+    AccountCircle,
+    Lock,
+} from '@mui/icons-material'
+import background from './../../assets/background.png'
+import axios from 'axios';
 
-//import db from './../../../../backend/src/db';
 
 //Login ist das erste, was der Nutzter sieht, wenn er die Website aufruft
 export const Login = () => {
-    const [Password, setPasswort] = React.useState('');
-    const [Username, setUsername] = React.useState('');
+    const [Password, setPasswort] = React.useState('')
+    const [email, setUsername] = React.useState('')
     const [checked, setChecked] = React.useState(true);
     const handleChange = (event: {
         target: { checked: boolean | ((prevState: boolean) => boolean) };
@@ -26,6 +30,32 @@ export const Login = () => {
     const xsValue = 12;
     const mdValue = 6;
     const lgValue = 4;
+
+
+    function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){        
+        setPasswort(event.target.value);
+        
+    }
+    
+
+  function handleUsernameChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
+    setUsername(event.target.value);
+  }
+
+  async function CheckLoginData(){
+        try
+        {
+            const url = "http://localhost:3000/api/auth";
+            const { data: res } = await axios.post(url, {email,Password});
+            localStorage.setItem("token", res.data);
+
+            
+        }
+        catch (error)
+        {
+            console.log(error)
+        }    
+    }
 
     return (
         <>
@@ -65,8 +95,9 @@ export const Login = () => {
                             <TextField
                                 onChange={handlePasswordChange}
                                 label='Passwort'
-                                type='password'
-                                style={{ background: '#bbd8b1' }}
+                                type="password"
+                                value={Password}
+                                style={{ background: '#bbd8b1'}}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
@@ -112,36 +143,5 @@ export const Login = () => {
                 </Grid>
             </Grid>
         </>
-    );
-
-    function handlePasswordChange(
-        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) {
-        setPasswort(event.target.value);
-    }
-
-    function handleUsernameChange(
-        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) {
-        setUsername(event.target.value);
-    }
-
-    function CheckLoginData() {
-        var query = {
-            $and: [
-                {
-                    'Usercredentails.password': Password,
-                },
-                {
-                    'Usercredentails.username': Username,
-                },
-            ],
-        };
-
-        //Connect to DB
-        // db.connect()
-
-        //var test = db.FindOne('Usercredentials', 'Usercredentials', query)
-        //console.log(test)
-    }
+    );    
 };
