@@ -15,7 +15,7 @@ async function InsertOne(databaseName: string, collectionName: string, object: a
     try {
         const db: Db = client.db(databaseName);
         const collection: Collection<any> = db.collection(collectionName);
-        const result = await collection.insertOne(object);
+        const result = await collection.insertOne(object);        
         return result;
     } catch (err) {
         console.error(err);

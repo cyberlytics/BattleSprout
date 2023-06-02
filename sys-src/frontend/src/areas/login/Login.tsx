@@ -18,7 +18,7 @@ import axios from 'axios';
 
 //Login ist das erste, was der Nutzter sieht, wenn er die Website aufruft
 export const Login = () => {
-    const [Password, setPasswort] = React.useState('')
+    const [password, setPasswort] = React.useState('')
     const [email, setUsername] = React.useState('')
     const [checked, setChecked] = React.useState(true);
     const handleChange = (event: {
@@ -45,9 +45,10 @@ export const Login = () => {
   async function CheckLoginData(){
         try
         {
-            const url = "http://localhost:3000/api/auth";
-            const { data: res } = await axios.post(url, {email,Password});
+            const url = "http://localhost:3000/api/signup";
+            const { data: res } = await axios.post(url, {email,password});
             localStorage.setItem("token", res.data);
+            console.log(res)
 
             
         }
@@ -96,7 +97,7 @@ export const Login = () => {
                                 onChange={handlePasswordChange}
                                 label='Passwort'
                                 type="password"
-                                value={Password}
+                                value={password}
                                 style={{ background: '#bbd8b1'}}
                                 InputProps={{
                                     startAdornment: (
