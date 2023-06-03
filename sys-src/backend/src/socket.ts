@@ -2,11 +2,12 @@ import { Server as HTTPServer } from 'http';
 import { Socket, Server } from 'socket.io';
 import { v4 } from 'uuid';
 
+/* Kümmert sich um die Verbindung und öffnet Socket-Server, beinhaltet StartListeners für Socket-Verbindung */
+
 export class ServerSocket {
     public static instance: ServerSocket;
     public io: Server;
 
-    /** Master list of all connected users */
     public users: { [uid: string]: string };
 
     constructor(server: HTTPServer) {
