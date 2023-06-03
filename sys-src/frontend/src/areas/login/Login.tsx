@@ -19,7 +19,7 @@ import axios from 'axios';
 //Login ist das erste, was der Nutzter sieht, wenn er die Website aufruft
 export const Login = () => {
     const [password, setPasswort] = React.useState('')
-    const [email, setUsername] = React.useState('')
+    const [email, setEmail] = React.useState('')
     const [checked, setChecked] = React.useState(true);
     const handleChange = (event: {
         target: { checked: boolean | ((prevState: boolean) => boolean) };
@@ -38,17 +38,17 @@ export const Login = () => {
     }
     
 
-  function handleUsernameChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
-    setUsername(event.target.value);
+  function handleEmailChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
+    setEmail(event.target.value);
   }
 
   async function CheckLoginData(){
         try
         {
-            const url = "http://localhost:3000/api/signup";
+            const url = "http://localhost:3000/api/login";
             const { data: res } = await axios.post(url, {email,password});
             localStorage.setItem("token", res.data);
-            console.log(res)
+            alert("Sie sind eingeloggt")
 
             
         }
@@ -80,9 +80,9 @@ export const Login = () => {
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <TextField
-                                onChange={handleUsernameChange}
-                                label='Benutzername'
-                                style={{ background: '#bbd8b1' }}
+                            onChange={handleEmailChange}
+                                label='Email'
+                                style={{ background: '#bbd8b1'}}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
@@ -137,7 +137,10 @@ export const Login = () => {
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <Typography>
                                 Noch kein Account? Jetzt
-                                <Button href=''>registrieren!</Button>
+                                <Button style={{color: 'blue'}}
+                                    href='/signup'>
+                                        registrieren!
+                                </Button>                                
                             </Typography>
                         </Grid>
                     </Grid>
