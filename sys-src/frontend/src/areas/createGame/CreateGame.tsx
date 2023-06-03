@@ -1,3 +1,4 @@
+import React, { PropsWithChildren, useContext } from 'react';
 import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Radio from '@mui/material/Radio';
@@ -6,15 +7,20 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import background from './../../assets/background.png';
+import SocketContext from '../../socket/Context';
 
 //Spiel erstellen-Komponente mit Socket-IO Informationen
 
-export const CreateGame = () => {
+interface IApplicationProps {}
+
+export const CreateGame: React.FunctionComponent<IApplicationProps> = (props) => {
+    const { socket, uid, users } = useContext(SocketContext).SocketState;
     return (
         <>
             <div style={{paddingTop: 50, paddingBottom: 300, paddingLeft: 100, backgroundImage: `url(${background})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center"}}>
                 <Typography variant='h2'
                     style={{
+                        color: "#45ad45",
                         margin: 30
                     }}
                 >
@@ -49,6 +55,16 @@ export const CreateGame = () => {
                     <div id='copyLinkBox'>
                         {/** Hier stehen spaeter die SocketIO Informationen */}
                         <Typography variant='body1'>https://unserlink-gruppenraumxyz.de</Typography>
+                    </div>
+                    <div
+                        style={{
+                            marginTop: 30
+                        }}
+                    >
+                        <Typography variant='body1'>SocketIO Informationen:</Typography>
+                        <Typography variant='body2'>User ID: {uid}</Typography>
+                        <Typography variant='body2'>Anzahl Online-User: {users.length}</Typography>
+                        <Typography variant='body2'>Socket ID: {socket?.id}</Typography>
                     </div>
                 </div>
                 <div
