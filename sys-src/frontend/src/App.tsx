@@ -7,6 +7,7 @@ import { Login } from './areas/login/Login';
 import { MainMenu } from './areas/mainMenu/MainMenu';
 import { CreateGame } from './areas/createGame/CreateGame';
 import { ThemeProvider, createTheme } from '@mui/material';
+import { Signup } from './areas/signup/signup';
 import './App.css';
 
 //colors to use in the project with material ui
@@ -31,6 +32,7 @@ export const App = () => {
                     <Route path='/' Component={Layout}>
                         <Route index Component={MainMenu} />
                         <Route path='Login' Component={Login} />
+                        <Route path='Signup' Component={Signup}/>
                         <Route path='GameField' Component={GameFIeld} />
                         <Route path='CreateGame' Component={CreateGame} />
                         <Route path='Ranking' Component={Ranking} />
