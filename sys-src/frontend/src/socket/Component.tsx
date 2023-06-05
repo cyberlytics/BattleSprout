@@ -10,7 +10,7 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
     const [SocketState, SocketDispatch] = useReducer(SocketReducer, defaultSocketContextState);
     const [loading, setLoading] = useState(true);
 
-    const socket = useSocket('ws://localhost:1337', {
+    const socket = useSocket('ws://localhost:3000', {
         reconnectionAttempts: 5,
         reconnectionDelay: 5000,
         autoConnect: false
@@ -64,6 +64,8 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
         socket.io.on('reconnect_failed', () => {
             console.info('Reconenction failure');
             alert('Wir konnten Sie nicht mit dem Web-Socket verbinden.');
+
+            setLoading(false);
         });
     };
 
