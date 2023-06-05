@@ -31,7 +31,7 @@ export const App = () => {
                     <Route path='/' Component={Layout}>
                         <Route index Component={MainMenu} />
                         <Route path='Login' Component={Login} />
-                        <Route path='GameField' Component={GameFIeld} />
+                        <Route path='GameField' Component={GameField} />
                         <Route path='CreateGame' Component={CreateGame} />
                         <Route path='Ranking' Component={Ranking} />
                         <Route path='*' Component={NoPage} />
