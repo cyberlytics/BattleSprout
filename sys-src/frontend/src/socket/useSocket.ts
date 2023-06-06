@@ -11,4 +11,6 @@ export const useSocket = (
             if (socket) socket.close();
         };
     }, [socket]);
+
+    return socket;
 };
