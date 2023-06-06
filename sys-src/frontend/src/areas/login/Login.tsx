@@ -51,7 +51,8 @@ export const Login = () => {
             const url = "http://localhost:3000/api/login";
             const { data: res } = await axios.post(url, {email,password});
             localStorage.setItem("token", res.data);
-            navigate('/my/MainMenu')            
+            navigate('/MainMenu') 
+            window.location.reload()
         }
         catch (error)
         {

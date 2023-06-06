@@ -64,7 +64,7 @@ export const Layout = () => {
 
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                         <Button
-                            onClick={() => navigate('/my/MainMenu')}
+                            onClick={() => navigate('/MainMenu')}
                             style={{ color: 'white' }}
                         >
                             Hauptmenü
@@ -82,7 +82,7 @@ export const Layout = () => {
                             Spielfeld
                         </Button>
                         <Button
-                            onClick={() => navigate('/my/CreateGame')}
+                            onClick={() => navigate('/CreateGame')}
                             style={{ color: 'white' }}
                         >
                             Spiel erstellen
