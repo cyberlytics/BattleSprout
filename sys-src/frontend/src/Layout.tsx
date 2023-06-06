@@ -21,7 +21,13 @@ import { FriendList } from './areas/friendList/FriendList';
 
 //zum Testen der Navigation und der Komponenten
 export const Layout = () => {
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
+
+    function logout(){
+        localStorage.removeItem('token');
+        navigate('/')
+        window.location.reload()
+    }
 
     const [openHelpDialog, setOpenHelpDialog] = useState<boolean>(false);
 
@@ -80,6 +86,12 @@ export const Layout = () => {
                             style={{ color: 'white' }}
                         >
                             Spiel erstellen
+                        </Button>
+                        <Button
+                            onClick={logout}
+                            style={{ color: 'white' }}
+                        >
+                            Abmelden
                         </Button>
                     </Box>
                 </Toolbar>
