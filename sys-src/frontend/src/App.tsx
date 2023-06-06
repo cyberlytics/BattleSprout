@@ -25,15 +25,26 @@ const theme = createTheme({
 //Oberste Komponente des Projekts, ist für die Navigation per URL zuständig
 //App Komponente ist immer geladen
 export const App = () => {
-    return (
+    if(localStorage.getItem('token') == null){
+       return(
         <ThemeProvider theme={theme}>
             <BrowserRouter>
                 <Routes>
                     <Route path='/' Component={Login}/>
-                    <Route path='/signup' Component={Signup}/>
-
-                    <Route path='/my' Component={Layout}>
-                        <Route path='MainMenu' Component={MainMenu} />
+                    <Route path='/signup' Component={Signup}/>              
+                </Routes>
+            </BrowserRouter>
+        </ThemeProvider>
+        );
+    }
+    
+    return (
+        
+        <ThemeProvider theme={theme}>
+            <BrowserRouter>
+                <Routes>
+                    <Route path='/' Component={Layout}>
+                        <Route index path='MainMenu' Component={MainMenu} />
                         <Route path='Dashboard' Component={Dashboard} />
                         <Route index path='Login' Component={Login} />
                         <Route path='Signup' Component={Signup}/>
