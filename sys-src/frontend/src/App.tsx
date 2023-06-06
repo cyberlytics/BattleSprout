@@ -29,9 +29,13 @@ export const App = () => {
         <ThemeProvider theme={theme}>
             <BrowserRouter>
                 <Routes>
-                    <Route path='/' Component={Layout}>
-                        <Route index Component={MainMenu} />
-                        <Route path='Login' Component={Login} />
+                    <Route path='/' Component={Login}/>
+                    <Route path='/signup' Component={Signup}/>
+
+                    <Route path='/my' Component={Layout}>
+                        <Route path='MainMenu' Component={MainMenu} />
+                        <Route path='Dashboard' Component={Dashboard} />
+                        <Route index path='Login' Component={Login} />
                         <Route path='Signup' Component={Signup}/>
                         <Route path='GameField' Component={GameFIeld} />
                         <Route path='CreateGame' Component={CreateGame} />

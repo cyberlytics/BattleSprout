@@ -14,6 +14,8 @@ import {
 } from '@mui/icons-material'
 import background from './../../assets/background.png'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 
 //Login ist das erste, was der Nutzter sieht, wenn er die Website aufruft
@@ -21,6 +23,7 @@ export const Login = () => {
     const [password, setPasswort] = React.useState('')
     const [email, setEmail] = React.useState('')
     const [checked, setChecked] = React.useState(true);
+    const navigate = useNavigate();
     const handleChange = (event: {
         target: { checked: boolean | ((prevState: boolean) => boolean) };
     }) => {
@@ -48,9 +51,7 @@ export const Login = () => {
             const url = "http://localhost:3000/api/login";
             const { data: res } = await axios.post(url, {email,password});
             localStorage.setItem("token", res.data);
-            alert("Sie sind eingeloggt")
-
-            
+            navigate('/my/MainMenu')            
         }
         catch (error)
         {
