@@ -64,7 +64,7 @@ export const MainMenu = () => {
                         icon={FormatListNumbered}
                         title='Rangliste'
                         content='Sehe dir deine und andere Statistiken an'
-                        link='/leaderBoard'
+                        link='/ranking'
                     />
                 </Grid>
                 <Grid item xs={12}>

@@ -110,6 +110,7 @@ export const FriendList = () => {
         <Tooltip title="Freundesliste" placement='right'>
             <IconButton
                 aria-label='open Drawer'
+                data-testid='Open-Drawer-Button'
                 onClick={toggleDrawer(true)}>
                 <Menu/>
             </IconButton>
@@ -123,10 +124,11 @@ export const FriendList = () => {
         >
             <Box>
                 <Tooltip title="Schließen" placement='bottom'>
-                    <IconButton sx={{margin: 1, float: 'right'}}>
-                        <Close
-                            onClick={toggleDrawer(false)}
-                        />
+                    <IconButton 
+                        sx={{margin: 1, float: 'right'}}
+                        onClick={toggleDrawer(false)}
+                    >
+                        <Close/>
                     </IconButton>
                 </Tooltip>
 
@@ -149,6 +151,7 @@ export const FriendList = () => {
                     </Grid>
                     <Grid item>
                         <TextField
+                            inputProps={{ "data-testid": "Input-Friend-Name" }}
                             placeholder='Name'
                             value={friend}
                             onChange={handleChange}
@@ -156,8 +159,9 @@ export const FriendList = () => {
                         />
                     </Grid>
                     <Grid item>
-                        <Tooltip title="Freund hunzufügen" placement='bottom'>
+                        <Tooltip title="Freund hinzufügen" placement='bottom'>
                             <IconButton
+                                data-testid='Add-Friend-Button'
                                 onClick={AddFriend}
                                 sx={{marginLeft: 3}}
                                 >

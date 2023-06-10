@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './Layout';
 import { NoPage } from './NoPage';
+import { Ranking } from './areas/ranking/Ranking';
 import { Dashboard } from './areas/dashboard/Dashboard';
 import { GameFIeld } from './areas/gameField/GameField';
 import { Login } from './areas/login/Login';
@@ -33,6 +34,7 @@ export const App = () => {
                         <Route path='Login' Component={Login} />
                         <Route path='GameField' Component={GameFIeld} />
                         <Route path='CreateGame' Component={CreateGame} />
+                        <Route path='Ranking' Component={Ranking} />
                         <Route path='*' Component={NoPage} />
                     </Route>
                 </Routes>
