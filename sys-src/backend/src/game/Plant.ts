@@ -22,7 +22,7 @@ class Plant {
         }
     }
 
-    public isAllPlantTilesSplashed(){
+    public  isAllPlantTilesSplashed(){
         return this.plantTiles.every(plantTile => plantTile.isSplashed);
     }
 
