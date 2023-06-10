@@ -1,5 +1,7 @@
-
-import {handleSplash, handleTurnChanged} from "../Socket/Handler/ResponseHandler";
+import {
+    handleSplash,
+    handleTurnChanged,
+} from '../Socket/Handler/ResponseHandler';
 
 enum GameState {
     JOINING,
@@ -32,7 +34,9 @@ export class Game {
 
     public joinGame(playerName: string): void {
         if (this.gameState !== GameState.JOINING || this.players.length >= 2) {
-            throw new Error("Cannot join game in current state or game is full.");
+            throw new Error(
+                'Cannot join game in current state or game is full.'
+            );
         }
 
         this.players.push(new Player(playerName));
@@ -44,7 +48,7 @@ export class Game {
 
     public setPlantTile(playerName: string, plant: Plant): void {
         if (this.gameState !== GameState.SETUP) {
-            throw new Error("Cannot set plant tile in current state.");
+            throw new Error('Cannot set plant tile in current state.');
         }
 
         const player = this.getPlayerByName(playerName);
@@ -53,26 +57,26 @@ export class Game {
 
     public playerReady(playerName: string): void {
         if (this.gameState !== GameState.SETUP) {
-            throw new Error("Cannot mark player ready in current state.");
+            throw new Error('Cannot mark player ready in current state.');
         }
 
         const player = this.getPlayerByName(playerName);
         player.ready = true;
 
-        if (this.players.every(p => p.ready)) {
+        if (this.players.every((p) => p.ready)) {
             this.gameState = GameState.PLAYING;
         }
     }
 
     public processSplash(playerName: string, splash: Vector2): void {
         if (this.gameState !== GameState.PLAYING) {
-            throw new Error("Cannot process splash in current state.");
+            throw new Error('Cannot process splash in current state.');
         }
 
         const player = this.getPlayerByName(playerName);
 
         if (player !== this.players[this.currentPlayerIndex]) {
-            throw new Error("Not your turn.");
+            throw new Error('Not your turn.');
         }
 
         const opponent = this.players[(this.currentPlayerIndex + 1) % 2];
@@ -86,18 +90,22 @@ export class Game {
             opponent.board.isBoardEndState();
         }
 
-        var message = { x: splash.x, y: splash.y, hit: splashResult.hit, sunk: splashResult.sunk };
+        var message = {
+            x: splash.x,
+            y: splash.y,
+            hit: splashResult.hit,
+            sunk: splashResult.sunk,
+        };
 
         handleSplash(this.getNameOfAllPlayers(), message);
-
     }
 
     private getNameOfAllPlayers(): string[] {
-        return this.players.map(p => p.name);
+        return this.players.map((p) => p.name);
     }
 
     private getPlayerByName(playerName: string): Player {
-        const player = this.players.find(p => p.name === playerName);
+        const player = this.players.find((p) => p.name === playerName);
 
         if (!player) {
             throw new Error(`Player ${playerName} not found.`);
@@ -109,7 +117,9 @@ export class Game {
     private changeTurn(): void {
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 2;
 
-
-        handleTurnChanged(this.getNameOfAllPlayers() , this.players[this.currentPlayerIndex].name);
+        handleTurnChanged(
+            this.getNameOfAllPlayers(),
+            this.players[this.currentPlayerIndex].name
+        );
     }
 }
