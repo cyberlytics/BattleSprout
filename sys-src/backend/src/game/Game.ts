@@ -1,3 +1,6 @@
+
+import {handleSplash, handleTurnChanged} from "../Socket/Handler/ResponseHandler";
+
 enum GameState {
     JOINING,
     SETUP,
@@ -16,7 +19,7 @@ class Player {
     }
 }
 
-class Game {
+export class Game {
     private players: Player[];
     private currentPlayerIndex: number;
     private gameState: GameState;
@@ -82,16 +85,15 @@ class Game {
         if (splashResult.sunk) {
             opponent.board.isBoardEndState();
         }
+
+        var message = { x: splash.x, y: splash.y, hit: splashResult.hit, sunk: splashResult.sunk };
+
+        handleSplash(this.getNameOfAllPlayers(), message);
+
     }
 
-    private getPlayerByIndex(playerIndex: number): Player {
-        const player = this.players[playerIndex];
-
-        if (!player) {
-            throw new Error(`Player ${playerIndex} not found.`);
-        }
-
-        return player;
+    private getNameOfAllPlayers(): string[] {
+        return this.players.map(p => p.name);
     }
 
     private getPlayerByName(playerName: string): Player {
@@ -106,5 +108,8 @@ class Game {
 
     private changeTurn(): void {
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 2;
+
+
+        handleTurnChanged(this.getNameOfAllPlayers() , this.players[this.currentPlayerIndex].name);
     }
 }

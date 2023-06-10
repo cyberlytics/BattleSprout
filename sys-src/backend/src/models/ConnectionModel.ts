@@ -1,10 +1,11 @@
+import {Socket} from "socket.io";
 
 export interface IConnectionState{
 
     playerID:string;
     connectionState: string;
     gameID: string;
-    socketID: string;
+    socket : Socket;
 }
 
 export const connectionList: IConnectionState[] = [];
