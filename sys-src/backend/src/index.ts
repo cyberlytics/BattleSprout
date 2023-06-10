@@ -1,4 +1,4 @@
-import { ServerSocket } from './socket';
+import { ServerSocket } from './Socket/socket';
 
 import express, { Application } from 'express';
 import http from 'http';
