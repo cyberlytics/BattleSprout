@@ -1,5 +1,4 @@
 import {
-    Fab,
     Grid,
     Typography,
     Dialog,
@@ -7,32 +6,46 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
+    Button,
+    TextField,
     IconButton,
     Tooltip,
 } from '@mui/material';
 import { MenuTile } from './components/MenuTile';
 import {
     AddCircleOutlined,
-    Close,
+    Delete,
     FormatListNumbered,
     GroupAdd,
-    Help,
 } from '@mui/icons-material';
 import { useState } from 'react';
-import background from './../../assets/background.png';
-import logo from './../../assets/battlesprout.png';
+import { useNavigate } from 'react-router-dom';
 
 //Hauptmenü des Spiels. Von hier aus soll der Nutzer überall hinkommen.
 export const MainMenu = () => {
-    const [openHelpDialog, setOpenHelpDialog] = useState<boolean>(false);
+    const [openJoinDialog, setOpenJoinDialog] = useState(false);
+    const [joinText, setJoinText] = useState('');
 
-    const handleClickOpen = () => {
-        setOpenHelpDialog(true);
-    };
+    function handleOpenJoinDialog() {
+        setOpenJoinDialog(true);
+    }
 
-    const handleClose = () => {
-        setOpenHelpDialog(false);
-    };
+    function handleCloseJoinDialog() {
+        setOpenJoinDialog(false);
+        clearJoinText();
+    }
+
+    function submitJoinGame() {
+        //TODO: submit Text
+
+        handleCloseJoinDialog();
+    }
+
+    function clearJoinText() {
+        setJoinText('');
+    }
+
+    const navigate = useNavigate();
 
     const xsValue = 12;
     const mdValue = 6;
@@ -86,41 +99,71 @@ export const MainMenu = () => {
                         />
                     </Grid>
                 </Grid>
+                <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
+                    <MenuTile
+                        icon={AddCircleOutlined}
+                        title='Spiel erstellen'
+                        content='Erstelle ein Spiel, dem ein anderer beitreten kann'
+                        action={() => navigate('/createGame')}
+                    />
+                </Grid>
+                <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
+                    <MenuTile
+                        icon={GroupAdd}
+                        title='Spiel beitreten'
+                        content='Tritt einem Spiel bei'
+                        action={() => handleOpenJoinDialog()}
+                    />
+                </Grid>
+                <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
+                    <MenuTile
+                        icon={FormatListNumbered}
+                        title='Rangliste'
+                        content='Sehe dir deine und andere Statistiken an'
+                        action={() => navigate('/leaderBoard')}
+                    />
+                </Grid>
+            </Grid>
 
-                <Tooltip title={'Hilfe'} placement='top'>
-                    <Fab
-                        color='secondary'
-                        style={{ position: 'absolute', bottom: 16, right: 16 }}
-                        onClick={handleClickOpen}
-                    >
-                        <Help fontSize='large' color='primary' />
-                    </Fab>
-                </Tooltip>
+            <Dialog
+                open={openJoinDialog}
+                onClose={handleCloseJoinDialog}
+                fullWidth
+            >
+                <DialogTitle>{'Spiel beitreten'}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {'Geben Sie die Adresse zum Beitreten an: '}
+                    </DialogContentText>
 
-                <Dialog open={openHelpDialog} onClose={handleClose} fullWidth>
-                    {/* TODO: Help Dialog */}
-                    <DialogActions
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'flex-start',
+                    <TextField
+                        autoFocus
+                        margin='dense'
+                        label='Adresse'
+                        fullWidth
+                        variant='standard'
+                        value={joinText}
+                        onChange={(e) => setJoinText(e.target.value)}
+                        InputProps={{
+                            endAdornment: (
+                                <Tooltip title={'Löschen'}>
+                                    <IconButton onClick={clearJoinText}>
+                                        <Delete />
+                                    </IconButton>
+                                </Tooltip>
+                            ),
                         }}
-                    >
-                        <Tooltip title={'Schließen'} placement='top'>
-                            <IconButton onClick={handleClose}>
-                                <Close />
-                            </IconButton>
-                        </Tooltip>
-                    </DialogActions>
-                    <DialogTitle>{'Filler: Das ist der Hilfe Dialog'}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            {
-                                'Hier wird ein Text und Video zur Hilfe im System Eingefügt'
-                            }
-                        </DialogContentText>
-                    </DialogContent>
-                </Dialog>
-            </div>
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseJoinDialog} variant='outlined'>
+                        {'Abbrechen'}
+                    </Button>
+                    <Button onClick={submitJoinGame} variant='contained'>
+                        {'Beitreten'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 };
