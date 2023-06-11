@@ -53,12 +53,6 @@ export const Layout = () => {
                             Hauptmenü
                         </Button>
                         <Button
-                            onClick={() => navigate('/Dashboard')}
-                            style={{ color: 'white' }}
-                        >
-                            Dashboard
-                        </Button>
-                        <Button
                             onClick={() => navigate('/Login')}
                             style={{ color: 'white' }}
                         >
