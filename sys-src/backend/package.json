@@ -13,9 +13,11 @@
   "license": "ISC",
   "dependencies": {
     "@types/jest": "^29.5.2",
+    "@types/node": "^20.3.0",
     "@types/supertest": "^2.0.12",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.1.4",
     "express": "^4.18.2",
     "joi": "^17.9.2",
     "joi-password-complexity": "^5.1.0",
@@ -32,7 +34,8 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
-      "./src/test/index.test.ts"
+      "./src/test/index.test.ts", 
+      "./src/test/tokenService.test.ts"
     ]
   },
   "devDependencies": {
