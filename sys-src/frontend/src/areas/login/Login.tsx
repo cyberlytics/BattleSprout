@@ -55,8 +55,8 @@ export const Login = () => {
             window.location.reload()
         }
         catch (error)
-        {
-            console.log(error)
+        {            
+            alert("Email oder Benutzername falsch")
         }    
     }
 
