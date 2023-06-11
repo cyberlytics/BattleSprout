@@ -1,9 +1,9 @@
 class Plant {
-    length: number;
+
     plantTiles: PlantTile[] = [];
 
-    constructor(length: number, plantTiles: PlantTile[]) {
-        this.length = length;
+    constructor(plantTiles: PlantTile[]) {
+
         this.plantTiles = plantTiles;
     }
 

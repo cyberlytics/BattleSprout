@@ -21,9 +21,7 @@ export const handleSetPlant = (
     socket: Socket,
     gameID: string,
     playerName: string,
-    plant: Plant,
-    xFields: number[],
-    yFields: number[]
+    plantTiles : PlantTile[]
 ) => {
     var connection = connectionList.find((c) => c.socket == socket);
     if (!connection) return;
@@ -31,11 +29,9 @@ export const handleSetPlant = (
     var game = gameMap.get(gameID);
     if (!game) return;
 
-    //TODO: additional Parameters?
-    game.setPlantTile(playerName, plant);
+    game.setPlantTile(playerName, plantTiles);
 };
 
-//TODO: correct this way??
 export const handleSetSplash = (
     socket: Socket,
     gameID: string,

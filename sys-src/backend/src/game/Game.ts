@@ -46,10 +46,12 @@ export class Game {
         }
     }
 
-    public setPlantTile(playerName: string, plant: Plant): void {
+    public setPlantTile(playerName: string, plantTiles: PlantTile[]): void {
         if (this.gameState !== GameState.SETUP) {
             throw new Error('Cannot set plant tile in current state.');
         }
+
+        var plant = new Plant(plantTiles);
 
         const player = this.getPlayerByName(playerName);
         player.board.addPlant(plant);
