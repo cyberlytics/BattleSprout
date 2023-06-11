@@ -20,6 +20,7 @@ import {
 } from '@mui/icons-material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from './../../assets/battlesprout.png';
 
 //Hauptmenü des Spiels. Von hier aus soll der Nutzer überall hinkommen.
 export const MainMenu = () => {
@@ -53,51 +54,30 @@ export const MainMenu = () => {
 
     return (
         <>
-            <div style={{paddingTop: 30, paddingBottom: 300, paddingLeft: 100, paddingRight: 100, backgroundImage: `url(${background})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center"}}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <img src={logo} alt="Battlesprout Logo" 
-                            style={{
-                                display: "block",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                margin: "auto",
-                                width: "50%"
-                            }}
-                        />
-                        <Typography variant='h4'
-                            style={{
-                                color: "#45ad45",
-                                margin: 30
-                            }}
-                        >
-                            {'Battleship war gestern - herzlich willkommen zu BattleSprout!'}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
-                        <MenuTile
-                            icon={AddCircleOutlined}
-                            title='Spiel erstellen'
-                            content='Erstelle ein Spiel, dem ein anderer beitreten kann'
-                            link='/createGame'
-                        />
-                    </Grid>
-                    <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
-                        <MenuTile
-                            icon={GroupAdd}
-                            title='Spiel beitreten'
-                            content='Tritt einem Spiel bei'
-                            link='/joinGame'
-                        />
-                    </Grid>
-                    <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
-                        <MenuTile
-                            icon={FormatListNumbered}
-                            title='Rangliste'
-                            content='Sehe dir deine und andere Statistiken an'
-                            link='/leaderBoard'
-                        />
-                    </Grid>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <img
+                        src={logo}
+                        alt='Battlesprout Logo'
+                        style={{
+                            display: 'block',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            margin: 'auto',
+                            width: '50%',
+                        }}
+                    />
+                    <Typography
+                        variant='h4'
+                        style={{
+                            color: '#45ad45',
+                            margin: 30,
+                        }}
+                    >
+                        {
+                            'Battleship war gestern - herzlich willkommen zu BattleSprout!'
+                        }
+                    </Typography>
                 </Grid>
                 <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                     <MenuTile
@@ -112,7 +92,7 @@ export const MainMenu = () => {
                         icon={GroupAdd}
                         title='Spiel beitreten'
                         content='Tritt einem Spiel bei'
-                        action={() => handleOpenJoinDialog()}
+                        action={handleOpenJoinDialog}
                     />
                 </Grid>
                 <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
