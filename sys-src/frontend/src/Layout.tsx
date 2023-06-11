@@ -40,7 +40,7 @@ export const Layout = () => {
                         component='div'
                         sx={{
                             flexGrow: 1,
-                            display: { xs: 'none', sm: 'block' },
+                            display: 'block',
                         }}
                     >
                         <img
@@ -48,7 +48,9 @@ export const Layout = () => {
                             alt='Battlesprout Logo'
                             style={{
                                 height: 64,
+                                cursor: 'pointer',
                             }}
+                            onClick={() => navigate('/')}
                         />
                     </Box>
 
