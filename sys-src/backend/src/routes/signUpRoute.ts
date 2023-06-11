@@ -16,7 +16,7 @@ router.post("/api/signup", async function (req:any, res:any) {
       password: req.body.password,
     })
     InsertOne("test", "user", usercredentials)
-    
+    return res.status(200).send({message: "User registered."})    
 });
 
 module.exports = router
