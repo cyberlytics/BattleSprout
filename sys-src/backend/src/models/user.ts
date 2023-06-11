@@ -6,15 +6,8 @@ const userSchema = new mongoose.Schema({
 	password: { type: String, required: true },
 });
 
-function generateAuthToken(email: string){
-	const token = jwt.sign({ _id: email }, "process.env.JWTPRIVATEKEY", {
-		expiresIn: "2h",
-	});
-	return token;
-}
-
 const User = mongoose.model("user", userSchema);
 
 export {
-	User, generateAuthToken
+	User
 }

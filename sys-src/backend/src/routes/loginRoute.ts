@@ -1,6 +1,6 @@
 const router = require("express").Router();
-import {generateAuthToken} from '../models/user';
 import {connect, FindOne} from '../db'
+import TokenService from '../utilities/tokenService'
 
 router.post("/api/login", async function(req: any, res: any){
     connect();  
@@ -15,8 +15,8 @@ router.post("/api/login", async function(req: any, res: any){
       if(req.body.password != user.password){
         console.log(req.body.password)
         return res.status(401).send({message: "Wrong Password"});}
-  
-    const token = generateAuthToken(req.body.email)
+        
+    let token = new TokenService().generateAuthToken(req.body.email);   
     res.status(200).send({data: token, message: "You are now logged in"});
 });
 
