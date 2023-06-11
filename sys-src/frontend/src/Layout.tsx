@@ -16,8 +16,9 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import logo from './assets/battlesprout.png';
 
-//zum Teste  der Navigation und der Komponenten
+//zum Testen der Navigation und der Komponenten
 export const Layout = () => {
     const navigate = useNavigate();
 
@@ -35,16 +36,22 @@ export const Layout = () => {
         <>
             <AppBar color='primary'>
                 <Toolbar>
-                    <Typography
-                        variant='h6'
+                    <Box
                         component='div'
                         sx={{
                             flexGrow: 1,
                             display: { xs: 'none', sm: 'block' },
                         }}
                     >
-                        BattleSprout
-                    </Typography>
+                        <img
+                            src={logo}
+                            alt='Battlesprout Logo'
+                            style={{
+                                height: 64,
+                            }}
+                        />
+                    </Box>
+
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                         <Button
                             onClick={() => navigate('/')}
