@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './Layout';
 import { NoPage } from './NoPage';
-import { Dashboard } from './areas/dashboard/Dashboard';
 import { GameFIeld } from './areas/gameField/GameField';
 import { Login } from './areas/login/Login';
 import { MainMenu } from './areas/mainMenu/MainMenu';
@@ -29,7 +28,6 @@ export const App = () => {
                 <Routes>
                     <Route path='/' Component={Layout}>
                         <Route index Component={MainMenu} />
-                        <Route path='Dashboard' Component={Dashboard} />
                         <Route path='Login' Component={Login} />
                         <Route path='GameField' Component={GameFIeld} />
                         <Route path='CreateGame' Component={CreateGame} />
