@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Radio from '@mui/material/Radio';
@@ -16,6 +16,23 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
     props
 ) => {
     const { socket, uid, users } = useContext(SocketContext).SocketState;
+
+    const gamelinkRef = useRef<HTMLInputElement>(null);
+
+    const copyGameLink = () => {
+        if (gamelinkRef.current) {
+          navigator.clipboard.writeText(gamelinkRef.current.value)
+            .then(() => {
+              console.log('Game link copied successfully!');
+            })
+            .catch((error) => {
+              console.error('Failed to copy game link:', error);
+            });
+        }
+    };
+
+    const gamelink = '[Hier wird die Adresse uebergeben]';
+
     return (
         <>
             <div>
@@ -75,14 +92,20 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                         margin: 30,
                     }}
                 >
-                    <Typography variant='body1'>
-                        Lade einen Freund ein:
-                    </Typography>
-                    <div id='copyLinkBox'>
-                        {/** Hier stehen spaeter die SocketIO Informationen */}
-                        <Typography variant='body1'>
-                            https://unserlink-gruppenraumxyz.de
-                        </Typography>
+                    <Typography variant="body1">Lade einen Freund ein:</Typography>
+                    <div id="copyLinkBox">
+                        {/* Game link */}
+                        <input
+                        type="text"
+                        ref={gamelinkRef}
+                        value={gamelink}
+                        readOnly
+                        style={{ display: 'none' }}
+                        />
+                        <Typography variant="body1">{gamelink}</Typography>
+                        <Button variant="contained" onClick={copyGameLink} style={{
+                                marginTop: 30, marginBottom: 30
+                        }}> Kopieren</Button>
                     </div>
                     <div
                         style={{
