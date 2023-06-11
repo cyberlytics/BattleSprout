@@ -1,12 +1,4 @@
-import {
-    AppBar,
-    Box,
-    Button,
-    List,
-    ListItem,
-    Toolbar,
-    Typography,
-} from '@mui/material';
+import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 //zum Teste  der Navigation und der Komponenten

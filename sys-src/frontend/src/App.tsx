@@ -7,6 +7,7 @@ import { Login } from './areas/login/Login';
 import { MainMenu } from './areas/mainMenu/MainMenu';
 import { CreateGame } from './areas/createGame/CreateGame';
 import { ThemeProvider, createTheme } from '@mui/material';
+import './App.css';
 
 //colors to use in the project with material ui
 const theme = createTheme({
