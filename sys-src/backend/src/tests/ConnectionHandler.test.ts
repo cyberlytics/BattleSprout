@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
-import{handleHandshake, handleAuthenticate,handleDisconnect} from '../src/Socket/Handler/ConnectionHandler';
-import { connectionList } from '../src/models/ConnectionModel';
+import{handleHandshake, handleAuthenticate,handleDisconnect} from '../Socket/Handler/ConnectionHandler';
+import { connectionList } from '../models/ConnectionModel';
 import 'jest';
 
 

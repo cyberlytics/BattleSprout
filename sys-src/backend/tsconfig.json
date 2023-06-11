@@ -11,6 +11,6 @@
         "types": ["@types/jest", "node"]
     },
     "include": ["src/**/*.ts",
-                "tests/*.ts"],
+                "src/tests/*.ts"],
     "exclude": ["node_modules", "dist"]
 }
