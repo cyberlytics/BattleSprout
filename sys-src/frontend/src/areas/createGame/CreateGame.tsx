@@ -7,6 +7,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import SocketContext from '../../socket/Context';
+import { useNavigate } from 'react-router-dom';
 
 //Spiel erstellen-Komponente mit Socket-IO Informationen
 
@@ -21,17 +22,20 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
 
     const copyGameLink = () => {
         if (gamelinkRef.current) {
-          navigator.clipboard.writeText(gamelinkRef.current.value)
-            .then(() => {
-              console.log('Game link copied successfully!');
-            })
-            .catch((error) => {
-              console.error('Failed to copy game link:', error);
-            });
+            navigator.clipboard
+                .writeText(gamelinkRef.current.value)
+                .then(() => {
+                    console.log('Game link copied successfully!');
+                })
+                .catch((error) => {
+                    console.error('Failed to copy game link:', error);
+                });
         }
     };
 
     const gamelink = '[Hier wird die Adresse uebergeben]';
+
+    const navigate = useNavigate();
 
     return (
         <>
@@ -45,6 +49,15 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                 >
                     Spiel erstellen
                 </Typography>
+                <div
+                    style={{
+                        margin: 30,
+                    }}
+                >
+                    <Button variant='outlined' onClick={() => navigate('/')}>
+                        {'Zurück'}
+                    </Button>
+                </div>
                 <div
                     style={{
                         margin: 30,
@@ -92,20 +105,30 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                         margin: 30,
                     }}
                 >
-                    <Typography variant="body1">Lade einen Freund ein:</Typography>
-                    <div id="copyLinkBox">
+                    <Typography variant='body1'>
+                        Lade einen Freund ein:
+                    </Typography>
+                    <div id='copyLinkBox'>
                         {/* Game link */}
                         <input
-                        type="text"
-                        ref={gamelinkRef}
-                        value={gamelink}
-                        readOnly
-                        style={{ display: 'none' }}
+                            type='text'
+                            ref={gamelinkRef}
+                            value={gamelink}
+                            readOnly
+                            style={{ display: 'none' }}
                         />
-                        <Typography variant="body1">{gamelink}</Typography>
-                        <Button variant="contained" onClick={copyGameLink} style={{
-                                marginTop: 30, marginBottom: 30
-                        }}> Kopieren</Button>
+                        <Typography variant='body1'>{gamelink}</Typography>
+                        <Button
+                            variant='contained'
+                            onClick={copyGameLink}
+                            style={{
+                                marginTop: 30,
+                                marginBottom: 30,
+                            }}
+                        >
+                            {' '}
+                            Kopieren
+                        </Button>
                     </div>
                     <div
                         style={{
@@ -129,7 +152,7 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                         margin: 30,
                     }}
                 >
-                    <Button variant='contained'>Starten</Button>{' '}
+                    <Button variant='contained'>Starten</Button>
                     {/** Link zu Game Room */}
                 </div>
             </div>
