@@ -9,7 +9,6 @@ import {
     Typography,
 } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
-import { useNavigate } from 'react-router-dom';
 
 interface IProps {
     icon: OverridableComponent<SvgIconTypeMap<{}, 'svg'>> & {
@@ -17,15 +16,13 @@ interface IProps {
     };
     title: string;
     content: string;
-    link: string;
     children?: JSX.Element;
+    action: Function;
 }
 
 //Ein Element auf der Startseite
 export const MenuTile = (props: IProps) => {
-    const { icon, title, content, link, children } = props;
-
-    const navigate = useNavigate();
+    const { icon, title, content, children, action } = props;
 
     return (
         <Paper elevation={3}>
@@ -41,7 +38,7 @@ export const MenuTile = (props: IProps) => {
                     justifyItems: 'flex-start',
                     textAlign: 'left',
                 }}
-                onClick={() => navigate(link)}
+                onClick={() => action()}
             >
                 <Icon component={icon} fontSize='large' />
                 <Divider

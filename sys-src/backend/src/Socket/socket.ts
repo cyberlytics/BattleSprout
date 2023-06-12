@@ -1,12 +1,14 @@
 import { Server as HTTPServer } from 'http';
 import { Socket, Server } from 'socket.io';
+import {baseListener} from "./BaseListener";
 import { v4 } from 'uuid';
+
+/* Kümmert sich um die Verbindung und öffnet Socket-Server, beinhaltet StartListeners für Socket-Verbindung */
 
 export class ServerSocket {
     public static instance: ServerSocket;
     public io: Server;
 
-    /** Master list of all connected users */
     public users: { [uid: string]: string };
 
     constructor(server: HTTPServer) {
@@ -22,20 +24,9 @@ export class ServerSocket {
             }
         });
 
-        this.io.on('connect', this.StartListeners);
+        this.io.on('connect', baseListener);
 
         console.info('SocketIO started.');
     }
 
-    StartListeners = (socket: Socket) => {
-        console.info('Message received from ' + socket.id);
-
-        socket.on('handshake', () => {
-            console.info('Handshake received from ' + socket.id);
-        });
-
-        socket.on('disconnect', () => {
-            console.info('Disconnect received from ' + socket.id);
-        });
-    };
 }
