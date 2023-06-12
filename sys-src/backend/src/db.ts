@@ -1,6 +1,6 @@
 import { MongoClient, Collection, Db } from "mongodb";
 
-const uri: string = process.env.MONGODB_CONNECTION_STRING!;
+const uri: string = "mongodb://localhost:27017";
 const client: MongoClient = new MongoClient(uri);
 
 async function connect(): Promise<void> {
@@ -15,7 +15,7 @@ async function InsertOne(databaseName: string, collectionName: string, object: a
     try {
         const db: Db = client.db(databaseName);
         const collection: Collection<any> = db.collection(collectionName);
-        const result = await collection.insertOne(object);
+        const result = await collection.insertOne(object);        
         return result;
     } catch (err) {
         console.error(err);
