@@ -1,7 +1,7 @@
 import initializeGameBoard from "../utilities/gameLogic"
-import Game from "../models/GameModel"
+import Game from "../models/gameModel"
 
-const createNewGame = (req, res) =>{
+const createNewGame = (req: any, res:any) =>{
     //TODO:Test if sending http request and initializing board works
     const boardRows = req.body.boardRows;
     const boardCols = req.body.boardCols;
