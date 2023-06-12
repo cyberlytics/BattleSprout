@@ -12,7 +12,6 @@ import {
     Tooltip,
 } from '@mui/material';
 import { MenuTile } from './components/MenuTile';
-import { FriendList } from './components/FriendList';
 import {
     AddCircleOutlined,
     Delete,
@@ -103,9 +102,6 @@ export const MainMenu = () => {
                         content='Sehe dir deine und andere Statistiken an'
                         action={() => navigate('/ranking')}
                     />
-                </Grid>
-                <Grid item xs={12}>
-                    <FriendList/>
                 </Grid>
             </Grid>
 

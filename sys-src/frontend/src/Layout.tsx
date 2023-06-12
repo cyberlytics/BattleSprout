@@ -17,6 +17,7 @@ import {
 import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import logo from './assets/battlesprout.png';
+import { FriendList } from './areas/friendList/FriendList';
 
 //zum Testen der Navigation und der Komponenten
 export const Layout = () => {
@@ -36,6 +37,7 @@ export const Layout = () => {
         <>
             <AppBar color='primary'>
                 <Toolbar>
+                    <FriendList />
                     <Box
                         component='div'
                         sx={{
