@@ -101,7 +101,7 @@ export const MainMenu = () => {
                         icon={FormatListNumbered}
                         title='Rangliste'
                         content='Sehe dir deine und andere Statistiken an'
-                        link='/ranking'
+                        action={() => navigate('/ranking')}
                     />
                 </Grid>
                 <Grid item xs={12}>
