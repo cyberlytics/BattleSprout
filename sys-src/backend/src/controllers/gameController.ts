@@ -1,32 +1,19 @@
-import initializeGameBoard from "../utilities/gameLogic"
-import Game from "../models/GameModel"
+import initializeGameBoard from '../utilities/gameLogic';
+import { Game } from '../game/Game';
+import { gameMap } from '../models/GameMap';
 
-const createNewGame = (req, res) =>{
+const createNewGame = (req: any, res: any) => {
+    //TODO: remove any
     //TODO:Test if sending http request and initializing board works
-    const boardRows = req.body.boardRows;
-    const boardCols = req.body.boardCols;
 
-    const gameBoard = initializeGameBoard(boardRows,boardCols);
+    var randomGameId =
+        Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15);
+    const game = new Game();
 
-    //Setup a new game
-    const newGame: Game = {
-        player1: 'Player1',
-        player2: 'Player2',
-        board: gameBoard,
-        status: 'Setup',
-        currentPlayer: 'Player1',
-    }
+    gameMap.set(randomGameId, game);
 
-
-    const response = {
-        //TODO: Generate random gameID?
-        gameId: '123456',
-        game: newGame,
-        
-    };
-
-    res.status(200).json(response);
-}
+    res.status(200).json({ gameId: randomGameId });
+};
 
 export default createNewGame;
-

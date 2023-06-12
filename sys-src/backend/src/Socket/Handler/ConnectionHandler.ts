@@ -4,7 +4,7 @@ import {connectionList} from "../../models/ConnectionModel";
 
 export const handleHandshake = (socket: Socket) => {
 
-    connectionList.push({ playerID: '', connectionState: 'handshake', gameID: '', socketID: socket.id });
+    connectionList.push({ playerID: '', connectionState: 'handshake', gameID: '', socket: socket });
 
 }
 
@@ -12,12 +12,12 @@ export const handleAuthenticate = (socket: Socket, message: string) => {
 
     var authMessage = JSON.parse(message);
 
-    const connection = connectionList.find(c => c.socketID == socket.id);
+    const connection = connectionList.find(c => c.socket.id == socket.id);
 
 }
 
 export const handleDisconnect = (socket: Socket) => {
 
-    connectionList.filter(c => c.socketID != socket.id);
+    connectionList.filter(c => c.socket.id != socket.id);
     console.log('Client disconnected: ' + socket.id);
 }

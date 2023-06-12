@@ -14,21 +14,13 @@ import {
 } from '@mui/icons-material'
 import background from './../../assets/background.png'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
 
 
 //Login ist das erste, was der Nutzter sieht, wenn er die Website aufruft
-export const Login = () => {
-    const [password, setPasswort] = React.useState('')
-    const [email, setEmail] = React.useState('')
-    const [checked, setChecked] = React.useState(true);
-    const navigate = useNavigate();
-    const handleChange = (event: {
-        target: { checked: boolean | ((prevState: boolean) => boolean) };
-    }) => {
-        setChecked(event.target.checked);
-    };
+export const Signup = () => {
+    const [password, setPassword] = React.useState('')
+    const [email, setUsername] = React.useState('')
+    const [sndPassword, setSndPassword] = React.useState('')
 
     const xsValue = 12;
     const mdValue = 6;
@@ -36,34 +28,58 @@ export const Login = () => {
 
 
     function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){        
-        setPasswort(event.target.value);
+        setPassword(event.target.value);
         
     }
     
+    function handleSndPasswordChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
+		setSndPassword(event.target.value);
+    }
 
-  function handleEmailChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
-    setEmail(event.target.value);
-  }
+    function handleUsernameChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
+        setUsername(event.target.value);
+    }
+
 
   async function CheckLoginData(){
+    if(password !== sndPassword){
+        alert("Eingegebene Passwörter stimmen nicht überein!")
+        return;
+    }
+
+    if(password.length === 0){
+        alert("Geben Sie ein Passwort ein und bestätigen Sie es!")
+        return;
+    }
+
+    if(sndPassword.length === 0){
+        alert("Bestätigen Sie das Passwort!")
+        return;
+    }
         try
         {
-            const url = "http://localhost:3000/api/login";
-            const { data: res } = await axios.post(url, {email,password});
-            localStorage.setItem("token", res.data);
-            navigate('/MainMenu') 
-            window.location.reload()
+            const url = "http://localhost:3000/api/signup";
+            const { data: res } = await axios.post(url, {email,password});            
+            alert("Sie sind nun registiert.")  
         }
         catch (error)
-        {            
-            alert("Email oder Benutzername falsch")
+        {
+            alert("Nutzer mit Email-Adresse " + email + " ist bereits vorhanden")
         }    
     }
 
     return (
         <>
-            <Grid container spacing={2}>
-                <Grid item xs={xsValue} md={mdValue} lg={lgValue} />
+            <Grid
+                container
+                spacing={2}
+                style={{
+                    backgroundImage: `url(${background})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                }}
+            >
+                <Grid item xs={xsValue} md={mdValue} lg={lgValue}/>
                 <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                     <Grid
                         container
@@ -72,23 +88,21 @@ export const Login = () => {
                         alignItems={'center'}
                         style={{
                             padding: 50,
-                            background: 'rgba(52,52,52,0.1)',
+                            background: 'rgba(52,52,52,0.1'
                         }}
                     >
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
-                            <Typography variant='h4' gutterBottom>
-                                Bitte melde dich an!
-                            </Typography>
+                            <Typography variant="h4" gutterBottom>Bitte registiere dich</Typography>
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <TextField
-                            onChange={handleEmailChange}
+                            onChange={handleUsernameChange}
                                 label='Email'
                                 style={{ background: '#bbd8b1'}}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
-                                            <AccountCircle />
+                                            <AccountCircle/>
                                         </InputAdornment>
                                     ),
                                 }}
@@ -96,7 +110,7 @@ export const Login = () => {
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <TextField
-                                onChange={handlePasswordChange}
+                            onChange={handlePasswordChange}
                                 label='Passwort'
                                 type="password"
                                 value={password}
@@ -104,47 +118,42 @@ export const Login = () => {
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
-                                            <Lock />
+                                            <Lock/>
                                         </InputAdornment>
                                     ),
                                 }}
                             />
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={checked}
-                                        onChange={handleChange}
-                                        style={{ color: '#add0a2' }}
-                                    />
-                                }
-                                label='Account merken'
+                            <TextField
+                            onChange={handleSndPasswordChange}
+                                label='Passwort wiederholen'
+                                type="password"
+                                value={sndPassword}
+                                style={{ background: '#bbd8b1'}}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position='start'>
+                                            <Lock/>
+                                        </InputAdornment>
+                                    ),
+                                }}
                             />
-                        </Grid>
+                        </Grid>                        
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <Button
-                                onClick={CheckLoginData}
+                            onClick={CheckLoginData}
                                 fullWidth
                                 style={{
                                     background: '#bbd8b1',
                                     color: 'black',
                                     width: '110px',
-                                    height: '50px',
+                                    height: '50px'
                                 }}
                             >
-                                Anmelden
+                                Registieren
                             </Button>
-                        </Grid>
-                        <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
-                            <Typography>
-                                Noch kein Account? Jetzt
-                                <Button style={{color: 'blue'}}
-                                    href='/signup'>
-                                        registrieren!
-                                </Button>                                
-                            </Typography>
-                        </Grid>
+                        </Grid>                     
                     </Grid>
                 </Grid>
             </Grid>

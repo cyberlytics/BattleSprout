@@ -1,35 +1,70 @@
+import { Close, Help } from '@mui/icons-material';
 import {
     AppBar,
     Box,
     Button,
-    List,
-    ListItem,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Fab,
+    IconButton,
     Toolbar,
+    Tooltip,
     Typography,
 } from '@mui/material';
+import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import logo from './assets/battlesprout.png';
+import { FriendList } from './areas/friendList/FriendList';
 
-//zum Teste  der Navigation und der Komponenten
+//zum Testen der Navigation und der Komponenten
 export const Layout = () => {
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
+
+    function logout(){
+        localStorage.removeItem('token');
+        navigate('/')
+        window.location.reload()
+    }
+
+    const [openHelpDialog, setOpenHelpDialog] = useState<boolean>(false);
+
+    const handleClickOpen = () => {
+        setOpenHelpDialog(true);
+    };
+
+    const handleClose = () => {
+        setOpenHelpDialog(false);
+    };
 
     return (
         <>
             <AppBar color='primary'>
                 <Toolbar>
-                    <Typography
-                        variant='h6'
+                    <FriendList />
+                    <Box
                         component='div'
                         sx={{
                             flexGrow: 1,
-                            display: { xs: 'none', sm: 'block' },
+                            display: 'block',
                         }}
                     >
-                        BattleSprout
-                    </Typography>
+                        <img
+                            src={logo}
+                            alt='Battlesprout Logo'
+                            style={{
+                                height: 64,
+                                cursor: 'pointer',
+                            }}
+                            onClick={() => navigate('/')}
+                        />
+                    </Box>
+
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                         <Button
-                            onClick={() => navigate('/')}
+                            onClick={() => navigate('/MainMenu')}
                             style={{ color: 'white' }}
                         >
                             Hauptmenü
@@ -52,10 +87,48 @@ export const Layout = () => {
                         >
                             Spiel erstellen
                         </Button>
+                        <Button
+                            onClick={logout}
+                            style={{ color: 'white' }}
+                        >
+                            Abmelden
+                        </Button>
                     </Box>
                 </Toolbar>
             </AppBar>
             <Toolbar />
+            <Dialog open={openHelpDialog} onClose={handleClose} fullWidth>
+                {/* TODO: Help Dialog */}
+                <DialogActions
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                    }}
+                >
+                    <Tooltip title={'Schließen'} placement='top'>
+                        <IconButton onClick={handleClose}>
+                            <Close />
+                        </IconButton>
+                    </Tooltip>
+                </DialogActions>
+                <DialogTitle>{'Filler: Das ist der Hilfe Dialog'}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {
+                            'Hier wird ein Text und Video zur Hilfe im System Eingefügt'
+                        }
+                    </DialogContentText>
+                </DialogContent>
+            </Dialog>
+            <Tooltip title={'Hilfe'} placement='top'>
+                <Fab
+                    color='secondary'
+                    style={{ position: 'absolute', bottom: 16, right: 16 }}
+                    onClick={handleClickOpen}
+                >
+                    <Help fontSize='large' color='primary' />
+                </Fab>
+            </Tooltip>
 
             <Outlet />
         </>
