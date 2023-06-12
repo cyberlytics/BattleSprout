@@ -1,4 +1,4 @@
-import { ServerSocket } from './socket';
+import { ServerSocket } from './Socket/socket';
 var cors = require('cors');
 const { User } = require("./models/user");
 const loginRoute = require("./routes/loginRoute")
