@@ -39,7 +39,7 @@ export const Login = () => {
                         alignItems={'center'}
                         style={{
                             padding: 50,
-                            background: 'rgba(52,52,52,0.1',
+                            background: 'rgba(52,52,52,0.1)'
                         }}
                     >
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
