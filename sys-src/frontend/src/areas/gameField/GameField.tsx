@@ -1,94 +1,52 @@
 import { Typography } from '@mui/material';
-import React from 'react';
-import { Stage, Layer, Text, Rect, Circle } from 'react-konva';
+import React, { useState } from 'react';
+import background from './../../assets/background.png';
+import Cell from './CellComponent';
+import Grid from './GridComponent';
 
-const gridSize = 6;
-    const cellSize = 35;
-    const stroke = 2;
-
-
-function generateCells() {
-    const cells = [];
-
-    
-
-    for (let row = 0; row < gridSize; row++) {
-        for (let col = 0; col < gridSize; col++) {
-
-            const x = stroke + row * cellSize ;
-            const y = stroke + col * cellSize ;
-            const width = cellSize ;
-            const height = cellSize;
-
-            const rect = <Rect
-                key={`${row}-${col}`}
-                x={x} y={y}
-                width={width} height={height}
-                fill={"#AE7867"}
-                stroke={"#C19587"}
-
-            />
-            
-            
-
-            cells.push(
-                <Rect key={`${row}-${col}`} 
-                    x={x} y={y}
-                    width={width} height={height}
-                    strokeWidth={stroke}
-                    fill={"#AE7867"}
-                    stroke={"#C19587"}
-                    />
-                    
-                    );
-                
-        }
-    }
-
-    return cells;
+export enum CellState {
+  EMPTY,
+  SHIP,
+  HIT,
+  MISS
 }
 
-const INITIAL_STATE = generateCells();
+export type CellProps = {
+  index: number;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+  cellState: CellState;
+};
 
 
-export const GameField = () => {
-    const [cells, setCells] = React.useState(INITIAL_STATE);
-    const [rectColors, setRectColors] = React.useState(Array(cells.length).fill("#AE7867"));
-  
-    const handleMouseOver = (index: number) => {
-      const newRectColors = [...rectColors];
-      newRectColors[index] = "#FF0000";
-      setRectColors(newRectColors);
-      console.log({col: Math.floor(index / gridSize), row:  index % gridSize});
-    };
 
-    const handleMouseOut = (index: any) => {
-        const newRectColors = [...rectColors];
-        newRectColors[index] = "#AE7867";
-        setRectColors(newRectColors);
-    }
-  
-    return (
-      <div>
-        <Typography variant="h2">Spielfeld</Typography>
-        <Stage width={window.innerWidth} height={window.innerHeight} perfectDrawEnabled={false}>
-          <Layer fill="red">
-            {cells.map((cell, index) => (
-              <Rect
-                key={cell.key}
-                x={cell.props.x}
-                y={cell.props.y}
-                width={cell.props.width}
-                height={cell.props.height}
-                strokeWidth={cell.props.strokeWidth}
-                fill={rectColors[index]}
-                stroke={cell.props.stroke}
-                onMouseOver={() => handleMouseOver(index)}
-                onMouseOut={() => handleMouseOut(index)}
-              />
-            ))}
-          </Layer>
-        </Stage>
+export const GameField: React.FC = () => {
+  return (<>
+    <div style={{backgroundImage: `url(${background})`, backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center"}}>
+      <Typography variant="h2"
+        style={{
+          color: "#45ad45",
+          margin: 30
+      }}
+      >
+      Spielfeld</Typography>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+        
+
+        <div style={{ display: 'flex', gap: '128px' }}>
+          <div>
+            <Typography variant="h4">Dein Beet</Typography>
+            <Grid />
+          </div>
+          
+          <div>
+            <Typography variant="h4">Beet von Unknown_User</Typography>
+            <Grid />
+          </div>
+        </div>
+        
       </div>
-    );
-  };
+    </div>
+    </>
+  );
+};
