@@ -1,6 +1,7 @@
+import {Vector2} from "./Vector2";
 
 
-class PlantTile{
+export class PlantTile{
 
     public position: Vector2;
     public isSplashed: boolean;

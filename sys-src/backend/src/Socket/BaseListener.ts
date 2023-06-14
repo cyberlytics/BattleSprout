@@ -5,6 +5,7 @@ import {
     handleHandshake,
 } from './Handler/ConnectionHandler';
 import {handleJoinGame, handleSetPlant, handleSetSplash} from './Handler/GameHandler';
+import { PlantTile } from '../game/PlantTile';
 
 export const baseListener = (socket: Socket) => {
     socket.on('handshake', () => handleHandshake(socket));

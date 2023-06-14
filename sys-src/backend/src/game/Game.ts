@@ -2,6 +2,10 @@ import {
     handleSplash,
     handleTurnChanged,
 } from '../Socket/Handler/ResponseHandler';
+import {PlantTile} from "./PlantTile";
+import {Vector2} from "./Vector2";
+import {Plant} from "./Plant";
+import {Board} from "./Board";
 
 enum GameState {
     JOINING,

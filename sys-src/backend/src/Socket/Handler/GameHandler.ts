@@ -1,6 +1,8 @@
 import { Socket } from 'socket.io';
 import { gameMap } from '../../models/GameMap';
 import { connectionList } from '../../models/ConnectionModel';
+import {PlantTile} from "../../game/PlantTile";
+import {Vector2} from "../../game/Vector2";
 
 export const handleJoinGame = (socket: Socket, gameID: string) => {
     var connection = connectionList.find((c) => c.socket == socket);

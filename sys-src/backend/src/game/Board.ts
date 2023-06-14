@@ -1,4 +1,8 @@
-class Board {
+import {Plant} from "./Plant";
+import {Vector2} from "./Vector2";
+import {SplashResult} from "./SplashResult";
+
+export class Board {
 
     public plants: Plant[] = [];
 
