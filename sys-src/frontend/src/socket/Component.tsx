@@ -1,19 +1,33 @@
-import React, { PropsWithChildren, useEffect, useReducer, useState } from 'react';
-import { defaultSocketContextState, SocketContextProvider, SocketReducer } from './Context';
+import React, {
+    PropsWithChildren,
+    useEffect,
+    useReducer,
+    useState,
+} from 'react';
+import {
+    defaultSocketContextState,
+    SocketContextProvider,
+    SocketReducer,
+} from './Context';
 import { useSocket } from './useSocket';
 
 export interface ISocketContextComponentProps extends PropsWithChildren {}
 
-const SocketContextComponent: React.FunctionComponent<ISocketContextComponentProps> = (props) => {
+const SocketContextComponent: React.FunctionComponent<
+    ISocketContextComponentProps
+> = (props) => {
     const { children } = props;
 
-    const [SocketState, SocketDispatch] = useReducer(SocketReducer, defaultSocketContextState);
+    const [SocketState, SocketDispatch] = useReducer(
+        SocketReducer,
+        defaultSocketContextState
+    );
     const [loading, setLoading] = useState(true);
 
-    const socket = useSocket('ws://localhost:3000', {
+    const socket = useSocket('ws://localhost:4000', {
         reconnectionAttempts: 5,
         reconnectionDelay: 5000,
-        autoConnect: false
+        autoConnect: false,
     });
 
     useEffect(() => {
@@ -75,7 +89,7 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
         socket.emit('handshake', (uid: string, users: string[]) => {
             console.log('User handshake callback message received');
             SocketDispatch({ type: 'update_uid', payload: uid });
-            SocketDispatch({ type: 'update_users', payload: users});
+            SocketDispatch({ type: 'update_users', payload: users });
 
             setLoading(false);
         });
@@ -83,7 +97,11 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
 
     if (loading) return <p>Loading socket IO...</p>;
 
-    return <SocketContextProvider value={{ SocketState, SocketDispatch }}>{children}</SocketContextProvider>
+    return (
+        <SocketContextProvider value={{ SocketState, SocketDispatch }}>
+            {children}
+        </SocketContextProvider>
+    );
 };
 
 export default SocketContextComponent;
