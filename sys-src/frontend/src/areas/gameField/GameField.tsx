@@ -1,8 +1,9 @@
 import { Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Grid from './GridComponent';
 import SocketContextComponent from '../../socket/Component';
 import { useParams } from 'react-router-dom';
+import io, {Socket} from "socket.io-client";
 
 export enum CellState {
     EMPTY,
@@ -18,12 +19,43 @@ export type CellProps = {
     cellState: CellState;
 };
 
+const SOCKET_SERVER_URL = 'http://localhost:4000';
+
+export enum GameState {
+
+    connecting,
+    joining,
+    setup
+
+}
+
+
 export const GameField: React.FC = () => {
     const params = useParams();
     const gameId = params.id;
 
+    const socketContext = useRef<Socket>(io(SOCKET_SERVER_URL))
+    const [gameState, setGameState] = useState<GameState>(GameState.connecting);
+
+    useEffect(() => {
+
+
+        if(gameState === GameState.connecting) {
+            socketContext.current.emit('handshake');
+            setGameState(GameState.joining);
+        }
+
+        if(gameState === GameState.joining) {
+            socketContext.current.emit('joinGame', gameId);
+            setGameState(GameState.setup);
+        }
+
+
+
+    }, []);
+
     return (
-        <SocketContextComponent>
+
             <div>
                 <Typography
                     variant='h2'
@@ -57,6 +89,5 @@ export const GameField: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </SocketContextComponent>
     );
 };
