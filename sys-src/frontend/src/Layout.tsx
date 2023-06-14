@@ -21,12 +21,12 @@ import { FriendList } from './areas/friendList/FriendList';
 
 //zum Testen der Navigation und der Komponenten
 export const Layout = () => {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
-    function logout(){
+    function logout() {
         localStorage.removeItem('token');
-        navigate('/')
-        window.location.reload()
+        navigate('/');
+        window.location.reload();
     }
 
     const [openHelpDialog, setOpenHelpDialog] = useState<boolean>(false);
@@ -63,34 +63,7 @@ export const Layout = () => {
                     </Box>
 
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        <Button
-                            onClick={() => navigate('/MainMenu')}
-                            style={{ color: 'white' }}
-                        >
-                            Hauptmenü
-                        </Button>
-                        <Button
-                            onClick={() => navigate('/Login')}
-                            style={{ color: 'white' }}
-                        >
-                            Login
-                        </Button>
-                        <Button
-                            onClick={() => navigate('/GameField')}
-                            style={{ color: 'white' }}
-                        >
-                            Spielfeld
-                        </Button>
-                        <Button
-                            onClick={() => navigate('/CreateGame')}
-                            style={{ color: 'white' }}
-                        >
-                            Spiel erstellen
-                        </Button>
-                        <Button
-                            onClick={logout}
-                            style={{ color: 'white' }}
-                        >
+                        <Button onClick={logout} style={{ color: 'white' }}>
                             Abmelden
                         </Button>
                     </Box>

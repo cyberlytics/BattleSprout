@@ -42,8 +42,14 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
         try {
             const response = await axios.post('http://localhost:3000/newgame');
 
+            console.log(response);
+            console.log(response.data);
+            console.log(response.data.gameId);
+
             if (response.data && response.data.gameId) {
-                navigate(`/GameField/${response.data.gameId}`);
+                const link = '/GameField/' + response.data.gameId;
+                console.log(link);
+                navigate(link);
             } else {
                 console.log('The response does not contain a game ID.');
             }

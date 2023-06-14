@@ -48,9 +48,7 @@ export const App = () => {
                         <Route index path='MainMenu' Component={MainMenu} />
                         <Route index path='Login' Component={Login} />
                         <Route path='Signup' Component={Signup} />
-                        <Route path='GameField'>
-                            <Route path=':id' Component={GameField} />
-                        </Route>
+                        <Route path='GameField/:id' Component={GameField} />
                         <Route path='CreateGame' Component={CreateGame} />
                         <Route path='Ranking' Component={Ranking} />
                         <Route path='*' Component={NoPage} />
