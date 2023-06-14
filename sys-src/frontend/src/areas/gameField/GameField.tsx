@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material';
 import React, { useState } from 'react';
 import Grid from './GridComponent';
+import SocketContextComponent from '../../socket/Component';
 
 export enum CellState {
     EMPTY,
@@ -18,7 +19,7 @@ export type CellProps = {
 
 export const GameField: React.FC = () => {
     return (
-        <>
+        <SocketContextComponent>
             <div>
                 <Typography
                     variant='h2'
@@ -52,6 +53,6 @@ export const GameField: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </SocketContextComponent>
     );
 };

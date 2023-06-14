@@ -32,6 +32,7 @@ export const App = () => {
                     <Routes>
                         <Route path='/' Component={Login} />
                         <Route path='/signup' Component={Signup} />
+                        <Route path='*' Component={Login} />
                     </Routes>
                 </BrowserRouter>
             </ThemeProvider>
