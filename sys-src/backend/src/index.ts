@@ -1,31 +1,46 @@
 import { ServerSocket } from './Socket/socket';
-var cors = require('cors');
+
 const { User } = require("./models/user");
 const loginRoute = require("./routes/loginRoute")
 const signUpRoute = require("./routes/signUpRoute")
+
 import express, { Application } from 'express';
 import http from 'http';
+import cors from 'cors';
+import { Server as SocketIOServer } from 'socket.io';
+import gameRoutes from "./routes/gameRoutes";
+
+const port: number = 3000;
+const socketPort: number = 4000;
 
 const app: Application = express();
-const port: number = 3000;
-
 app.use(cors())
 app.use(express.json())
 
 app.get('/', function(req, res){
-  console.log("Root Route")
-  res.json({ message: "hello world" });
+    console.log("Root Route")
+    res.json({ message: "hello world" });
 });
 
 app.use(loginRoute)
 app.use(signUpRoute)
+app.use(gameRoutes)
 
 const server = http.createServer(app);
 server.listen(port, () => {
-    
     console.log(`Server running on port ${port}`);
 });
 
-export default app;
+// Set up the Socket.io server separately
+const socketServer = http.createServer();
+const io = new SocketIOServer(socketServer, {
+    // Assuming you want CORS enabled here too
+    cors: {
+        origin: "*",
+    },
+});
+socketServer.listen(socketPort, () => {
+    console.log(`Socket.io server running on port ${socketPort}`);
+});
 
-new ServerSocket(server);
+export default app;
