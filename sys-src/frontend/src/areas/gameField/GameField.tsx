@@ -2,6 +2,7 @@ import { Typography } from '@mui/material';
 import React, { useState } from 'react';
 import Grid from './GridComponent';
 import SocketContextComponent from '../../socket/Component';
+import { useParams } from 'react-router-dom';
 
 export enum CellState {
     EMPTY,
@@ -18,6 +19,9 @@ export type CellProps = {
 };
 
 export const GameField: React.FC = () => {
+    const params = useParams();
+    const gameId = params.id;
+
     return (
         <SocketContextComponent>
             <div>

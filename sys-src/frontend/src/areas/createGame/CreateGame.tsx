@@ -8,6 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import SocketContext from '../../socket/Context';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 //Spiel erstellen-Komponente mit Socket-IO Informationen
 
@@ -37,6 +38,20 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
 
     const navigate = useNavigate();
 
+    const createNewGame = async () => {
+        try {
+            const response = await axios.post('http://localhost:3000/newgame');
+
+            if (response.data && response.data.gameId) {
+                navigate(`/GameField/${response.data.gameId}`);
+            } else {
+                console.log('The response does not contain a game ID.');
+            }
+        } catch (error) {
+            console.error('An error occurred while creating the game:', error);
+        }
+    };
+
     return (
         <>
             <div>
@@ -54,7 +69,10 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                         margin: 30,
                     }}
                 >
-                    <Button variant='outlined' onClick={() => navigate('/')}>
+                    <Button
+                        variant='outlined'
+                        onClick={() => navigate('/MainMenu')}
+                    >
                         {'Zurück'}
                     </Button>
                 </div>
@@ -152,7 +170,12 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                         margin: 30,
                     }}
                 >
-                    <Button variant='contained'>Starten</Button>
+                    <Button
+                        variant='contained'
+                        onClick={async () => await createNewGame()}
+                    >
+                        Starten
+                    </Button>
                     {/** Link zu Game Room */}
                 </div>
             </div>

@@ -25,6 +25,7 @@ const theme = createTheme({
 //Oberste Komponente des Projekts, ist für die Navigation per URL zuständig
 //App Komponente ist immer geladen
 export const App = () => {
+    //TODO: fix token
     if (localStorage.getItem('token') !== null) {
         return (
             <ThemeProvider theme={theme}>
