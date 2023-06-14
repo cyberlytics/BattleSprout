@@ -9,8 +9,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <React.StrictMode>
-        <SocketContextComponent>
-            <App />
-        </SocketContextComponent>
+        {/* <SocketContextComponent> */}
+        <App />
+        {/* </SocketContextComponent> */}
     </React.StrictMode>
 );
