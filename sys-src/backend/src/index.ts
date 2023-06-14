@@ -32,15 +32,9 @@ server.listen(port, () => {
 });
 
 // Set up the Socket.io server separately
-const socketServer = http.createServer();
-const io = new SocketIOServer(socketServer, {
-    // Assuming you want CORS enabled here too
-    cors: {
-        origin: "*",
-    },
-});
-socketServer.listen(socketPort, () => {
-    console.log(`Socket.io server running on port ${socketPort}`);
-});
+new ServerSocket(socketPort);
+
+console.log(`SocketIO running on port ${socketPort}`);
+
 
 export default app;
