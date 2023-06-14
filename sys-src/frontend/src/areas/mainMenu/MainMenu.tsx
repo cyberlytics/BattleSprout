@@ -37,8 +37,8 @@ export const MainMenu = () => {
     }
 
     function submitJoinGame() {
-        //TODO: submit Text
-
+        const link = '/GameField/' + joinText;
+        navigate(link);
         handleCloseJoinDialog();
     }
 
@@ -113,13 +113,13 @@ export const MainMenu = () => {
                 <DialogTitle>{'Spiel beitreten'}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {'Geben Sie die Adresse zum Beitreten an: '}
+                        {'Geben Sie die Game ID zum Beitreten an: '}
                     </DialogContentText>
 
                     <TextField
                         autoFocus
                         margin='dense'
-                        label='Adresse'
+                        label='Game ID'
                         fullWidth
                         variant='standard'
                         value={joinText}

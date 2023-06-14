@@ -58,7 +58,7 @@ export const Layout = () => {
                                 height: 64,
                                 cursor: 'pointer',
                             }}
-                            onClick={() => navigate('/')}
+                            onClick={() => navigate('/MainMenu')}
                         />
                     </Box>
 
