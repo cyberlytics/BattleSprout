@@ -17,7 +17,7 @@ export const baseListener = (socket: Socket) => {
     });
 
     socket.on('setPlant', (gameID: string, playerName: string, plantTiles: PlantTile[]) => {
-        handleSetPlant(socket, gameID, playerName, plantTiles);
+        handleSetPlant(socket,plantTiles);
     });
 
     socket.on('setSplash', (gameID: string, playerName: string, x: number, y: number) => {

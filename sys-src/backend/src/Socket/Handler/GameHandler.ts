@@ -9,6 +9,7 @@ export const handleJoinGame = (socket: Socket, gameID: string) => {
 
     if (!connection) return;
 
+    console.log('Client joined game: ' + gameID)
     connection.gameID = gameID;
 
     var game = gameMap.get(gameID);
@@ -21,17 +22,15 @@ export const handleJoinGame = (socket: Socket, gameID: string) => {
 //TODO: correct this way??
 export const handleSetPlant = (
     socket: Socket,
-    gameID: string,
-    playerName: string,
     plantTiles : PlantTile[]
 ) => {
     var connection = connectionList.find((c) => c.socket == socket);
     if (!connection) return;
 
-    var game = gameMap.get(gameID);
+    var game = gameMap.get(connection.gameID);
     if (!game) return;
 
-    game.setPlantTile(playerName, plantTiles);
+    game.setPlantTile(connection.playerID, plantTiles);
 };
 
 export const handleSetSplash = (
