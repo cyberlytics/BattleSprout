@@ -43,16 +43,14 @@ export const App = () => {
     return (
         <ThemeProvider theme={theme}>
             <BrowserRouter>
+                <Layout />
                 <Routes>
-                    <Route path='/' Component={Layout}>
-                        <Route index path='MainMenu' Component={MainMenu} />
-                        <Route index path='Login' Component={Login} />
-                        <Route path='Signup' Component={Signup} />
-                        <Route path='GameField/:id' Component={GameField} />
-                        <Route path='CreateGame' Component={CreateGame} />
-                        <Route path='Ranking' Component={Ranking} />
-                        <Route path='*' Component={NoPage} />
-                    </Route>
+                    <Route path='/' Component={MainMenu} />
+                    <Route path='Signup' Component={Signup} />
+                    <Route path='GameField/:id' Component={GameField} />
+                    <Route path='CreateGame' Component={CreateGame} />
+                    <Route path='Ranking' Component={Ranking} />
+                    <Route path='*' Component={NoPage} />
                 </Routes>
             </BrowserRouter>
         </ThemeProvider>

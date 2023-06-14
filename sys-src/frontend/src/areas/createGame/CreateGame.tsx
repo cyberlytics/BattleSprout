@@ -21,6 +21,7 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
 
     const gamelinkRef = useRef<HTMLInputElement>(null);
 
+    //TODO: Move to gameField
     const copyGameLink = () => {
         if (gamelinkRef.current) {
             navigator.clipboard
@@ -124,11 +125,10 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                         margin: 30,
                     }}
                 >
-                    <Typography variant='body1'>
+                    {/* <Typography variant='body1'>
                         Lade einen Freund ein:
                     </Typography>
                     <div id='copyLinkBox'>
-                        {/* Game link */}
                         <input
                             type='text'
                             ref={gamelinkRef}
@@ -148,23 +148,7 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                             {' '}
                             Kopieren
                         </Button>
-                    </div>
-                    <div
-                        style={{
-                            marginTop: 30,
-                        }}
-                    >
-                        <Typography variant='body1'>
-                            SocketIO Informationen:
-                        </Typography>
-                        <Typography variant='body2'>User ID: {uid}</Typography>
-                        <Typography variant='body2'>
-                            Anzahl Online-User: {users.length}
-                        </Typography>
-                        <Typography variant='body2'>
-                            Socket ID: {socket?.id}
-                        </Typography>
-                    </div>
+                    </div> */}
                 </div>
                 <div
                     style={{

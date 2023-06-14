@@ -58,7 +58,7 @@ export const Layout = () => {
                                 height: 64,
                                 cursor: 'pointer',
                             }}
-                            onClick={() => navigate('/MainMenu')}
+                            onClick={() => navigate('/')}
                         />
                     </Box>
 
@@ -103,7 +103,7 @@ export const Layout = () => {
                 </Fab>
             </Tooltip>
 
-            <Outlet />
+            {/* <Outlet /> */}
         </>
     );
 };
