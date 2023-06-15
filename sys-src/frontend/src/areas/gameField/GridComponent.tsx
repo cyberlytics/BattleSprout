@@ -1,46 +1,65 @@
-import { useState } from "react";
-import Cell from "./CellComponent";
-import { CellState } from "./GameField";
+import { useEffect, useState } from 'react';
+import Cell from './CellComponent';
+import { CellState } from './GameField';
 
-const dummyData: number[][] = [
-  [0,1,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,1,1,1,0],
-  [0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,1,1,1,1,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,0,1,1,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0],
-  [0,1,0,0,0,0,0,0,1,0]
-]
+// const dummyData: number[][] = [
+//     [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 1, 1, 1, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//     [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+// ];
 
-const Grid: React.FC = () => {
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  
-    const handleCellHover = (index: number) => {
-      setHoveredIndex(index);
-    };
-  
-    const gridStyle = {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(10, 40px)',
-      marginRight: '64px'
-    };
-  
+interface ICell {
+    index: number;
+    state: CellState;
+}
+
+const Grid = () => {
+    const [cellArray, setCellArray] = useState<ICell[]>(initCells);
+
+    function initCells() {
+        const cells: ICell[] = [];
+        for (let i = 0; i < 100; i++) {
+            cells.push({ index: i, state: CellState.EMPTY });
+        }
+        return cells;
+    }
+
+    function placePlant(index: number) {
+        const updatedArray = cellArray.map((cellItem) => {
+            if (cellItem.index === index) {
+                return { ...cellItem, state: CellState.PLANT };
+            }
+            return cellItem;
+        });
+        setCellArray(updatedArray);
+    }
+
     return (
-      <div style={gridStyle}>
-        {Array.from(Array(100).keys()).map((index) => (
-          <Cell
-            key={index}
-            index={index}
-            onMouseEnter={() => handleCellHover(index)}
-            onMouseLeave={() => handleCellHover(0)}
-            cellState={CellState.EMPTY}
-          />
-        ))}
-      </div>
+        <div
+            style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(10, 40px)',
+                marginRight: '64px',
+                background: 'white',
+            }}
+        >
+            {cellArray.map((cellItem) => (
+                <Cell
+                    key={cellItem.index}
+                    index={cellItem.index}
+                    onPlantPlaced={() => placePlant(cellItem.index)}
+                    cellState={cellItem.state}
+                />
+            ))}
+        </div>
     );
-  };
+};
 
-  export default Grid;
+export default Grid;

@@ -1,46 +1,67 @@
-import { useState } from "react";
-import { CellProps, CellState } from "./GameField";
+import { useEffect, useState } from 'react';
+import { CellState } from './GameField';
 
-const Cell: React.FC<CellProps> = ({ index, cellState }) => {
-    const [isHovered, setIsHovered] = useState(false);
-  
+interface IProps {
+    index: number;
+    cellState: CellState;
+    onPlantPlaced: Function;
+}
+
+const Cell = (props: IProps) => {
+    const { index, cellState, onPlantPlaced } = props;
+
+    const [cellOpacity, setCellOpacity] = useState(1);
+    const [cellColor, setCellColor] = useState('');
+
     const handleCellHover = () => {
-      setIsHovered(true);
+        setCellOpacity(0.7);
     };
-  
+
     const handleCellLeave = () => {
-      setIsHovered(false);
+        setCellOpacity(1);
     };
-     
-    const stateColor = (cellState: CellState) => {
-      switch(cellState) {
-        case CellState.EMPTY: {return '#AE7867'}
-        case CellState.SHIP: {return 'black'}
-        case CellState.HIT: {return 'blue'}
-        case CellState.MISS: {return 'red'}
-      }
-    }
-  
-    const cellStyle = {
-      backgroundColor: stateColor(cellState),
-      width: '40px',
-      height: '40px',
-      border: '1px solid #C19587',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    };
-  
+
+    useEffect(() => {
+        switch (cellState) {
+            case CellState.EMPTY: {
+                setCellColor('#8f664d');
+                break;
+            }
+            case CellState.PLANT: {
+                setCellColor('green');
+                break;
+            }
+            case CellState.HIT: {
+                setCellColor('red');
+                break;
+            }
+            case CellState.MISS: {
+                setCellColor('gray');
+                break;
+            }
+        }
+    }, [cellState]);
+
     return (
-      <div
-        style={cellStyle}
-        onMouseEnter={handleCellHover}
-        onMouseLeave={handleCellLeave}
-        onClick={() => {console.log(index)}}
-      >
-        {}
-      </div>
+        <div
+            className='cell-component'
+            style={{
+                backgroundColor: cellColor,
+                width: '40px',
+                height: '40px',
+                border: '1px solid black',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: cellOpacity,
+            }}
+            onMouseEnter={handleCellHover}
+            onMouseLeave={handleCellLeave}
+            onClick={() => {
+                onPlantPlaced();
+            }}
+        ></div>
     );
-  };
+};
 
 export default Cell;
