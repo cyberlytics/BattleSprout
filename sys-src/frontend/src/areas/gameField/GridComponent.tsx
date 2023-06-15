@@ -2,25 +2,15 @@ import { useEffect, useState } from 'react';
 import Cell from './CellComponent';
 import { CellState } from './GameField';
 
-// const dummyData: number[][] = [
-//     [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 1, 1, 1, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
-//     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//     [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
-// ];
-
 interface ICell {
     index: number;
     state: CellState;
 }
 
 const Grid = () => {
+    //TODO: Array soll vom Backend verwaltet werden
+    //Frontend zeigt Array nur an und übergibt Aufrufe mit Clicks der Zellen
+    //Backend muss 2 verschiedene Versionen jedes Spielfelds speichern (Pfanzen sichtbar / unsichtbar)
     const [cellArray, setCellArray] = useState<ICell[]>(initCells);
 
     function initCells() {
@@ -32,6 +22,8 @@ const Grid = () => {
     }
 
     function placePlant(index: number) {
+        //TODO: Hier muss an das Backend übergeben werden, welche Zelle geklickt wurde.
+        //Das Backend schickt wiederum zurück, was mit der Zelle (un den anderen) passiert
         const updatedArray = cellArray.map((cellItem) => {
             if (cellItem.index === index) {
                 return { ...cellItem, state: CellState.PLANT };
