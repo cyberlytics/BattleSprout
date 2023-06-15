@@ -17,8 +17,6 @@ interface IApplicationProps {}
 export const CreateGame: React.FunctionComponent<IApplicationProps> = (
     props
 ) => {
-    const { socket, uid, users } = useContext(SocketContext).SocketState;
-
     const gamelinkRef = useRef<HTMLInputElement>(null);
 
     //TODO: Move to gameField

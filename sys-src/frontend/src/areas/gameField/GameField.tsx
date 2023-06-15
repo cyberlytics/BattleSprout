@@ -1,9 +1,8 @@
 import { Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import Grid from './GridComponent';
-import SocketContextComponent from '../../socket/Component';
 import { useParams } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
+import { GridComponent } from './GridComponent';
 
 export enum CellState {
     EMPTY,
@@ -26,6 +25,9 @@ export const GameField: React.FC = () => {
 
     const socketContext = useRef<Socket>(io(SOCKET_SERVER_URL));
     const [gameState, setGameState] = useState<GameState>(GameState.connecting);
+
+    //TODO: Größe vom Socket auslesen
+    const [gameFieldSize, setGameFieldSize] = useState<number>(10);
 
     useEffect(() => {
         if (gameState === GameState.connecting) {
@@ -61,14 +63,20 @@ export const GameField: React.FC = () => {
                 <div style={{ display: 'flex', gap: '128px' }}>
                     <div>
                         <Typography variant='h4'>Dein Beet</Typography>
-                        <Grid />
+                        <GridComponent
+                            socketContext={socketContext}
+                            gameFieldSize={gameFieldSize}
+                        />
                     </div>
 
                     <div>
                         <Typography variant='h4'>
                             Beet von Unknown_User
                         </Typography>
-                        <Grid />
+                        <GridComponent
+                            socketContext={socketContext}
+                            gameFieldSize={gameFieldSize}
+                        />
                     </div>
                 </div>
             </div>

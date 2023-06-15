@@ -1,13 +1,20 @@
-import { useEffect, useState } from 'react';
+import { MutableRefObject, useState } from 'react';
 import Cell from './CellComponent';
 import { CellState } from './GameField';
+import { Socket } from 'socket.io-client';
 
 interface ICell {
     index: number;
     state: CellState;
 }
 
-const Grid = () => {
+interface IProps {
+    socketContext: MutableRefObject<Socket>;
+    gameFieldSize: number;
+}
+
+export const GridComponent = (props: IProps) => {
+    const { socketContext, gameFieldSize } = props;
     //TODO: Array soll vom Backend verwaltet werden
     //Frontend zeigt Array nur an und übergibt Aufrufe mit Clicks der Zellen
     //Backend muss 2 verschiedene Versionen jedes Spielfelds speichern (Pfanzen sichtbar / unsichtbar)
@@ -15,7 +22,8 @@ const Grid = () => {
 
     function initCells() {
         const cells: ICell[] = [];
-        for (let i = 0; i < 100; i++) {
+        const size = gameFieldSize * gameFieldSize;
+        for (let i = 0; i < size; i++) {
             cells.push({ index: i, state: CellState.EMPTY });
         }
         return cells;
@@ -24,6 +32,13 @@ const Grid = () => {
     function placePlant(index: number) {
         //TODO: Hier muss an das Backend übergeben werden, welche Zelle geklickt wurde.
         //Das Backend schickt wiederum zurück, was mit der Zelle (un den anderen) passiert
+
+        console.log('Initial index: ' + index);
+        const { x, y } = convertIndexToXY(index);
+        console.log('Converted to coordinates: x: ' + x + ' y: ' + y);
+        const newIndex = convertXYToIndex(x, y);
+        console.log('Back to index: ' + newIndex);
+
         const updatedArray = cellArray.map((cellItem) => {
             if (cellItem.index === index) {
                 return { ...cellItem, state: CellState.PLANT };
@@ -31,6 +46,16 @@ const Grid = () => {
             return cellItem;
         });
         setCellArray(updatedArray);
+    }
+
+    function convertXYToIndex(x: number, y: number) {
+        return y * gameFieldSize + x;
+    }
+
+    function convertIndexToXY(index: number) {
+        const x = index % gameFieldSize;
+        const y = Math.floor(index / gameFieldSize);
+        return { x, y };
     }
 
     return (
@@ -53,5 +78,3 @@ const Grid = () => {
         </div>
     );
 };
-
-export default Grid;
