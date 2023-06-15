@@ -29,16 +29,13 @@ export const GridComponent = (props: IProps) => {
         return cells;
     }
 
-    function placePlant(index: number) {
+    function handleCellClick(index: number) {
+        const { x, y } = convertIndexToXY(index);
+
         //TODO: Hier muss an das Backend übergeben werden, welche Zelle geklickt wurde.
         //Das Backend schickt wiederum zurück, was mit der Zelle (un den anderen) passiert
 
-        console.log('Initial index: ' + index);
-        const { x, y } = convertIndexToXY(index);
-        console.log('Converted to coordinates: x: ' + x + ' y: ' + y);
-        const newIndex = convertXYToIndex(x, y);
-        console.log('Back to index: ' + newIndex);
-
+        //zum Testen:
         const updatedArray = cellArray.map((cellItem) => {
             if (cellItem.index === index) {
                 return { ...cellItem, state: CellState.PLANT };
@@ -71,7 +68,7 @@ export const GridComponent = (props: IProps) => {
                 <Cell
                     key={cellItem.index}
                     index={cellItem.index}
-                    onPlantPlaced={() => placePlant(cellItem.index)}
+                    onPlantPlaced={() => handleCellClick(cellItem.index)}
                     cellState={cellItem.state}
                 />
             ))}

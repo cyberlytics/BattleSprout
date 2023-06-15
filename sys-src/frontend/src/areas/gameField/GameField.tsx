@@ -39,6 +39,8 @@ export const GameField: React.FC = () => {
             socketContext.current.emit('joinGame', gameId);
             setGameState(GameState.setup);
         }
+
+        //TODO: Event for gameFieldSize
     }, []);
 
     return (
