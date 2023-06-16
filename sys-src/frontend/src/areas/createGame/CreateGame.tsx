@@ -71,7 +71,7 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                 >
                     <Button
                         variant='outlined'
-                        onClick={() => navigate('/MainMenu')}
+                        onClick={() => navigate('/')}
                     >
                         {'Zurück'}
                     </Button>

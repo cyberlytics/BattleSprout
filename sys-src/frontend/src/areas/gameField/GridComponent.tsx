@@ -37,8 +37,13 @@ export const GridComponent = (props: IProps) => {
 
         //zum Testen:
         const updatedArray = cellArray.map((cellItem) => {
-            if (cellItem.index === index) {
+            //Wenn Zelle EMPTY wird beim Klicken eine Pflanzzelle gesetzt
+            if (cellItem.index === index && cellItem.state === CellState.EMPTY) {
                 return { ...cellItem, state: CellState.PLANT };
+            }
+            //Wenn Zelle bereits PLANT wird die Zelle bei erneutem Klicken wieder auf EMPTY gesetzt
+            else if (cellItem.index === index && cellItem.state === CellState.PLANT) {
+                return { ...cellItem, state: CellState.EMPTY };
             }
             return cellItem;
         });
