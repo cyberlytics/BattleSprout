@@ -26,13 +26,13 @@ const theme = createTheme({
 //App Komponente ist immer geladen
 export const App = () => {
     //TODO: fix token
-    if (localStorage.getItem('token') !== null) {
+    if (localStorage.getItem('token') == null) {
         return (
             <ThemeProvider theme={theme}>
                 <BrowserRouter>
                     <Routes>
-                        <Route path='/' Component={Login} />
-                        <Route path='/signup' Component={Signup} />
+                        <Route path='Login' Component={Login} />
+                        <Route path='Signup' Component={Signup} />
                         <Route path='*' Component={Login} />
                     </Routes>
                 </BrowserRouter>

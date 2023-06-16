@@ -8,12 +8,14 @@ import {
 } from '@mui/material';
 import { AccountCircle, Lock } from '@mui/icons-material';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 //Login ist das erste, was der Nutzter sieht, wenn er die Website aufruft
 export const Signup = () => {
     const [password, setPassword] = React.useState('');
     const [email, setUsername] = React.useState('');
     const [sndPassword, setSndPassword] = React.useState('');
+    const navigate = useNavigate();
 
     const xsValue = 12;
     const mdValue = 6;
@@ -56,6 +58,7 @@ export const Signup = () => {
             const url = 'http://localhost:3000/api/signup';
             const { data: res } = await axios.post(url, { email, password });
             alert('Sie sind nun registiert.');
+            navigate("Login")
         } catch (error) {
             alert(
                 'Nutzer mit Email-Adresse ' + email + ' ist bereits vorhanden'

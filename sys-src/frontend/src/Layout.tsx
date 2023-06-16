@@ -25,7 +25,7 @@ export const Layout = () => {
 
     function logout() {
         localStorage.removeItem('token');
-        navigate('/');
+        navigate('Login');
         window.location.reload();
     }
 
