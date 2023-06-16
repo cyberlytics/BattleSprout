@@ -45,9 +45,8 @@ export class Game {
 
         this.players.push(new Player(playerName));
 
-        if (this.players.length === 2) {
-            this.gameState = GameState.SETUP;
-        }
+        this.gameState = GameState.SETUP;
+
     }
 
     public setPlantTile(playerName: string, plantTiles: PlantTile[]): void {

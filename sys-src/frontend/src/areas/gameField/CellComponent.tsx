@@ -27,6 +27,10 @@ const Cell = (props: IProps) => {
                 setCellColor('#8f664d');
                 break;
             }
+            case CellState.SETUP: {
+                setCellColor("blue");
+                break;
+            }
             case CellState.PLANT: {
                 setCellColor('green');
                 break;
