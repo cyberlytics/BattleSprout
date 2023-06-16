@@ -4,6 +4,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 import { GridComponent } from './GridComponent';
 import {PlantTile} from "../../PlantTile.";
+import PlantsAvailableListComponent from "./PlantsAvailableListComponent";
 
 export enum CellState {
     EMPTY,
@@ -20,14 +21,16 @@ const SOCKET_SERVER_URL = 'http://localhost:4000';
     connecting,
     joining,
     setup,
-<<<<<<< HEAD
+
+    confirm,
+
     playing,
     finished
-=======
 
-    playing
->>>>>>> 736ee3e178890583ecef3100d810828f2e8b61a7
+
 }
+
+var numbers = [2, 4, 4];
 
 export const GameField= () => {
     const params = useParams();
@@ -41,6 +44,11 @@ export const GameField= () => {
     console.log(location.state)
     const [plantTiles, setPlantTiles] = useState<PlantTile[]>([]);
     const [gameFieldSize, setGameFieldSize] = useState<number>(location.state);
+    const [setupDone, setSetupDone] = useState<boolean>(false);
+
+
+
+    const [useablePlants, setUseablePlants] = useState<number[]>(numbers);
 
     useEffect(() => {
         if (gameState === GameState.connecting) {
@@ -62,12 +70,37 @@ export const GameField= () => {
 
     function setPlant() {
 
+
+        if (!isPlantSizeAvailable())
+            return;
+
         setPlantTiles([]);
         socketContext.current.emit('setPlant', plantTiles);
+        setSetupDone(true);
+    }
+
+    function isPlantSizeAvailable(): boolean {
+        const plantLength = plantTiles.length;
+
+        if (useablePlants.includes(plantLength)) {
+
+            let updated = [...useablePlants];
+
+            updated.splice(updated.indexOf(plantLength), 1);
+
+            setUseablePlants(updated);
+
+            if (updated.length === 0) {
+                setGameState(GameState.confirm);
+            }
+            return true;
+        }
+        return false;
     }
 
     function addPlantTile(plantTile : PlantTile) : boolean{
 
+        setSetupDone(false);
         if(!canPlantTileBeAdded(plantTile))
             return false;
 
@@ -79,6 +112,10 @@ export const GameField= () => {
         if(plantTiles.length === 0){
             return true;
         }
+
+        if(plantTiles.length >= Math.max.apply(null, useablePlants))
+            return false;
+
 
         const isNotInStraightLine = checkForStraightLine(plantTiles, plantTile);
         const hasAdjacentTile = checkForNeighbour(plantTiles, plantTile);
@@ -122,14 +159,9 @@ export const GameField= () => {
 
     return (
         <div>
-            {gameState === GameState.setup &&
 
-                <button > Bereit! </button>
-            }
 
-            {gameState === GameState.setup &&
-                <button onClick={setPlant}> Pflanze setzen! </button>
-            }
+
             <Typography
                 variant='h2'
                 style={{
@@ -151,18 +183,30 @@ export const GameField= () => {
                     <div>
                         <Typography variant='h4'>Dein Beet</Typography>
                         <GridComponent
+                            setupDone={setupDone}
                             socketContext={socketContext}
                             gameFieldSize={gameFieldSize}
                             addPlantTile={addPlantTile}
-
                         />
                     </div>
+
+                    {gameState === GameState.confirm &&
+                        <button> Bereit! </button>
+                    }
+
+                    { gameState===GameState.setup
+                        && <PlantsAvailableListComponent numbers={useablePlants} /> }
+
+                    {gameState === GameState.setup &&
+                        <button onClick={setPlant}> Pflanze setzen! </button>
+                    }
                     {gameState === GameState.playing &&
                         <div>
                             <Typography variant='h4'>
                                 Beet von Unknown_User
                             </Typography>
                             <GridComponent
+                                setupDone={setupDone}
                                 socketContext={socketContext}
                                 gameFieldSize={gameFieldSize}
                                 addPlantTile={addPlantTile}

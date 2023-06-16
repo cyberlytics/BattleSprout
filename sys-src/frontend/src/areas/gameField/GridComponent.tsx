@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useState } from 'react';
+import React, {MutableRefObject, useEffect, useState} from 'react';
 import Cell from './CellComponent';
 import { CellState } from './GameField';
 import { Socket } from 'socket.io-client';
@@ -14,16 +14,24 @@ interface IProps {
     socketContext: MutableRefObject<Socket>;
     gameFieldSize: number;
     addPlantTile: Function;
+
+    setupDone: boolean;
 }
 
 export const GridComponent = (props: IProps) => {
-    const { socketContext, gameFieldSize, addPlantTile} = props;
+    const { socketContext, gameFieldSize, addPlantTile, setupDone} = props;
     //TODO: Array soll vom Backend verwaltet werden
     //Frontend zeigt Array nur an und übergibt Aufrufe mit Clicks der Zellen
     //Backend muss 2 verschiedene Versionen jedes Spielfelds speichern (Pfanzen sichtbar / unsichtbar)
     const [cellArray, setCellArray] = useState<ICell[]>(initCells);
 
 
+    useEffect(() => {
+
+        if (setupDone) {
+            setupToPlant();
+        }
+    }, [setupDone]);
 
     function initCells() {
         const cells: ICell[] = [];
@@ -58,7 +66,17 @@ export const GridComponent = (props: IProps) => {
     }
 
 
+    function setupToPlant() {
 
+        var updatedArray = cellArray.map((cellItem) => {
+
+            if (cellItem.state === CellState.SETUP) {
+                return { ...cellItem, state: CellState.PLANT };
+            }
+            return cellItem;
+        });
+        setCellArray(updatedArray);
+    }
 
     function convertXYToIndex(x: number, y: number) {
         return y * gameFieldSize + x;
