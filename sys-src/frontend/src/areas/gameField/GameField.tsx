@@ -17,6 +17,8 @@ export enum GameState {
     connecting,
     joining,
     setup,
+    playing,
+    finished
 }
 
 export const GameField: React.FC = () => {
@@ -44,6 +46,23 @@ export const GameField: React.FC = () => {
         //TODO: Event for gameFieldSize
     }, []);
 
+    const getGameStateText = () => {
+        switch (gameState) {
+            case GameState.connecting:
+                return 'Verbinden...';
+            case GameState.joining:
+                return 'Spiel beitreten...';
+            case GameState.setup:
+                return 'Spielaufbau - platziere deine Pflanzen';
+            case GameState.playing:
+                return 'Spiel läuft...';
+            case GameState.finished:
+                return 'Spiel zu Ende!';
+            default:
+                return '';
+        }
+    };
+
     return (
         <div>
             <Typography
@@ -53,7 +72,7 @@ export const GameField: React.FC = () => {
                     margin: 30,
                 }}
             >
-                Spielfeld
+                {getGameStateText()}
             </Typography>
             <div
                 style={{
