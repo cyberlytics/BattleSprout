@@ -9,7 +9,7 @@ const createNewGame = (req: any, res: any) => {
     var randomGameId =
         Math.random().toString(36).substring(2, 15) +
         Math.random().toString(36).substring(2, 15);
-    const game = new Game();
+    const game = new Game(randomGameId);
 
     gameMap.set(randomGameId, game);
 

@@ -4,6 +4,7 @@ import { CellState } from './GameField';
 import { Socket } from 'socket.io-client';
 import {PlantTile} from "../../PlantTile.";
 import {Vector2} from "../../Vector2";
+import {GameState} from "./GameState";
 
 interface ICell {
     index: number;
@@ -11,15 +12,20 @@ interface ICell {
 }
 
 interface IProps {
-    socketContext: MutableRefObject<Socket>;
+
     gameFieldSize: number;
     addPlantTile: Function;
 
+    socket: Socket;
+    splashList: { hit: boolean; x: number; y: number; sunk: boolean }[];
     setupDone: boolean;
+
+    isUrTurn: boolean;
+    gameState: GameState;
 }
 
 export const GridComponent = (props: IProps) => {
-    const { socketContext, gameFieldSize, addPlantTile, setupDone} = props;
+    const { gameFieldSize, addPlantTile, setupDone, splashList, gameState, socket, isUrTurn} = props;
     //TODO: Array soll vom Backend verwaltet werden
     //Frontend zeigt Array nur an und übergibt Aufrufe mit Clicks der Zellen
     //Backend muss 2 verschiedene Versionen jedes Spielfelds speichern (Pfanzen sichtbar / unsichtbar)
@@ -31,7 +37,12 @@ export const GridComponent = (props: IProps) => {
         if (setupDone) {
             setupToPlant();
         }
-    }, [setupDone]);
+
+        updateSplashes();
+
+
+    }, [setupDone, splashList]);
+
 
     function initCells() {
         const cells: ICell[] = [];
@@ -43,6 +54,32 @@ export const GridComponent = (props: IProps) => {
     }
 
     function handleCellClick(index: number) {
+
+        if (gameState === GameState.setup) {
+            handleSetupCellClick(index);
+        }
+
+        if (gameState === GameState.playing) {
+            handlePlayingCellClick(index);
+        }
+    }
+
+
+    function handlePlayingCellClick(index: number) {
+
+        console.log("isUrTurn: " + isUrTurn)
+        if (!isUrTurn) return;
+
+        console.log("Its my turn!");
+        const { x, y } = convertIndexToXY(index);
+        socket.emit('setSplash', new Vector2(x,y));
+
+
+    }
+
+
+    function handleSetupCellClick(index: number) {
+
         const { x, y } = convertIndexToXY(index);
 
 
@@ -66,9 +103,24 @@ export const GridComponent = (props: IProps) => {
     }
 
 
+    function updateSplashes() {
+
+        splashList.forEach((splash) => {
+
+            const index = convertXYToIndex(splash.x, splash.y);
+            const updatedArray = cellArray.map((cellItem) => {
+                if (cellItem.index === index) {
+                    return { ...cellItem, state: splash.hit ? CellState.HIT : CellState.MISS };
+                }
+                return cellItem;
+            });
+            setCellArray(updatedArray);
+        });
+    }
+
     function setupToPlant() {
 
-        var updatedArray = cellArray.map((cellItem) => {
+        const updatedArray = cellArray.map((cellItem) => {
 
             if (cellItem.state === CellState.SETUP) {
                 return { ...cellItem, state: CellState.PLANT };

@@ -7,6 +7,11 @@ export class Board {
     public plants: Plant[] = [];
 
 
+    constructor() {
+
+        this.plants = [];
+    }
+
     public addPlant(plant: Plant) {
 
         this.plants.push(plant);

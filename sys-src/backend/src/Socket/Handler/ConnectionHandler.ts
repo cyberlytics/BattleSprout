@@ -8,14 +8,12 @@ export const handleHandshake = (socket: Socket) => {
     console.log('Client connected: ' + socket.id);
 }
 
-export const handleAuthenticate = (socket: Socket, message: string) => {
-
-    var authMessage = JSON.parse(message);
+export const handleAuthenticate = (socket: Socket, playerId: string) => {
 
     const connection = connectionList.find(c => c.socket.id == socket.id);
 
     if(connection){
-        connection.playerID = "test";
+        connection.playerID = playerId;
     }
 }
 

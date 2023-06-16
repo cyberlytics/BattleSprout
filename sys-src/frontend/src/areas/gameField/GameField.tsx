@@ -5,6 +5,7 @@ import io, { Socket } from 'socket.io-client';
 import { GridComponent } from './GridComponent';
 import {PlantTile} from "../../PlantTile.";
 import PlantsAvailableListComponent from "./PlantsAvailableListComponent";
+import {GameState} from "./GameState";
 
 export enum CellState {
     EMPTY,
@@ -17,55 +18,123 @@ export enum CellState {
 
 const SOCKET_SERVER_URL = 'http://localhost:4000';
 
- enum GameState {
-    connecting,
-    joining,
-    setup,
-
-    confirm,
-
-    playing,
-    finished
 
 
-}
+const numbers = [1];
 
-var numbers = [2, 4, 4];
+ const playerId = "1";
 
 export const GameField= () => {
     const params = useParams();
     const gameId = params.id;
 
+
     console.log(gameId)
 
-    const socketContext = useRef<Socket>(io(SOCKET_SERVER_URL));
+    const [socket] = useState(io(SOCKET_SERVER_URL));
     const [gameState, setGameState] = useState<GameState>(GameState.connecting);
     const location = useLocation();
     console.log(location.state)
     const [plantTiles, setPlantTiles] = useState<PlantTile[]>([]);
-    const [gameFieldSize, setGameFieldSize] = useState<number>(location.state);
+    const [gameFieldSize, setGameFieldSize] = useState<number>(10);
     const [setupDone, setSetupDone] = useState<boolean>(false);
+    const [currentPlayer, setCurrentPlayer] = useState<string>("");
 
+    const [playerId, setPlayerId] = useState<string>("");
+    const [ourBoardSplashes, setOurBoardSplashes] = useState<{ hit: boolean; x: number; y: number; sunk: boolean }[]>([]);
+    const [enemyBoardSplashes, setEnemyBoardSplashes] = useState<{ hit: boolean; x: number; y: number; sunk: boolean }[]>([]);
 
+    const [usablePlants, setUsablePlants] = useState<number[]>(numbers);
 
-    const [useablePlants, setUseablePlants] = useState<number[]>(numbers);
+    const [isSocketSetup, setIsSocketSetup] = useState<boolean>(false);
+
+    const [turn, setTurn] = useState<boolean>(false);
+
 
     useEffect(() => {
-        if (gameState === GameState.connecting) {
-            socketContext.current.emit('handshake');
 
-            setGameState(GameState.joining);
-            console.log('handshake')
+        if (!isSocketSetup) {
+            socketSetup();
         }
 
-        if (gameState === GameState.joining) {
-            socketContext.current.emit('joinGame', gameId);
-            console.log('joining')
-            setGameState(GameState.setup);
-        }
+        return () => {
 
-        //TODO: Event for gameFieldSize
-    }, );
+            socket.disconnect();
+
+        };
+
+    },[] );
+
+
+    useEffect(() => {
+
+
+
+    },[] );
+
+    function socketSetup() {
+
+
+        setIsSocketSetup(true);
+
+
+        setGameState(GameState.joining);
+        socket.emit('handshake')
+
+        console.log('handshake')
+        const id = Math.random().toString(36);
+        console.log("PlayerID "+  id)
+        socket.emit('authenticate', id);
+        setPlayerId(id);
+
+        socket.emit('joinGame', gameId);
+
+        setGameState(GameState.setup);
+
+
+        setPlayerId(id);
+
+        socket.on('splash', (splashedPlayer: string, splash: { hit: boolean; x: number; y: number; sunk: boolean }) => {
+
+            handleSplash(splashedPlayer, id,  splash);
+
+        });
+
+
+
+        socket.on('turnChanged', (playerNameOfNewTurn: string) => {
+
+            console.log("Received TurnChanged : " + playerNameOfNewTurn)
+            setCurrentPlayer(playerNameOfNewTurn);
+        });
+
+        socket.on('startGame', () => {
+
+            console.log("Received Startgame")
+            setGameState(GameState.playing);
+        });
+
+        setIsSocketSetup(true);
+
+    }
+
+
+    function handleSplash(currentPlayer: string, id:string ,splash: { hit: boolean; x: number; y: number; sunk: boolean }) {
+
+
+        if(currentPlayer === id){
+            setEnemyBoardSplashes([...enemyBoardSplashes, splash]);
+
+        }else{
+
+            setOurBoardSplashes([...ourBoardSplashes, splash]);
+        }
+    }
+
+    function setReady() {
+
+        socket.emit('playerReady', gameId);
+    }
 
 
     function setPlant() {
@@ -75,20 +144,29 @@ export const GameField= () => {
             return;
 
         setPlantTiles([]);
-        socketContext.current.emit('setPlant', plantTiles);
+
+        const dataObjects = plantTiles.map((plantTile) => ({
+            position: {
+                x: plantTile.position.x,
+                y: plantTile.position.y,
+            }
+        }));
+
+        console.log(dataObjects);
+        socket.emit('setPlant', dataObjects);
         setSetupDone(true);
     }
 
     function isPlantSizeAvailable(): boolean {
         const plantLength = plantTiles.length;
 
-        if (useablePlants.includes(plantLength)) {
+        if (usablePlants.includes(plantLength)) {
 
-            let updated = [...useablePlants];
+            let updated = [...usablePlants];
 
             updated.splice(updated.indexOf(plantLength), 1);
 
-            setUseablePlants(updated);
+            setUsablePlants(updated);
 
             if (updated.length === 0) {
                 setGameState(GameState.confirm);
@@ -109,13 +187,12 @@ export const GameField= () => {
     }
 
     function canPlantTileBeAdded(plantTile: PlantTile): boolean {
-        if(plantTiles.length === 0){
-            return true;
-        }
 
-        if(plantTiles.length >= Math.max.apply(null, useablePlants))
+        if(plantTiles.length >= Math.max.apply(null, usablePlants))
             return false;
 
+        if(plantTiles.length === 0)
+            return true;
 
         const isNotInStraightLine = checkForStraightLine(plantTiles, plantTile);
         const hasAdjacentTile = checkForNeighbour(plantTiles, plantTile);
@@ -183,19 +260,22 @@ export const GameField= () => {
                     <div>
                         <Typography variant='h4'>Dein Beet</Typography>
                         <GridComponent
+                            gameState={gameState}
+                            socket={socket}
                             setupDone={setupDone}
-                            socketContext={socketContext}
+                            isUrTurn={currentPlayer === playerId}
+                            splashList={ourBoardSplashes}
                             gameFieldSize={gameFieldSize}
                             addPlantTile={addPlantTile}
                         />
                     </div>
 
                     {gameState === GameState.confirm &&
-                        <button> Bereit! </button>
+                        <button onClick={setReady}> Bereit! </button>
                     }
 
                     { gameState===GameState.setup
-                        && <PlantsAvailableListComponent numbers={useablePlants} /> }
+                        && <PlantsAvailableListComponent numbers={usablePlants} /> }
 
                     {gameState === GameState.setup &&
                         <button onClick={setPlant}> Pflanze setzen! </button>
@@ -206,8 +286,11 @@ export const GameField= () => {
                                 Beet von Unknown_User
                             </Typography>
                             <GridComponent
+                                gameState={gameState}
+                                isUrTurn={currentPlayer === playerId}
+                                socket={socket}
                                 setupDone={setupDone}
-                                socketContext={socketContext}
+                                splashList={enemyBoardSplashes}
                                 gameFieldSize={gameFieldSize}
                                 addPlantTile={addPlantTile}
                             />

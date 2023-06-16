@@ -1,5 +1,5 @@
 import {
-    handleSplash,
+    handleSplash, handleStartGame,
     handleTurnChanged,
 } from '../Socket/Handler/ResponseHandler';
 import {PlantTile} from "./PlantTile";
@@ -30,18 +30,23 @@ export class Game {
     private currentPlayerIndex: number;
     private gameState: GameState;
 
-    constructor() {
+    private gameId: string;
+
+    constructor(gameId: string){
         this.players = [];
         this.currentPlayerIndex = 0;
         this.gameState = GameState.JOINING;
+        this.gameId = gameId;
     }
 
     public joinGame(playerName: string): void {
-        if (this.gameState !== GameState.JOINING || this.players.length >= 2) {
+        if (this.players.length >= 2) {
             throw new Error(
                 'Cannot join game in current state or game is full.'
             );
         }
+
+        console.log('Player joined game: ' + playerName)
 
         this.players.push(new Player(playerName));
 
@@ -54,6 +59,7 @@ export class Game {
             throw new Error('Cannot set plant tile in current state.');
         }
 
+        console.log('Player set plant tile: ' + playerName + plantTiles)
         var plant = new Plant(plantTiles);
 
         const player = this.getPlayerByName(playerName);
@@ -65,12 +71,17 @@ export class Game {
             throw new Error('Cannot mark player ready in current state.');
         }
 
+
         const player = this.getPlayerByName(playerName);
         player.ready = true;
 
-        if (this.players.every((p) => p.ready)) {
+        if (this.players.every((p) => p.ready) && this.players.length == 2) {
             this.gameState = GameState.PLAYING;
+            handleStartGame(this.players.map((p) => p.name), this.gameId);
+            this.changeTurn();
         }
+
+
     }
 
     public processSplash(playerName: string, splash: Vector2): void {
@@ -102,7 +113,7 @@ export class Game {
             sunk: splashResult.sunk,
         };
 
-        handleSplash(this.getNameOfAllPlayers(), message);
+        handleSplash(this.getNameOfAllPlayers(),this.gameId, player.name, message);
     }
 
     private getNameOfAllPlayers(): string[] {
@@ -120,11 +131,12 @@ export class Game {
     }
 
     private changeTurn(): void {
-        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 2;
+        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % 2 ;
 
         handleTurnChanged(
             this.getNameOfAllPlayers(),
-            this.players[this.currentPlayerIndex].name
+            this.players[this.currentPlayerIndex].name,
+            this.gameId
         );
     }
 }
