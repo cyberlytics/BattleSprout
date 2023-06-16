@@ -20,7 +20,7 @@ const SOCKET_SERVER_URL = 'http://localhost:4000';
 
 
 
-const numbers = [1];
+const PlantLength = [2, 3, 3, 4];
 
  const playerId = "1";
 
@@ -44,7 +44,7 @@ export const GameField= () => {
     const [ourBoardSplashes, setOurBoardSplashes] = useState<{ hit: boolean; x: number; y: number; sunk: boolean }[]>([]);
     const [enemyBoardSplashes, setEnemyBoardSplashes] = useState<{ hit: boolean; x: number; y: number; sunk: boolean }[]>([]);
 
-    const [usablePlants, setUsablePlants] = useState<number[]>(numbers);
+    const [usablePlants, setUsablePlants] = useState<number[]>(PlantLength);
 
     const [isSocketSetup, setIsSocketSetup] = useState<boolean>(false);
 
@@ -134,6 +134,7 @@ export const GameField= () => {
     function setReady() {
 
         socket.emit('playerReady', gameId);
+        setGameState(GameState.waiting);
     }
 
 
@@ -225,8 +226,13 @@ export const GameField= () => {
                 return 'Spiel beitreten...';
             case GameState.setup:
                 return 'Spielaufbau - platziere deine Pflanzen';
+            case GameState.waiting:
+                return 'Warten auf Gegner...';
             case GameState.playing:
-                return 'Spiel läuft...';
+                if(currentPlayer === playerId){
+                    return 'Du bist am Zug!';
+                }
+                return 'Warten auf den Gegnerzug...';
             case GameState.finished:
                 return 'Spiel zu Ende!';
             default:
