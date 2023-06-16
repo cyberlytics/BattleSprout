@@ -18,6 +18,7 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
     props
 ) => {
     const gamelinkRef = useRef<HTMLInputElement>(null);
+    const [GameFieldSize, setGameFieldSize] = React.useState('10');
 
     //TODO: Move to gameField
     const copyGameLink = () => {
@@ -43,7 +44,7 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
 
             if (response.data && response.data.gameId) {
                 const link = '/GameField/' + response.data.gameId;
-                navigate(link);
+                navigate(link, {state: GameFieldSize});
             } else {
                 console.log('The response does not contain a game ID.');
             }
@@ -51,6 +52,10 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
             console.error('An error occurred while creating the game:', error);
         }
     };
+
+    const handleGameFieldSizeChange = (ev: any) => {        
+        setGameFieldSize(ev.target.value)        
+    }
 
     return (
         <>
@@ -87,31 +92,32 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                         </FormLabel>
                         <RadioGroup
                             aria-labelledby='radio-buttons-group-label'
-                            defaultValue='ten'
-                            name='radio-buttons-group'
+                            defaultValue='10'
+                            name='radio-buttons-group'                            
+                            onChange={handleGameFieldSizeChange}
                         >
                             <FormControlLabel
-                                value='five'
+                                value='5'
                                 control={<Radio />}
                                 label='5x5'
                             />
                             <FormControlLabel
-                                value='seven'
+                                value='7'
                                 control={<Radio />}
                                 label='7x7'
                             />
                             <FormControlLabel
-                                value='ten'
+                                value='10'
                                 control={<Radio />}
                                 label='10x10'
                             />
                             <FormControlLabel
-                                value='twelve'
+                                value='12'
                                 control={<Radio />}
                                 label='12x12'
                             />
                             <FormControlLabel
-                                value='fifteen'
+                                value='15'
                                 control={<Radio />}
                                 label='15x15'
                             />

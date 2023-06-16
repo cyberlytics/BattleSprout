@@ -1,4 +1,4 @@
-import { MutableRefObject, useState } from 'react';
+import React, { MutableRefObject, useState } from 'react';
 import Cell from './CellComponent';
 import { CellState } from './GameField';
 import { Socket } from 'socket.io-client';
@@ -55,13 +55,13 @@ export const GridComponent = (props: IProps) => {
         return { x, y };
     }
 
-    return (
+    return (        
         <div
-            style={{
+            style={{                
                 display: 'grid',
-                gridTemplateColumns: 'repeat(10, 40px)',
+                gridTemplateColumns: 'repeat(' + `${gameFieldSize}` + ', 40px)',
                 marginRight: '64px',
-                background: 'white',
+                
             }}
         >
             {cellArray.map((cellItem) => (

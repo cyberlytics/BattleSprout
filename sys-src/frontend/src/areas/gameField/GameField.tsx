@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 import { GridComponent } from './GridComponent';
 
@@ -25,9 +25,10 @@ export const GameField: React.FC = () => {
 
     const socketContext = useRef<Socket>(io(SOCKET_SERVER_URL));
     const [gameState, setGameState] = useState<GameState>(GameState.connecting);
-
+    const location = useLocation();
+    console.log(location.state)
     //TODO: Größe vom Socket auslesen
-    const [gameFieldSize, setGameFieldSize] = useState<number>(10);
+    const [gameFieldSize, setGameFieldSize] = useState<number>(location.state);
 
     useEffect(() => {
         if (gameState === GameState.connecting) {
