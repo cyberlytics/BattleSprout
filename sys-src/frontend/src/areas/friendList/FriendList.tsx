@@ -89,7 +89,7 @@ export const FriendList = () => {
                     }
                 }              
                 try{
-                    const response = await axios.post('http://localhost:3000/api/friends',{name: friend});
+                    const response = await axios.post('http://localhost:3000/api/friends',{ name: friend});
                     const newFriend = {Name: friend};
                     setflist([...flist,newFriend]);
                     setfriend('');
