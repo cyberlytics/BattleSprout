@@ -17,7 +17,7 @@ const port: number = 3000;
 const socketPort: number = 4000;
 
 const app: Application = express();
-app.use(cors())
+app.use(cors());
 app.use(express.json())
 
 app.get('/', function(req, res){
@@ -25,10 +25,12 @@ app.get('/', function(req, res){
     res.json({ message: "hello world" });
 });
 
+app.use(friendRoute);
+
 app.use(loginRoute)
 app.use(signUpRoute)
 app.use(gameRoutes)
-app.use(friendRoute)
+
 
 const server = http.createServer(app);
 server.listen(port, () => {

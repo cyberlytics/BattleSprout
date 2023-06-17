@@ -28,6 +28,7 @@ import {
     SportsEsports,
     GroupAdd
 } from '@mui/icons-material';
+import axios from 'axios';
 
 interface IFriend {
     Name: string;
@@ -70,7 +71,7 @@ export const FriendList = () => {
     }
 
     //Fügt Freund zur Liste hinzu und prüft dabei die Eingabe
-    const AddFriend = (event: any): void => {
+    const AddFriend = async (event: any): Promise<void> => {
         event.preventDefault();
         if(friend.length !== 0) {
             if(flist.length === MAX_flist){
@@ -86,9 +87,15 @@ export const FriendList = () => {
                         handleDialogOpen(Titel,Content);
                         return
                     }
+                }              
+                try{
+                    const response = await axios.post('http://localhost:3000/api/friends',{name: friend});
+                    const newFriend = {Name: friend};
+                    setflist([...flist,newFriend]);
+                    setfriend('');
+                }catch(error){
+                    console.error('Could not add friend: ', error);
                 }
-                const newFriend = {Name: friend};
-                setflist([...flist,newFriend]);
             }
         } else {
             const Titel = "Fehlerhafte Eingabe";

@@ -15,7 +15,13 @@ export const getAllFriends = async (req: Request, res: Response): Promise<void> 
 // Add a friend
   export const addFriend = async  (req: Request, res: Response): Promise<void> =>{
     try{
-        const newFriend: IFriend = new Friend(req.body);
+      const newFriend: IFriend = new Friend({
+        name: req.body.name,
+        image: req.body.image,
+        onlineStatus: req.body.onlineStatus || false
+      });
+
+
         const savedFriend: IFriend = await newFriend.save();
         res.json(savedFriend);
     }catch(error){
@@ -26,9 +32,9 @@ export const getAllFriends = async (req: Request, res: Response): Promise<void> 
 // Delete a friend
  export const deleteFriend = async  (req: Request, res: Response): Promise<void> =>{
     try{
-        const newFriend: IFriend = new Friend(req.body);
-        const savedFriend: IFriend = await newFriend.save();
-        res.json(savedFriend);
+      const friendId = req.params.id;
+      await Friend.findByIdAndRemove(friendId);
+      res.json({ message: 'Friend deleted successfully' });
     }catch(error){
         console.error(error);
         res.status(500).json({message: 'Deleted friend'});
