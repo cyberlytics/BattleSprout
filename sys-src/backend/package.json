@@ -34,7 +34,8 @@
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
       "./src/test/index.test.ts",
-      "./src/test/tokenService.test.ts"
+      "./src/test/tokenService.test.ts",
+      "./src/test/ConnectionHandler.test.ts"
     ]
   },
   "devDependencies": {
