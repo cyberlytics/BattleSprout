@@ -4,24 +4,31 @@ import {
     handleDisconnect,
     handleHandshake,
 } from './Handler/ConnectionHandler';
-import {handleJoinGame, handleSetPlant, handleSetSplash} from './Handler/GameHandler';
+import {handleJoinGame, handleReady, handleSetPlant, handleSetSplash} from './Handler/GameHandler';
+import { PlantTile } from '../game/PlantTile';
+import {Vector2} from "../game/Vector2";
 
 export const baseListener = (socket: Socket) => {
     socket.on('handshake', () => handleHandshake(socket));
-    socket.on('authenticate', (message: string) => {
-        handleAuthenticate(socket, message);
+    socket.on('authenticate', (playerId: string) => {
+        handleAuthenticate(socket, playerId);
     });
     socket.on('joinGame', (gameID: string) => {
         handleJoinGame(socket, gameID);
     });
 
-    socket.on('setPlant', (gameID: string, playerName: string, plantTiles: PlantTile[]) => {
-        handleSetPlant(socket, gameID, playerName, plantTiles);
+    socket.on('setPlant', ( plantTiles : { position: {x : number, y : number} }[]) => {
+        handleSetPlant(socket,plantTiles);
     });
 
-    socket.on('setSplash', (gameID: string, playerName: string, x: number, y: number) => {
-        handleSetSplash(socket, gameID, playerName, x, y);
+    socket.on('setSplash', ( position: Vector2 ) => {
+        handleSetSplash(socket, position );
+
     });
 
     socket.on('disconnect', () => handleDisconnect(socket));
+
+    socket.on('playerReady', (gameID: string) => {
+        handleReady(socket, gameID);
+    });
 };

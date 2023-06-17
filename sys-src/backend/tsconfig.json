@@ -10,11 +10,11 @@
         "rootDir": "src",
         "types": ["@types/jest", "node"]
     },
-<<<<<<< HEAD
+
     "include": ["src/**/*.ts",
                 "src/tests/*.ts"],
-=======
+
     "include": ["src/**/*.ts", "src/test/index.test.ts"],
->>>>>>> 531bd228087f90c34fc7ad08bad1fd1e43f9c20a
+
     "exclude": ["node_modules", "dist"]
 }

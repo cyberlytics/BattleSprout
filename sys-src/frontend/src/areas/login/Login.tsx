@@ -8,20 +8,15 @@ import {
     Typography,
     InputAdornment,
 } from '@mui/material';
-import {
-    AccountCircle,
-    Lock,
-} from '@mui/icons-material'
-import background from './../../assets/background.png'
+import { AccountCircle, Lock } from '@mui/icons-material';
+import background from './../../assets/background.png';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-
-
 //Login ist das erste, was der Nutzter sieht, wenn er die Website aufruft
 export const Login = () => {
-    const [password, setPasswort] = React.useState('')
-    const [email, setEmail] = React.useState('')
+    const [password, setPasswort] = React.useState('');
+    const [email, setEmail] = React.useState('');
     const [checked, setChecked] = React.useState(true);
     const navigate = useNavigate();
     const handleChange = (event: {
@@ -34,30 +29,28 @@ export const Login = () => {
     const mdValue = 6;
     const lgValue = 4;
 
-
-    function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){        
+    function handlePasswordChange(
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) {
         setPasswort(event.target.value);
-        
     }
-    
 
-  function handleEmailChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
-    setEmail(event.target.value);
-  }
+    function handleEmailChange(
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) {
+        setEmail(event.target.value);
+    }
 
-  async function CheckLoginData(){
-        try
-        {
-            const url = "http://localhost:3000/api/login";
-            const { data: res } = await axios.post(url, {email,password});
-            localStorage.setItem("token", res.data);
-            navigate('/MainMenu') 
-            window.location.reload()
+    async function CheckLoginData() {
+        try {
+            const url = 'http://localhost:3000/api/login';
+            const { data: res } = await axios.post(url, { email, password });
+            localStorage.setItem('token', res.data);
+            navigate('/');
+            window.location.reload();
+        } catch (error) {
+            alert('Email oder Benutzername falsch');
         }
-        catch (error)
-        {            
-            alert("Email oder Benutzername falsch")
-        }    
     }
 
     return (
@@ -82,9 +75,9 @@ export const Login = () => {
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <TextField
-                            onChange={handleEmailChange}
+                                onChange={handleEmailChange}
                                 label='Email'
-                                style={{ background: '#bbd8b1'}}
+                                style={{ background: '#bbd8b1' }}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
@@ -98,9 +91,9 @@ export const Login = () => {
                             <TextField
                                 onChange={handlePasswordChange}
                                 label='Passwort'
-                                type="password"
+                                type='password'
                                 value={password}
-                                style={{ background: '#bbd8b1'}}
+                                style={{ background: '#bbd8b1' }}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
@@ -139,15 +132,17 @@ export const Login = () => {
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <Typography>
                                 Noch kein Account? Jetzt
-                                <Button style={{color: 'blue'}}
-                                    href='/signup'>
-                                        registrieren!
-                                </Button>                                
+                                <Button
+                                    style={{ color: 'blue' }}
+                                    href='/signup'
+                                >
+                                    registrieren!
+                                </Button>
                             </Typography>
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
         </>
-    );    
+    );
 };

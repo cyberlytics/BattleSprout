@@ -1,20 +1,18 @@
-import { Server as HTTPServer } from 'http';
-import { Socket, Server } from 'socket.io';
-import {baseListener} from "./BaseListener";
-import { v4 } from 'uuid';
-
-/* Kümmert sich um die Verbindung und öffnet Socket-Server, beinhaltet StartListeners für Socket-Verbindung */
+import { Server } from 'socket.io';
+import { baseListener } from "./BaseListener";
 
 export class ServerSocket {
     public static instance: ServerSocket;
-    public io: Server;
 
-    public users: { [uid: string]: string };
 
-    constructor(server: HTTPServer) {
+    constructor(port : number) {
+        if (ServerSocket.instance) {
+            return ServerSocket.instance;
+        }
+
         ServerSocket.instance = this;
-        this.users= {};
-        this.io = new Server(server, {
+
+        const io = new Server(port, {
             serveClient: false,
             pingInterval: 10000,
             pingTimeout: 5000,
@@ -24,9 +22,8 @@ export class ServerSocket {
             }
         });
 
-        this.io.on('connect', baseListener);
+        io.on('connect', baseListener);
 
         console.info('SocketIO started.');
     }
-
 }

@@ -1,5 +1,5 @@
 
-class SplashResult {
+export class SplashResult {
 
     public hit: boolean;
 

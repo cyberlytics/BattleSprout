@@ -1,6 +1,5 @@
 import {Vector2} from "./Vector2";
 
-
 export class PlantTile{
 
     public position: Vector2;

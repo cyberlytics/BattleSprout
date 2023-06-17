@@ -8,6 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import SocketContext from '../../socket/Context';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 //Spiel erstellen-Komponente mit Socket-IO Informationen
 
@@ -16,10 +17,10 @@ interface IApplicationProps {}
 export const CreateGame: React.FunctionComponent<IApplicationProps> = (
     props
 ) => {
-    const { socket, uid, users } = useContext(SocketContext).SocketState;
-
     const gamelinkRef = useRef<HTMLInputElement>(null);
+    const [GameFieldSize, setGameFieldSize] = React.useState('10');
 
+    //TODO: Move to gameField
     const copyGameLink = () => {
         if (gamelinkRef.current) {
             navigator.clipboard
@@ -36,6 +37,25 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
     const gamelink = '[Hier wird die Adresse uebergeben]';
 
     const navigate = useNavigate();
+
+    const createNewGame = async () => {
+        try {
+            const response = await axios.post('http://localhost:3000/newgame');
+
+            if (response.data && response.data.gameId) {
+                const link = '/GameField/' + response.data.gameId;
+                navigate(link, {state: GameFieldSize});
+            } else {
+                console.log('The response does not contain a game ID.');
+            }
+        } catch (error) {
+            console.error('An error occurred while creating the game:', error);
+        }
+    };
+
+    const handleGameFieldSizeChange = (ev: any) => {        
+        setGameFieldSize(ev.target.value)        
+    }
 
     return (
         <>
@@ -54,7 +74,10 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                         margin: 30,
                     }}
                 >
-                    <Button variant='outlined' onClick={() => navigate('/')}>
+                    <Button
+                        variant='outlined'
+                        onClick={() => navigate('/')}
+                    >
                         {'Zurück'}
                     </Button>
                 </div>
@@ -69,31 +92,32 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                         </FormLabel>
                         <RadioGroup
                             aria-labelledby='radio-buttons-group-label'
-                            defaultValue='ten'
-                            name='radio-buttons-group'
+                            defaultValue='10'
+                            name='radio-buttons-group'                            
+                            onChange={handleGameFieldSizeChange}
                         >
                             <FormControlLabel
-                                value='five'
+                                value='5'
                                 control={<Radio />}
                                 label='5x5'
                             />
                             <FormControlLabel
-                                value='seven'
+                                value='7'
                                 control={<Radio />}
                                 label='7x7'
                             />
                             <FormControlLabel
-                                value='ten'
+                                value='10'
                                 control={<Radio />}
                                 label='10x10'
                             />
                             <FormControlLabel
-                                value='twelve'
+                                value='12'
                                 control={<Radio />}
                                 label='12x12'
                             />
                             <FormControlLabel
-                                value='fifteen'
+                                value='15'
                                 control={<Radio />}
                                 label='15x15'
                             />
@@ -105,11 +129,10 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                         margin: 30,
                     }}
                 >
-                    <Typography variant='body1'>
+                    {/* <Typography variant='body1'>
                         Lade einen Freund ein:
                     </Typography>
                     <div id='copyLinkBox'>
-                        {/* Game link */}
                         <input
                             type='text'
                             ref={gamelinkRef}
@@ -129,30 +152,19 @@ export const CreateGame: React.FunctionComponent<IApplicationProps> = (
                             {' '}
                             Kopieren
                         </Button>
-                    </div>
-                    <div
-                        style={{
-                            marginTop: 30,
-                        }}
-                    >
-                        <Typography variant='body1'>
-                            SocketIO Informationen:
-                        </Typography>
-                        <Typography variant='body2'>User ID: {uid}</Typography>
-                        <Typography variant='body2'>
-                            Anzahl Online-User: {users.length}
-                        </Typography>
-                        <Typography variant='body2'>
-                            Socket ID: {socket?.id}
-                        </Typography>
-                    </div>
+                    </div> */}
                 </div>
                 <div
                     style={{
                         margin: 30,
                     }}
                 >
-                    <Button variant='contained'>Starten</Button>
+                    <Button
+                        variant='contained'
+                        onClick={async () => await createNewGame()}
+                    >
+                        Starten
+                    </Button>
                     {/** Link zu Game Room */}
                 </div>
             </div>

@@ -1,6 +1,9 @@
-class Plant {
 
-    plantTiles: PlantTile[] = [];
+import { Vector2 } from "./Vector2";
+import {PlantTile} from "./PlantTile";
+export class Plant {
+
+    plantTiles: PlantTile[]
 
     constructor(plantTiles: PlantTile[]) {
 
