@@ -3,13 +3,15 @@ import { ServerSocket } from './Socket/socket';
 const { User } = require("./models/user");
 const loginRoute = require("./routes/loginRoute")
 const signUpRoute = require("./routes/signUpRoute")
+const friendRoute = require("./routes/friendRoute")
 
 import express, { Application } from 'express';
 import http from 'http';
 import cors from 'cors';
 import { Server as SocketIOServer } from 'socket.io';
 import gameRoutes from "./routes/gameRoutes";
-import friendRoute from "./routes/friendRoute";
+import { getAllFriends } from './controllers/friendsController';
+
 
 const port: number = 3000;
 const socketPort: number = 4000;
@@ -26,6 +28,7 @@ app.get('/', function(req, res){
 app.use(loginRoute)
 app.use(signUpRoute)
 app.use(gameRoutes)
+app.use(friendRoute)
 
 const server = http.createServer(app);
 server.listen(port, () => {
