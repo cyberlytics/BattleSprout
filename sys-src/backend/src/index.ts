@@ -9,6 +9,7 @@ import http from 'http';
 import cors from 'cors';
 import { Server as SocketIOServer } from 'socket.io';
 import gameRoutes from "./routes/gameRoutes";
+import friendRoute from "./routes/friendRoute";
 
 const port: number = 3000;
 const socketPort: number = 4000;
