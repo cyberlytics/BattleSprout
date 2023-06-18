@@ -40,10 +40,9 @@ export class Game {
     }
 
     public joinGame(playerName: string): void {
+
         if (this.players.length >= 2) {
-            throw new Error(
-                'Cannot join game in current state or game is full.'
-            );
+            return;
         }
 
         console.log('Player joined game: ' + playerName)
