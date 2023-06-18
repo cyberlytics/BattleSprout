@@ -33,8 +33,21 @@ async function FindOne(databaseName: string, collectionName: string, query: any)
     }
 }
 
+async function find(databaseName: string, collectionName: string, query: any): Promise<any[]> {
+    try {
+        const db: Db = client.db(databaseName);
+        const collection: Collection<any> = db.collection(collectionName);
+        const result = await collection.find(query).toArray();
+        return result;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
 export {
     connect,
     InsertOne,
-    FindOne
+    FindOne,
+    find
 };

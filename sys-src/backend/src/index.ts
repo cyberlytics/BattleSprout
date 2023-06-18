@@ -4,6 +4,7 @@ const { User } = require("./models/user");
 const loginRoute = require("./routes/loginRoute")
 const signUpRoute = require("./routes/signUpRoute")
 const friendRoute = require("./routes/friendRoute")
+const rankRoute = require("./routes/rankRoute")
 
 import express, { Application } from 'express';
 import http from 'http';
@@ -26,7 +27,7 @@ app.get('/', function(req, res){
 });
 
 app.use(friendRoute);
-
+app.use(rankRoute);
 app.use(loginRoute)
 app.use(signUpRoute)
 app.use(gameRoutes)
