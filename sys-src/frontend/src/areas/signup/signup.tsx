@@ -9,6 +9,7 @@ import {
 import { AccountCircle, Lock } from '@mui/icons-material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { SERVER_URL } from '../../App';
 
 //Login ist das erste, was der Nutzter sieht, wenn er die Website aufruft
 export const Signup = () => {
@@ -55,10 +56,10 @@ export const Signup = () => {
             return;
         }
         try {
-            const url = 'http://localhost:3000/api/signup';
+            const url = SERVER_URL + '/api/signup';
             const { data: res } = await axios.post(url, { email, password });
             alert('Sie sind nun registiert.');
-            navigate("Login")
+            navigate('Login');
         } catch (error) {
             alert(
                 'Nutzer mit Email-Adresse ' + email + ' ist bereits vorhanden'

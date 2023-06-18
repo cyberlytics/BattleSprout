@@ -9,9 +9,9 @@ import {
     InputAdornment,
 } from '@mui/material';
 import { AccountCircle, Lock } from '@mui/icons-material';
-import background from './../../assets/background.png';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { SERVER_URL } from '../../App';
 
 //Login ist das erste, was der Nutzter sieht, wenn er die Website aufruft
 export const Login = () => {
@@ -43,7 +43,7 @@ export const Login = () => {
 
     async function CheckLoginData() {
         try {
-            const url = 'http://localhost:3000/api/login';
+            const url = SERVER_URL + '/api/login';
             const { data: res } = await axios.post(url, { email, password });
             localStorage.setItem('token', res.data);
             navigate('/');

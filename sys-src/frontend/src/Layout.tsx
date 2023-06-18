@@ -102,8 +102,6 @@ export const Layout = () => {
                     <Help fontSize='large' color='primary' />
                 </Fab>
             </Tooltip>
-
-            {/* <Outlet /> */}
         </>
     );
 };
