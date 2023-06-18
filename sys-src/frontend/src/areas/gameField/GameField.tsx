@@ -86,13 +86,18 @@ export const GameField = () => {
 
         setPlayerId(id);
 
+        registerSocketEvents(id);
 
+        setIsSocketSetup(true);
+    }
+
+
+    function registerSocketEvents(playerId: string) {
 
         socket.on('splash', (splashedPlayer: string, splash: { hit: boolean; x: number; y: number; sunk: boolean }) => {
-                handleSplash(splashedPlayer, id, splash);
+                handleSplash(splashedPlayer, playerId, splash);
             }
         );
-
         socket.on('turnChanged', (playerNameOfNewTurn: string) => {
             console.log('Received TurnChanged : ' + playerNameOfNewTurn);
             setCurrentPlayer(playerNameOfNewTurn);
@@ -105,11 +110,11 @@ export const GameField = () => {
 
         socket.on('gameOver', (winner: string) => {
             console.log('Received GameOver');
-            handleGameOver(winner, id);
+            handleGameOver(winner, playerId);
         });
 
-        setIsSocketSetup(true);
     }
+
 
     function handleSplash(currentPlayer: string, id: string, splash: { hit: boolean; x: number; y: number; sunk: boolean }) {
         if (currentPlayer === id) {
@@ -142,17 +147,8 @@ export const GameField = () => {
 
         if (!isPlantSizeAvailable()) return;
 
+        socket.emit('setPlant', plantTiles);
         setPlantTiles([]);
-
-        const dataObjects = plantTiles.map((plantTile) => ({
-            position: {
-                x: plantTile.position.x,
-                y: plantTile.position.y,
-            },
-        }));
-
-        console.log(dataObjects);
-        socket.emit('setPlant', dataObjects);
         setSetupDone(true);
     }
 

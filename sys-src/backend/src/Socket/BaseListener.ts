@@ -17,8 +17,8 @@ export const baseListener = (socket: Socket) => {
         handleJoinGame(socket, gameID);
     });
 
-    socket.on('setPlant', ( plantTiles : { position: {x : number, y : number} }[]) => {
-        handleSetPlant(socket,plantTiles);
+    socket.on('setPlant', ( plantTiles) => {
+        handleSetPlant(socket ,plantTiles);
     });
 
     socket.on('setSplash', ( position: Vector2 ) => {
