@@ -66,8 +66,9 @@ export class Game {
     }
 
     public playerReady(playerName: string): void {
+
         if (this.gameState !== GameState.SETUP) {
-            throw new Error('Cannot mark player ready in current state.');
+            return;
         }
 
 
