@@ -1,4 +1,5 @@
 import {
+    handleGameOver,
     handleSplash, handleStartGame,
     handleTurnChanged,
 } from '../Socket/Handler/ResponseHandler';
@@ -103,10 +104,15 @@ export class Game {
         }
 
         if (splashResult.sunk) {
-            opponent.board.isBoardEndState();
+
+            if(opponent.board.isBoardEndState()){
+
+                handleGameOver(this.getNameOfAllPlayers(), this.gameId, player.name);
+            }
+
         }
 
-        var message = {
+        const message = {
             x: splash.x,
             y: splash.y,
             hit: splashResult.hit,

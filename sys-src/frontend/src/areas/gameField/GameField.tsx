@@ -9,7 +9,7 @@ import {
     Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import io from 'socket.io-client';
 import { GridComponent } from './GridComponent';
 import { PlantTile } from '../../PlantTile.';
@@ -34,6 +34,7 @@ export const GameField = () => {
     const params = useParams();
     const gameId = params.id;
 
+    const navigate = useNavigate();
     console.log(gameId);
 
     const [socket] = useState(io(SOCKET_SERVER_URL));
@@ -43,15 +44,11 @@ export const GameField = () => {
     const [plantTiles, setPlantTiles] = useState<PlantTile[]>([]);
     const [gameFieldSize, setGameFieldSize] = useState<number>(10);
     const [setupDone, setSetupDone] = useState<boolean>(false);
-    const [currentPlayer, setCurrentPlayer] = useState<string>('');
+    const [currentPlayer, setCurrentPlayer] = useState<string>("");
 
-    const [playerId, setPlayerId] = useState<string>('');
-    const [ourBoardSplashes, setOurBoardSplashes] = useState<
-        { hit: boolean; x: number; y: number; sunk: boolean }[]
-    >([]);
-    const [enemyBoardSplashes, setEnemyBoardSplashes] = useState<
-        { hit: boolean; x: number; y: number; sunk: boolean }[]
-    >([]);
+    const [playerId, setPlayerId] = useState<string>("");
+    const [ourBoardSplashes, setOurBoardSplashes] = useState<{ hit: boolean; x: number; y: number; sunk: boolean }[]>([]);
+    const [enemyBoardSplashes, setEnemyBoardSplashes] = useState<{ hit: boolean; x: number; y: number; sunk: boolean }[]>([]);
 
     const [usablePlants, setUsablePlants] = useState<number[]>(PlantLength);
 
@@ -89,12 +86,9 @@ export const GameField = () => {
 
         setPlayerId(id);
 
-        socket.on(
-            'splash',
-            (
-                splashedPlayer: string,
-                splash: { hit: boolean; x: number; y: number; sunk: boolean }
-            ) => {
+
+
+        socket.on('splash', (splashedPlayer: string, splash: { hit: boolean; x: number; y: number; sunk: boolean }) => {
                 handleSplash(splashedPlayer, id, splash);
             }
         );
@@ -109,14 +103,15 @@ export const GameField = () => {
             setGameState(GameState.playing);
         });
 
+        socket.on('gameOver', (winner: string) => {
+            console.log('Received GameOver');
+            handleGameOver(winner, id);
+        });
+
         setIsSocketSetup(true);
     }
 
-    function handleSplash(
-        currentPlayer: string,
-        id: string,
-        splash: { hit: boolean; x: number; y: number; sunk: boolean }
-    ) {
+    function handleSplash(currentPlayer: string, id: string, splash: { hit: boolean; x: number; y: number; sunk: boolean }) {
         if (currentPlayer === id) {
             setEnemyBoardSplashes([...enemyBoardSplashes, splash]);
         } else {
@@ -129,7 +124,22 @@ export const GameField = () => {
         setGameState(GameState.waiting);
     }
 
+    function handleGameOver(winner: string, playerId: string ) {
+
+        let endMessage = "";
+        if(winner === playerId) {
+            endMessage = "You won!";
+        }else {
+            endMessage = "You lost!";
+        }
+
+        navigate("/")
+        alert(endMessage);
+
+    }
+
     function setPlant() {
+
         if (!isPlantSizeAvailable()) return;
 
         setPlantTiles([]);
@@ -184,10 +194,8 @@ export const GameField = () => {
         return hasAdjacentTile && isNotInStraightLine;
     }
 
-    function checkForStraightLine(
-        tiles: PlantTile[],
-        targetTile: PlantTile
-    ): boolean {
+    function checkForStraightLine(tiles: PlantTile[], targetTile: PlantTile): boolean {
+
         return tiles.every((tile) => {
             return (
                 tile.position.x === targetTile.position.x ||
@@ -196,10 +204,8 @@ export const GameField = () => {
         });
     }
 
-    function checkForNeighbour(
-        tiles: PlantTile[],
-        targetTile: PlantTile
-    ): boolean {
+    function checkForNeighbour(tiles: PlantTile[], targetTile: PlantTile): boolean {
+
         return tiles.some((tile) => {
             const isNextInX =
                 tile.position.x === targetTile.position.x + 1 ||

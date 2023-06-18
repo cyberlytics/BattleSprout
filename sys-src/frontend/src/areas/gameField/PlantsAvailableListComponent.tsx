@@ -11,18 +11,18 @@ export const PlantsAvailableListComponent: FC<
 > = ({ numbers }) => {
     return (
         <>
-            <h1 className='plants-heading'>{'Verfügbare Pfanzen:'}</h1>
+            <h1 className='plants-heading'>{ 'Verfügbare Pfanzen:' }</h1>
             <List>
-                {numbers.map((number, index) => (
-                    <div key={index}>
+                { numbers.map((number, index) => (
+                    <div key={ index }>
                         <ListItem>
                             <ListItemText
-                                primary={number + ' Felder Pflanze'}
+                                primary={ number + ' Felder Pflanze' }
                             />
                         </ListItem>
-                        <Divider />
+                        <Divider/>
                     </div>
-                ))}
+                )) }
             </List>
         </>
     );
