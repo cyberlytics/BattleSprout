@@ -55,13 +55,15 @@ export const GridComponent = (props: IProps) => {
         return cells;
     }
 
-    function handleCellClick(index: number) {
+    function handleCellClick(cell: ICell) {
         if (gameState === GameState.setup) {
-            handleSetupCellClick(index);
+            if(cell.state === CellState.EMPTY){
+                handleSetupCellClick(cell.index);
+            }
         }
 
         if (gameState === GameState.playing) {
-            handlePlayingCellClick(index);
+            handlePlayingCellClick(cell.index);
         }
     }
 
@@ -150,7 +152,7 @@ export const GridComponent = (props: IProps) => {
                 <Cell
                     key={cellItem.index}
                     index={cellItem.index}
-                    onPlantPlaced={() => handleCellClick(cellItem.index)}
+                    onPlantPlaced={() => handleCellClick(cellItem)}
                     cellState={cellItem.state}
                 />
             ))}
