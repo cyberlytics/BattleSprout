@@ -17,11 +17,6 @@ const app: Application = express();
 app.use(cors())
 app.use(express.json())
 
-app.get('/', function(req, res){
-    console.log("Root Route")
-    res.json({ message: "hello world" });
-});
-
 app.use(loginRoute)
 app.use(signUpRoute)
 app.use(gameRoutes)
@@ -31,7 +26,6 @@ server.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 
-// Set up the Socket.io server separately
 new ServerSocket(socketPort);
 
 console.log(`SocketIO running on port ${socketPort}`);
