@@ -41,23 +41,19 @@ export const handleReady = (socket: Socket, gameID: string) => {
 //TODO: correct this way??
 export const handleSetPlant = (
     socket: Socket,
-    plantTiles : { position: {x : number, y : number} }[]
+    plantTiles: PlantTile[]
 ) => {
     console.log("Received set plant message from socket: " + socket.id)
     console.log("Plant tiles: " + plantTiles);
-    var connection = connectionList.find((c) => c.socket == socket);
+    let connection = connectionList.find((c) => c.socket == socket);
     if (!connection) return;
 
-    var game = gameMap.get(connection.gameID);
+    let game = gameMap.get(connection.gameID);
     if (!game) return;
 
-    const mappedPlantTile = plantTiles.map((tile) => {
-        return new PlantTile(new Vector2(tile.position.x, tile.position.y), false);
-    });
+    console.log("Plant tiles: " + plantTiles);
 
-    console.log("Plant tiles: " + mappedPlantTile);
-
-    game.setPlantTile(connection.playerID, mappedPlantTile);
+    game.setPlantTile(connection.playerID, plantTiles);
 };
 
 export const handleSetSplash = (

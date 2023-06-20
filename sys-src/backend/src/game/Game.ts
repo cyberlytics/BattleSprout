@@ -1,4 +1,5 @@
 import {
+    handleGameOver,
     handleSplash, handleStartGame,
     handleTurnChanged,
 } from '../Socket/Handler/ResponseHandler';
@@ -40,10 +41,9 @@ export class Game {
     }
 
     public joinGame(playerName: string): void {
+
         if (this.players.length >= 2) {
-            throw new Error(
-                'Cannot join game in current state or game is full.'
-            );
+            return;
         }
 
         console.log('Player joined game: ' + playerName)
@@ -67,8 +67,9 @@ export class Game {
     }
 
     public playerReady(playerName: string): void {
+
         if (this.gameState !== GameState.SETUP) {
-            throw new Error('Cannot mark player ready in current state.');
+            return;
         }
 
 
@@ -103,10 +104,15 @@ export class Game {
         }
 
         if (splashResult.sunk) {
-            opponent.board.isBoardEndState();
+
+            if(opponent.board.isBoardEndState()){
+
+                handleGameOver(this.getNameOfAllPlayers(), this.gameId, player.name);
+            }
+
         }
 
-        var message = {
+        const message = {
             x: splash.x,
             y: splash.y,
             hit: splashResult.hit,

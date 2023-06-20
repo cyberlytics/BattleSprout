@@ -1,23 +1,29 @@
 import React, { FC } from 'react';
 import './PlantsAvailableListComponent.css';
+import { Divider, List, ListItem, ListItemText, Paper } from '@mui/material';
 
 interface PlantsAvailableListComponentProps {
     numbers: number[];
 }
 
-const PlantsAvailableListComponent: FC<PlantsAvailableListComponentProps> = ({ numbers }) => {
+export const PlantsAvailableListComponent: FC<
+    PlantsAvailableListComponentProps
+> = ({ numbers }) => {
     return (
-        <div className="plants-container">
-            <h1 className="plants-heading">Pflanzen verfügbar</h1>
-            <ul className="plants-list">
-                {numbers.map((number, index) => (
-                    <li key={index} className="plants-item">
-                        {number} Felder Pflanze verfügbar
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <>
+            <h1 className='plants-heading'>{ 'Verfügbare Pfanzen:' }</h1>
+            <List>
+                { numbers.map((number, index) => (
+                    <div key={ index }>
+                        <ListItem>
+                            <ListItemText
+                                primary={ number + ' Felder Pflanze' }
+                            />
+                        </ListItem>
+                        <Divider/>
+                    </div>
+                )) }
+            </List>
+        </>
     );
 };
-
-export default PlantsAvailableListComponent;

@@ -10,6 +10,11 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import { Signup } from './areas/signup/signup';
 import './App.css';
 
+//URLs for API, defaults to localhost if none is set in ".env"
+export const SERVER_URL = process.env.SERVER_URL || 'http://localhost:3000';
+export const SOCKET_SERVER_URL =
+    process.env.SOCKET_SERVER_URL || 'http://localhost:4000';
+
 //colors to use in the project with material ui
 const theme = createTheme({
     palette: {
