@@ -8,19 +8,17 @@ import {
     Typography,
     InputAdornment,
 } from '@mui/material';
-import {
-    AccountCircle,
-    Lock,
-} from '@mui/icons-material'
-import background from './../../assets/background.png'
-
-//import db from './../../../../backend/src/db';
+import { AccountCircle, Lock } from '@mui/icons-material';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { SERVER_URL } from '../../App';
 
 //Login ist das erste, was der Nutzter sieht, wenn er die Website aufruft
 export const Login = () => {
-    const [Password, setPasswort] = React.useState('')
-    const [Username, setUsername] = React.useState('')
+    const [password, setPasswort] = React.useState('');
+    const [email, setEmail] = React.useState('');
     const [checked, setChecked] = React.useState(true);
+    const navigate = useNavigate();
     const handleChange = (event: {
         target: { checked: boolean | ((prevState: boolean) => boolean) };
     }) => {
@@ -31,18 +29,34 @@ export const Login = () => {
     const mdValue = 6;
     const lgValue = 4;
 
+    function handlePasswordChange(
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) {
+        setPasswort(event.target.value);
+    }
+
+    function handleEmailChange(
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) {
+        setEmail(event.target.value);
+    }
+
+    async function CheckLoginData() {
+        try {
+            const url = SERVER_URL + '/api/login';
+            const { data: res } = await axios.post(url, { email, password });
+            localStorage.setItem('token', res.data);
+            navigate('/');
+            window.location.reload();
+        } catch (error) {
+            alert('Email oder Benutzername falsch');
+        }
+    }
+
     return (
         <>
-            <Grid
-                container
-                spacing={2}
-                style={{
-                    backgroundImage: `url(${background})`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'cover',
-                }}
-            >
-                <Grid item xs={xsValue} md={mdValue} lg={lgValue}/>
+            <Grid container spacing={2}>
+                <Grid item xs={xsValue} md={mdValue} lg={lgValue} />
                 <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                     <Grid
                         container
@@ -51,21 +65,23 @@ export const Login = () => {
                         alignItems={'center'}
                         style={{
                             padding: 50,
-                            background: 'rgba(52,52,52,0.1'
+                            background: 'rgba(52,52,52,0.1)',
                         }}
                     >
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
-                            <Typography variant="h4" gutterBottom>Bitte melde dich an!</Typography>
+                            <Typography variant='h4' gutterBottom>
+                                Bitte melde dich an!
+                            </Typography>
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <TextField
-                            onChange={handleUsernameChange}
-                                label='Benutzername'
-                                style={{ background: '#bbd8b1'}}
+                                onChange={handleEmailChange}
+                                label='Email'
+                                style={{ background: '#bbd8b1' }}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
-                                            <AccountCircle/>
+                                            <AccountCircle />
                                         </InputAdornment>
                                     ),
                                 }}
@@ -73,14 +89,15 @@ export const Login = () => {
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <TextField
-                            onChange={handlePasswordChange}
+                                onChange={handlePasswordChange}
                                 label='Passwort'
-                                type="password"
-                                style={{ background: '#bbd8b1'}}
+                                type='password'
+                                value={password}
+                                style={{ background: '#bbd8b1' }}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
-                                            <Lock/>
+                                            <Lock />
                                         </InputAdornment>
                                     ),
                                 }}
@@ -92,21 +109,21 @@ export const Login = () => {
                                     <Checkbox
                                         checked={checked}
                                         onChange={handleChange}
-                                        style={{ color: '#add0a2'}}
+                                        style={{ color: '#add0a2' }}
                                     />
                                 }
-                                label="Account merken"
+                                label='Account merken'
                             />
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <Button
-                            onClick={CheckLoginData}
+                                onClick={CheckLoginData}
                                 fullWidth
                                 style={{
                                     background: '#bbd8b1',
                                     color: 'black',
                                     width: '110px',
-                                    height: '50px'
+                                    height: '50px',
                                 }}
                             >
                                 Anmelden
@@ -116,8 +133,10 @@ export const Login = () => {
                             <Typography>
                                 Noch kein Account? Jetzt
                                 <Button
-                                    href=''>
-                                        registrieren!
+                                    style={{ color: 'blue' }}
+                                    href='/signup'
+                                >
+                                    registrieren!
                                 </Button>
                             </Typography>
                         </Grid>
@@ -126,35 +145,4 @@ export const Login = () => {
             </Grid>
         </>
     );
-    
-function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
-    setPasswort(event.target.value);
-  }
-
-  function handleUsernameChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
-    setUsername(event.target.value);
-  }
-
-  function CheckLoginData(){
-    var query = {
-        "$and": [
-            {
-                "Usercredentails.password": Password
-            },
-            {
-                "Usercredentails.username": Username
-            }
-        ]
-    };    
-
-    //Connect to DB
-   // db.connect()
-    
-    //var test = db.FindOne('Usercredentials', 'Usercredentials', query)
-    //console.log(test)
-   
-    
-   
-    
-  }
 };

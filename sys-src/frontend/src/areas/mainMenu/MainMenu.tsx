@@ -1,36 +1,28 @@
-import {
-    Fab,
-    Grid,
-    Typography,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    IconButton,
-    Tooltip,
-} from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { MenuTile } from './components/MenuTile';
 import {
     AddCircleOutlined,
-    Close,
     FormatListNumbered,
     GroupAdd,
-    Help,
 } from '@mui/icons-material';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import logo from './../../assets/battlesprout.png';
+import { JoinGameDialog } from './components/JoinGame';
 
 //Hauptmenü des Spiels. Von hier aus soll der Nutzer überall hinkommen.
 export const MainMenu = () => {
-    const [openHelpDialog, setOpenHelpDialog] = useState<boolean>(false);
+    const [openJoinDialog, setOpenJoinDialog] = useState(false);
 
-    const handleClickOpen = () => {
-        setOpenHelpDialog(true);
-    };
+    function handleOpenJoinDialog() {
+        setOpenJoinDialog(true);
+    }
 
-    const handleClose = () => {
-        setOpenHelpDialog(false);
-    };
+    function handleCloseJoinDialog() {
+        setOpenJoinDialog(false);
+    }
+
+    const navigate = useNavigate();
 
     const xsValue = 12;
     const mdValue = 6;
@@ -40,14 +32,35 @@ export const MainMenu = () => {
         <>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <Typography variant='h2'>{'Hauptmenü'}</Typography>
+                    <img
+                        src={logo}
+                        alt='Battlesprout Logo'
+                        style={{
+                            display: 'block',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            margin: 'auto',
+                            width: '50%',
+                        }}
+                    />
+                    <Typography
+                        variant='h4'
+                        style={{
+                            color: '#45ad45',
+                            margin: 30,
+                        }}
+                    >
+                        {
+                            'Battleship war gestern - herzlich willkommen zu BattleSprout!'
+                        }
+                    </Typography>
                 </Grid>
                 <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                     <MenuTile
                         icon={AddCircleOutlined}
                         title='Spiel erstellen'
                         content='Erstelle ein Spiel, dem ein anderer beitreten kann'
-                        link='/createGame'
+                        action={() => navigate('/createGame')}
                     />
                 </Grid>
                 <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
@@ -55,7 +68,7 @@ export const MainMenu = () => {
                         icon={GroupAdd}
                         title='Spiel beitreten'
                         content='Tritt einem Spiel bei'
-                        link='/joinGame'
+                        action={handleOpenJoinDialog}
                     />
                 </Grid>
                 <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
@@ -63,44 +76,15 @@ export const MainMenu = () => {
                         icon={FormatListNumbered}
                         title='Rangliste'
                         content='Sehe dir deine und andere Statistiken an'
-                        link='/leaderBoard'
+                        action={() => navigate('/ranking')}
                     />
                 </Grid>
             </Grid>
 
-            <Tooltip title={'Hilfe'} placement='top'>
-                <Fab
-                    color='secondary'
-                    style={{ position: 'absolute', bottom: 16, right: 16 }}
-                    onClick={handleClickOpen}
-                >
-                    <Help fontSize='large' color='primary' />
-                </Fab>
-            </Tooltip>
-
-            <Dialog open={openHelpDialog} onClose={handleClose} fullWidth>
-                {/* TODO: Help Dialog */}
-                <DialogActions
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'flex-start',
-                    }}
-                >
-                    <Tooltip title={'Schließen'} placement='top'>
-                        <IconButton onClick={handleClose}>
-                            <Close />
-                        </IconButton>
-                    </Tooltip>
-                </DialogActions>
-                <DialogTitle>{'Filler: Das ist der Hilfe Dialog'}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        {
-                            'Hier wird ein Text und Video zur Hilfe im System Eingefügt'
-                        }
-                    </DialogContentText>
-                </DialogContent>
-            </Dialog>
+            <JoinGameDialog
+                openJoinDialog={openJoinDialog}
+                handleCloseJoinDialog={() => handleCloseJoinDialog()}
+            />
         </>
     );
 };

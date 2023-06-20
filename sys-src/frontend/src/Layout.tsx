@@ -1,69 +1,75 @@
-import {
-    AppBar,
-    Box,
-    Button,
-    List,
-    ListItem,
-    Toolbar,
-    Typography,
-} from '@mui/material';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Help } from '@mui/icons-material';
+import { AppBar, Box, Button, Fab, Toolbar, Tooltip } from '@mui/material';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import logo from './assets/battlesprout.png';
+import { FriendList } from './areas/friendList/FriendList';
+import { HelpDialog } from './areas/helpDialog/HelpDialog';
 
-//zum Teste  der Navigation und der Komponenten
+//zum Testen der Navigation und der Komponenten
 export const Layout = () => {
     const navigate = useNavigate();
+
+    function logout() {
+        localStorage.removeItem('token');
+        navigate('Login');
+        window.location.reload();
+    }
+
+    const [openHelpDialog, setOpenHelpDialog] = useState<boolean>(false);
+
+    const handleClickOpen = () => {
+        setOpenHelpDialog(true);
+    };
+
+    const handleClose = () => {
+        setOpenHelpDialog(false);
+    };
 
     return (
         <>
             <AppBar color='primary'>
                 <Toolbar>
-                    <Typography
-                        variant='h6'
+                    <FriendList />
+                    <Box
                         component='div'
                         sx={{
                             flexGrow: 1,
-                            display: { xs: 'none', sm: 'block' },
+                            display: 'block',
                         }}
                     >
-                        BattleSprout
-                    </Typography>
-                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        <Button
+                        <img
+                            src={logo}
+                            alt='Battlesprout Logo'
+                            style={{
+                                height: 64,
+                                cursor: 'pointer',
+                            }}
                             onClick={() => navigate('/')}
-                            style={{ color: 'white' }}
-                        >
-                            Hauptmenü
-                        </Button>
-                        <Button
-                            onClick={() => navigate('/Dashboard')}
-                            style={{ color: 'white' }}
-                        >
-                            Dashboard
-                        </Button>
-                        <Button
-                            onClick={() => navigate('/Login')}
-                            style={{ color: 'white' }}
-                        >
-                            Login
-                        </Button>
-                        <Button
-                            onClick={() => navigate('/GameField')}
-                            style={{ color: 'white' }}
-                        >
-                            Spielfeld
-                        </Button>
-                        <Button
-                            onClick={() => navigate('/CreateGame')}
-                            style={{ color: 'white' }}
-                        >
-                            Spiel erstellen
+                        />
+                    </Box>
+
+                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        <Button onClick={logout} style={{ color: 'white' }}>
+                            Abmelden
                         </Button>
                     </Box>
                 </Toolbar>
             </AppBar>
             <Toolbar />
-
-            <Outlet />
+            <HelpDialog
+                openDialog={openHelpDialog}
+                handleCloseDialog={() => handleClose()}
+            />
+            <Tooltip title={'Hilfe'} placement='top'>
+                <Fab
+                    color='secondary'
+                    style={{ position: 'absolute', bottom: 16, right: 16 }}
+                    onClick={handleClickOpen}
+                >
+                    <Help fontSize='large' color='primary' />
+                </Fab>
+            </Tooltip>
         </>
     );
 };
