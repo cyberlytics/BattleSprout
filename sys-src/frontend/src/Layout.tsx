@@ -1,23 +1,10 @@
-import { Close, Help } from '@mui/icons-material';
-import {
-    AppBar,
-    Box,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Fab,
-    IconButton,
-    Toolbar,
-    Tooltip,
-    Typography,
-} from '@mui/material';
+import { Help } from '@mui/icons-material';
+import { AppBar, Box, Button, Fab, Toolbar, Tooltip } from '@mui/material';
 import { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import logo from './assets/battlesprout.png';
 import { FriendList } from './areas/friendList/FriendList';
+import { HelpDialog } from './areas/helpDialog/HelpDialog';
 
 //zum Testen der Navigation und der Komponenten
 export const Layout = () => {
@@ -70,29 +57,10 @@ export const Layout = () => {
                 </Toolbar>
             </AppBar>
             <Toolbar />
-            <Dialog open={openHelpDialog} onClose={handleClose} fullWidth>
-                {/* TODO: Help Dialog */}
-                <DialogActions
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'flex-start',
-                    }}
-                >
-                    <Tooltip title={'Schließen'} placement='top'>
-                        <IconButton onClick={handleClose}>
-                            <Close />
-                        </IconButton>
-                    </Tooltip>
-                </DialogActions>
-                <DialogTitle>{'Filler: Das ist der Hilfe Dialog'}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        {
-                            'Hier wird ein Text und Video zur Hilfe im System Eingefügt'
-                        }
-                    </DialogContentText>
-                </DialogContent>
-            </Dialog>
+            <HelpDialog
+                openDialog={openHelpDialog}
+                handleCloseDialog={() => handleClose()}
+            />
             <Tooltip title={'Hilfe'} placement='top'>
                 <Fab
                     color='secondary'
