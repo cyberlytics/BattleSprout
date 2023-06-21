@@ -20,7 +20,6 @@ const app: Application = express();
 app.use(cors());
 app.use(express.json())
 
-<<<<<<< HEAD
 app.get('/', function(req, res){
     console.log("Root Route")
     res.json({ message: "hello world" });
@@ -28,8 +27,6 @@ app.get('/', function(req, res){
 
 app.use(friendRoute);
 
-=======
->>>>>>> b1f9a7be8e5c404d74323d0a0544375f8f74865c
 app.use(loginRoute)
 app.use(signUpRoute)
 app.use(gameRoutes)
