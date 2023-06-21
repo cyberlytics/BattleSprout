@@ -20,7 +20,6 @@ interface IRank {
 export const Ranking = () => {
     const [ranklist, setRanklist] = useState<IRank[]>([]);
 
-    //ToDo: Richtige Namen/ScorePoint Werte übergeben
 
     const fetchRanklist = async () => {
         try {
@@ -87,7 +86,7 @@ export const Ranking = () => {
                     Die Top 10 Spieler!
                 </Typography>
                 <Button onClick={fetchRanklist}> 
-                    CLICK
+                    REFRESH RANKLIST
                 </Button>
             </Grid>
 

@@ -66,3 +66,29 @@ describe('/api/signup', () => {
     expect(res.status).toBe(200);    
   });
 })
+
+describe('/api/ranks', () => {
+  let server: any;
+  beforeAll(async () => {
+    const mod = await import('../index');
+    server = (mod as any).default;
+  }); 
+  
+  it('should get ranklist and return 200', async () => {
+    const res = await request(server)
+      .get('/api/ranks')
+
+    expect(res.status).toBe(200);  
+  });
+
+  it('should return 201 if new rank was added', async () => {
+    const res = await request(server)
+      .post('/api/ranks')
+      .send({
+        Name: 'Hans Müller',
+        Points: '210',
+      });
+    expect(res.status).toBe(201);
+    expect(res.body).toEqual({ success: true });
+  });
+})

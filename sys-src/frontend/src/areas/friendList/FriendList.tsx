@@ -163,6 +163,7 @@ export const FriendList = () => {
                             value={friend}
                             onChange={handleChange}
                             sx={{marginLeft: 3}}
+                            data-testid='Input-Friend-Name'
                         />
                     </Grid>
                     <Grid item>
