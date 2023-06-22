@@ -5,6 +5,7 @@ import {
     Button,
     Typography,
     InputAdornment,
+    CircularProgress,
 } from '@mui/material';
 import { AccountCircle, Lock } from '@mui/icons-material';
 import axios from 'axios';
@@ -16,6 +17,7 @@ export const Signup = () => {
     const [password, setPassword] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [username, setUsername] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
 
     const [sndPassword, setSndPassword] = React.useState('');
     const navigate = useNavigate();
@@ -42,7 +44,9 @@ export const Signup = () => {
         setUsername(event.target.value);
     }
 
-    function handleEmailChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
+    function handleEmailChange(
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) {
         setEmail(event.target.value);
     }
 
@@ -63,7 +67,11 @@ export const Signup = () => {
         }
         try {
             const url = SERVER_URL + '/api/signup';
-            const { data: res } = await axios.post(url, { email, password, username });
+            const { data: res } = await axios.post(url, {
+                email,
+                password,
+                username,
+            });
             alert('Sie sind nun registiert.');
             navigate('Login');
         } catch (error) {
@@ -73,10 +81,15 @@ export const Signup = () => {
         }
     }
 
+    async function handleRegisterButtonClick() {
+        setLoading(true);
+        await CheckLoginData();
+        setLoading(false);
+    }
+
     return (
         <>
-            <Grid container spacing={2}>
-                <Grid item xs={xsValue} md={mdValue} lg={lgValue} />
+            <Grid container spacing={2} justifyContent='center'>
                 <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                     <Grid
                         container
@@ -98,6 +111,7 @@ export const Signup = () => {
                                 onChange={handleEmailChange}
                                 label='Email'
                                 style={{ background: '#bbd8b1' }}
+                                disabled={loading}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
@@ -112,6 +126,7 @@ export const Signup = () => {
                                 onChange={handleUsernameChange}
                                 label='Benutzername'
                                 style={{ background: '#bbd8b1' }}
+                                disabled={loading}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
@@ -129,6 +144,7 @@ export const Signup = () => {
                                 type='password'
                                 value={password}
                                 style={{ background: '#bbd8b1' }}
+                                disabled={loading}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
@@ -145,6 +161,7 @@ export const Signup = () => {
                                 type='password'
                                 value={sndPassword}
                                 style={{ background: '#bbd8b1' }}
+                                disabled={loading}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
@@ -156,16 +173,28 @@ export const Signup = () => {
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <Button
-                                onClick={CheckLoginData}
+                                onClick={handleRegisterButtonClick}
                                 fullWidth
-                                style={{
-                                    background: '#bbd8b1',
-                                    color: 'black',
-                                    width: '110px',
-                                    height: '50px',
-                                }}
+                                disabled={loading}
+                                color='primary'
+                                variant='contained'
                             >
-                                Registieren
+                                {loading ? (
+                                    <CircularProgress />
+                                ) : (
+                                    'Registrieren'
+                                )}
+                            </Button>
+                        </Grid>
+                        <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
+                            <Button
+                                onClick={() => navigate('/signup/login')}
+                                fullWidth
+                                disabled={loading}
+                                color='primary'
+                                variant='outlined'
+                            >
+                                {'Zurück'}
                             </Button>
                         </Grid>
                     </Grid>
