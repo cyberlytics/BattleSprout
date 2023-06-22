@@ -35,7 +35,8 @@
     "setupFilesAfterEnv": [
       "./src/test/index.test.ts",
       "./src/test/tokenService.test.ts",
-      "./src/test/ConnectionHandler.test.ts"
+      "./src/test/ConnectionHandler.test.ts",
+      "./src/test/ResponseHandler.test.ts"
     ]
   },
   "devDependencies": {

@@ -8,37 +8,38 @@ import { connectionList, IConnectionState } from '../models/ConnectionModel';
 
 describe('Connectionhandler', () => {
   beforeEach(() => {
-    // Reset the connectionList before each test
     connectionList.length = 0;
   });
 
   test('handleHandshake should add connection to connectionlist', () => {
-    const socket: Socket = {} as Socket; // Create a mock Socket object
+    // Arrange
+    const socket1: Socket = {
+      id: 'socket123',
+    } as Socket;
     const initialConnectionList: IConnectionState[] = [...connectionList]; // Create a copy of the original connectionList
-    const initialConnectionListLength = initialConnectionList.length;
+    const connectionListLength = connectionList.length;
 
-    // Call the function being tested
-    handleHandshake(socket);
+    // Act
+    handleHandshake(socket1);
 
-    // Perform assertions
+    // Assert
     expect(connectionList).toEqual([
       ...initialConnectionList,
-      { playerID: '', connectionState: 'handshake', gameID: '', socket: socket },
+      { playerID: '', connectionState: 'handshake', gameID: '', socket: socket1 },
     ]);
-    expect(connectionList.length).toBe(initialConnectionListLength + 1);
+    expect(connectionList.length).toBe(connectionListLength + 1);
   });
 
 
 
   test('handleAuthenticate should find correct connection in connectionlist', () => {
+    // Arrange
     const socket1: Socket = {
       id: 'socket123',
     } as Socket; 
     const socket2: Socket = {
       id: 'socket456',
     } as Socket; 
-    const playerId = '123';
-    // Set up the connectionList with a known object
     const initialConnectionList: IConnectionState[] = [
       { playerID: '123', connectionState: 'authenticate', gameID: '', socket: socket1},
       { playerID: '456', connectionState: 'authenticate', gameID: '', socket: socket2 },
@@ -46,35 +47,36 @@ describe('Connectionhandler', () => {
     connectionList.push(...initialConnectionList);
     const playerID = "789";
 
-    // Call the function being tested
-    handleAuthenticate(socket1, playerId);
+    // Act
+    handleAuthenticate(socket1, playerID);
+
+    // Find the updated connection in the connectionList
+     const expectedConnection = connectionList.find(c=> c.socket.id == socket1.id);
 
     // Assert
-    expect(initialConnectionList[0].playerID).toEqual(playerID);
-    expect(initialConnectionList[1].playerID).toBe("456");
+    expect(expectedConnection?.playerID).toEqual(playerID);
   });
 
 
 
   test('handleDisconnect should remove connection from connectionlist', () => {
+    // Arrange
     const socket1: Socket = {
       id: 'socket123',
     } as Socket; 
     const socket2: Socket = {
       id: 'socket456',
     } as Socket; 
-
-    // Set up the connectionList with a known object
     const initialConnectionList: IConnectionState[] = [
       { playerID: '123', connectionState: '', gameID: '', socket: socket1},
       { playerID: '456', connectionState: '', gameID: '', socket: socket2},
     ];
     const expectedConnectionListLength = 1;
 
-    // Call the function being tested
+    // Act
     handleDisconnect(socket1);
 
-    // Perform assertions
+    // Assert
     //TODO:handleDisconnect doesn't do anything. Ask about it
   });
 });
