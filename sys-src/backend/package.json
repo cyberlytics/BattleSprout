@@ -33,7 +33,8 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
-      "./src/test/index.test.ts",
+      "./src/test/loginRoute.test.ts",
+      "./src/test/signUpRoute.test.ts",
       "./src/test/tokenService.test.ts",
       "./src/test/ConnectionHandler.test.ts",
       "./src/test/ResponseHandler.test.ts"
