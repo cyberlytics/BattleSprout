@@ -12,9 +12,7 @@
     },
 
     "include": ["src/**/*.ts",
-                "src/tests/*.ts"],
-
-    "include": ["src/**/*.ts", "src/test/index.test.ts"],
+                "src/test/*.ts"],
 
     "exclude": ["node_modules", "dist"]
 }
