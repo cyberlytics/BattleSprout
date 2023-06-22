@@ -14,7 +14,9 @@ import { SERVER_URL } from '../../App';
 //Login ist das erste, was der Nutzter sieht, wenn er die Website aufruft
 export const Signup = () => {
     const [password, setPassword] = React.useState('');
-    const [email, setUsername] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [username, setUsername] = React.useState('');
+
     const [sndPassword, setSndPassword] = React.useState('');
     const navigate = useNavigate();
 
@@ -40,6 +42,10 @@ export const Signup = () => {
         setUsername(event.target.value);
     }
 
+    function handleEmailChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
+        setEmail(event.target.value);
+    }
+
     async function CheckLoginData() {
         if (password !== sndPassword) {
             alert('Eingegebene Passwörter stimmen nicht überein!');
@@ -57,7 +63,7 @@ export const Signup = () => {
         }
         try {
             const url = SERVER_URL + '/api/signup';
-            const { data: res } = await axios.post(url, { email, password });
+            const { data: res } = await axios.post(url, { email, password, username });
             alert('Sie sind nun registiert.');
             navigate('Login');
         } catch (error) {
@@ -89,7 +95,7 @@ export const Signup = () => {
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <TextField
-                                onChange={handleUsernameChange}
+                                onChange={handleEmailChange}
                                 label='Email'
                                 style={{ background: '#bbd8b1' }}
                                 InputProps={{
@@ -101,6 +107,21 @@ export const Signup = () => {
                                 }}
                             />
                         </Grid>
+                        <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
+                            <TextField
+                                onChange={handleUsernameChange}
+                                label='Benutzername'
+                                style={{ background: '#bbd8b1' }}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position='start'>
+                                            <AccountCircle />
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </Grid>
+
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <TextField
                                 onChange={handlePasswordChange}
