@@ -53,9 +53,17 @@ export const CreateGame = () => {
                 {'Spiel erstellen'}
             </Typography>
 
-            <Grid container>
+            <Grid container
+                style={{
+                    margin: 30
+                }}
+            >
                 <Grid item>
-                    <Card>
+                    <Card
+                        style={{
+                            padding: 50
+                        }}
+                    >
                         <CardContent>
                             <FormControl>
                                 <FormLabel id='radio-buttons-group-label'>

@@ -4,11 +4,12 @@ import {
     DialogActions,
     Tooltip,
     IconButton,
+    DialogTitle,
     DialogContent,
+    Typography
 } from '@mui/material';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { useEffect, useState } from 'react';
-import remarkGfm from 'remark-gfm';
 
 import Readme from '../../README.md';
 
@@ -48,10 +49,7 @@ export const HelpDialog = (props: IProps) => {
                 </Tooltip>
             </DialogActions>
             <DialogContent>
-                <ReactMarkdown
-                    children={readmeText}
-                    remarkPlugins={[remarkGfm]}
-                />
+                <Typography variant="body2"><ReactMarkdown children={readmeText} /></Typography>
             </DialogContent>
         </Dialog>
     );
