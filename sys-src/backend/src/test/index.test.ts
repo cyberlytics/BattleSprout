@@ -60,7 +60,7 @@ describe('/api/signup', () => {
     const res = await request(server)
       .post('/api/signup')
       .send({
-        email: 'test2@test.de',
+        email: (Math.random() + 1).toString(36).substring(7)+ '@test.de',
         password: 'test2',
       });
     expect(res.status).toBe(200);    
