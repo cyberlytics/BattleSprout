@@ -25,11 +25,12 @@ app.get('/', function(req, res){
     res.json({ message: "hello world" });
 });
 
-app.use(friendRoute);
 
-app.use(loginRoute)
-app.use(signUpRoute)
-app.use(gameRoutes)
+
+app.use(loginRoute);
+app.use(signUpRoute);
+app.use(gameRoutes);
+app.use(friendRoute);
 
 
 const server = http.createServer(app);

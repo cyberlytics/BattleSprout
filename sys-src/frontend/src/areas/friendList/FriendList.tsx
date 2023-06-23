@@ -26,7 +26,8 @@ import {
     Menu,
     Close,
     SportsEsports,
-    GroupAdd
+    GroupAdd,
+    Token
 } from '@mui/icons-material';
 import axios from 'axios';
 
@@ -89,7 +90,8 @@ export const FriendList = () => {
                     }
                 }              
                 try{
-                    const response = await axios.post('http://localhost:3000/api/friends',{ name: friend});
+                    const token = localStorage.getItem('token');
+                    const response = await axios.post("http://localhost:3000/api/friends",{name: friend},{headers: {authorization: token, }});
                     const newFriend = {Name: friend};
                     setflist([...flist,newFriend]);
                     setfriend('');
