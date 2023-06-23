@@ -133,9 +133,9 @@ export const GameField = () => {
 
         let endMessage = "";
         if(winner === playerId) {
-            endMessage = "You won!";
+            endMessage = "Du hast gewonnen!";
         }else {
-            endMessage = "You lost!";
+            endMessage = "Du hast verloren!";
         }
 
         navigate("/")
@@ -225,9 +225,9 @@ export const GameField = () => {
                 return 'Warten auf Gegner...';
             case GameState.playing:
                 if (currentPlayer === playerId) {
-                    return 'Du bist am Zug!';
+                    return 'Du bist am Zug - werfe deine Wasserbombe auf ein Feld deines Nachbars!';
                 }
-                return 'Warten auf den Gegnerzug...';
+                return 'Vorsicht - dein Nachbar wirft eine Wasserbombe...';
             case GameState.finished:
                 return 'Spiel zu Ende!';
             default:
@@ -252,7 +252,11 @@ export const GameField = () => {
         switch (gameState) {
             case GameState.confirm:
                 return (
-                    <Button onClick={setReady} variant='contained'>
+                    <Button onClick={setReady} variant='contained'
+                        style={{
+                            marginTop: 250
+                        }}
+                    >
                         {'Bereit!'}
                     </Button>
                 );
@@ -265,7 +269,12 @@ export const GameField = () => {
                             />
                         </CardContent>
                         <CardActions>
-                            <Button onClick={setPlant} variant='contained'>
+                            <Button onClick={setPlant} variant='contained'
+                                style={{
+                                    marginLeft: 5,
+                                    marginBottom: 10
+                                }}
+                            >
                                 {'Pflanze setzen!'}
                             </Button>
                         </CardActions>
@@ -298,7 +307,7 @@ export const GameField = () => {
     return (
         <>
             <Typography
-                variant='h2'
+                variant='h4'
                 style={{
                     color: '#45ad45',
                     margin: 30,

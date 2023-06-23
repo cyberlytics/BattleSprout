@@ -6,6 +6,7 @@ import {
     IconButton,
     DialogTitle,
     DialogContent,
+    Typography
 } from '@mui/material';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import { useEffect, useState } from 'react';
@@ -48,7 +49,7 @@ export const HelpDialog = (props: IProps) => {
                 </Tooltip>
             </DialogActions>
             <DialogContent>
-                <ReactMarkdown children={readmeText} />
+                <Typography variant="body2"><ReactMarkdown children={readmeText} /></Typography>
             </DialogContent>
         </Dialog>
     );
