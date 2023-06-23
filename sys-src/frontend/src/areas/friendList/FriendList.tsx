@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import {
     Grid,
     Button,
@@ -71,6 +71,53 @@ export const FriendList = () => {
         setfriend(event.target.value);
     }
 
+        const loadFriends = async () =>{
+            try{
+                const token = localStorage.getItem('token');
+                const response = await axios.get("http://localhost:3000/api/friends",{
+                    headers: {
+                        authorization:token,
+                    },
+                });
+                for(var i = 0;i< response.data.length;i++){   
+                    //create a IFriend object to be added to the friendlist
+                    const newFriend: IFriend ={
+                        Name: response.data[i].name,
+                    }
+                    //check if the Friend already exists before adding them
+                    const friendExist = flist.some((newFriend)=> newFriend.Name === response.data[i].name);
+
+                    //if the Friend doesn't exist append them to the existing friendlist
+                    if(!friendExist){
+                    setflist((prevFlist) =>[...prevFlist,newFriend]);
+                    }
+                
+            }
+                            
+            }catch(error){
+                console.error(error);
+            }
+        }
+        const deleteFriend = async (friendName :string)=>{
+            const token = localStorage.getItem('token');
+
+            try{
+            const response = await axios.delete("http://localhost:3000/api/friends",{
+                headers: {
+                    authorization:token,
+                },
+                data:{
+                    name: friendName,
+                },
+            });
+
+                
+            }catch(error){
+                console.error(error);
+            }
+        }
+
+
     //Fügt Freund zur Liste hinzu und prüft dabei die Eingabe
     const AddFriend = async (event: any): Promise<void> => {
         event.preventDefault();
@@ -112,6 +159,7 @@ export const FriendList = () => {
             return;
         }
         setDrawer(openDrawer);
+        loadFriends();
     }
 
     return (
@@ -210,9 +258,12 @@ export const FriendList = () => {
                                                 handleDialogOpen(Titel, Content);
                                                 //Entfernt Freund aus der Freundesliste
                                                 const complete = (FriendToDelete: string): void => {
+
                                                     setflist(flist.filter((friend) => {
                                                         return friend.Name !== FriendToDelete
-                                                    }))}
+                                                    }))
+                                                    deleteFriend(FriendToDelete);
+                                                }
                                                 complete(value.Name);
                                             }}
                                         >

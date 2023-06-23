@@ -16,6 +16,6 @@ router.get("/api/friends",authenticate,friendsController.getAllFriends);
 router.post("/api/friends", authenticate, friendsController.addFriend);
 
 //delete friend
-router.delete("/api/friends/:id",authenticate,friendsController.deleteFriend);
+router.delete("/api/friends",authenticate,friendsController.deleteFriend);
 
 module.exports = router;

@@ -5,13 +5,13 @@ import { connect, FindOne, InsertOne, UpdateOne } from '../db';
 
 // Get all friends
 export const getAllFriends = async (req: Request, res: Response): Promise<void> => {
-  
   await connect();
   const userEmail = req.body.email;
   
   const user = await FindOne("test", "user", { "email": userEmail});
   try {
-    const friends: IFriend[] = await Friend.find();
+    const friends = user.friends || []; 
+    console.log(friends);
     res.json(friends);
   } catch (error) {
     console.error(error);
@@ -24,7 +24,7 @@ await connect();
 
   const userEmail = req.body.email;
   const filter= {email:userEmail};
-  console.log("test2:" + userEmail);
+
 
   const user = await FindOne("test", "user", { "email": userEmail });
   try { 
@@ -52,16 +52,25 @@ await connect();
     res.status(500).json({ message: 'Failed to add friend' });
   }
 };
+
+
 // Delete a friend
 export const deleteFriend = async (req: Request, res: Response): Promise<void> => {
 await connect();
+  const userEmail = req.body.email;
+  const friendName = req.body.name;
+  const filter= {email:userEmail};
+
+  const user = await FindOne("test", "user", { "email": userEmail });
   try {
-    const friendId = req.params.id;
-    await Friend.findByIdAndRemove(friendId);
+    const updatedFriends = {$pull: {friends: {name: friendName}}};
+    await UpdateOne("test","user",filter,updatedFriends);
+
+    
     res.json({ message: 'Friend deleted successfully' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Deleted friend' });
+    res.status(500).json({ message: 'Failed to delete friend' });
   }
 };
 

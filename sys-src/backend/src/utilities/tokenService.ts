@@ -39,16 +39,12 @@ class TokenService{
             return res.status(401).json({message: "Missing Token."});
         }
 
-        try{
-            console.log(token);
+        try{       
             //Verify the token
-            //const decoded = this.verify(token);
             const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
             //attach info about the verification of the token to the users request
-           // req.body.name = "test";
             req.body.email = decoded.info;
-            console.log("authenticate:"+req.body);
             next();
         }catch(error){
             return res.status(401).json({message:'Something went wrong while trying to authenticate token', error})

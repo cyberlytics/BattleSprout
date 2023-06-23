@@ -6,7 +6,7 @@ import TokenService from '../utilities/tokenService'
 router.post("/api/login", async function(req: any, res: any){
     connect();  
     const user = await FindOne("test", "user", {"email": req.body.email})
-    //console.log(user);
+    console.log(user)
     
     if(!user){
       console.log("Invalid Email or Password");
