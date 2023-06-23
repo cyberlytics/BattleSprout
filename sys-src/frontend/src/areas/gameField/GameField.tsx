@@ -225,9 +225,9 @@ export const GameField = () => {
                 return 'Warten auf Gegner...';
             case GameState.playing:
                 if (currentPlayer === playerId) {
-                    return 'Du bist am Zug!';
+                    return 'Du bist am Zug - werfe deine Wasserbombe auf ein Feld deines Nachbars!';
                 }
-                return 'Warten auf den Gegnerzug...';
+                return 'Vorsicht - dein Nachbar wirft eine Wasserbombe...';
             case GameState.finished:
                 return 'Spiel zu Ende!';
             default:
@@ -307,7 +307,7 @@ export const GameField = () => {
     return (
         <>
             <Typography
-                variant='h2'
+                variant='h4'
                 style={{
                     color: '#45ad45',
                     margin: 30,
