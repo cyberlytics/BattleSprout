@@ -85,6 +85,7 @@ export const Login = () => {
                             <TextField
                                 onChange={handleEmailChange}
                                 label='Email'
+                                value ={email}
                                 style={{ background: '#bbd8b1' }}
                                 disabled={loading}
                                 InputProps={{
