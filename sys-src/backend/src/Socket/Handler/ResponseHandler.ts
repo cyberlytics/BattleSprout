@@ -14,6 +14,15 @@ export const handleTurnChanged = (playerNames: string[], playerNameCurrentTurn: 
     });
 }
 
+export const handleInitGame = (playerName: string, gameID:string, gamesize: number) => {
+
+    console.log("Initialize game parameters");
+    let connection = connectionList.find(c => c.playerID == playerName);
+
+    if(!connection) return;
+    connection?.socket.emit('gameInit', gamesize);
+}
+
 
 export const handleStartGame = (playerNames: string[], gameId : string) => {
 
