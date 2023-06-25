@@ -1,6 +1,6 @@
 import { render, fireEvent } from '@testing-library/react';
-import { AddCircleOutlined } from '@mui/icons-material';
 import { MenuTile } from '../areas/mainMenu/components/MenuTile';
+import { AddCircleOutlined, GroupAdd } from '@mui/icons-material';
 
 describe('MenuTile Test', () => {
     test('renders title and content', () => {
@@ -22,7 +22,7 @@ describe('MenuTile Test', () => {
         const actionMock = jest.fn();
         const { getByRole } = render(
             <MenuTile
-                icon={AddCircleOutlined}
+                icon={GroupAdd}
                 title='Spiel beitreten'
                 content='Tritt einem Spiel bei'
                 action={actionMock}
