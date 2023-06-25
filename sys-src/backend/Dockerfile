@@ -4,6 +4,7 @@ RUN mkdir /app
 COPY . /app
 WORKDIR /app
 
+ENV SECRET_KEY="34234DJKFHASBJBS"
 
 RUN npm install
 

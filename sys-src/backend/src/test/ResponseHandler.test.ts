@@ -108,7 +108,7 @@ describe('ResponseHandler', ()=>{
         const playerNames = ['123','456','789'];
         const gameId = 'game123';
         const winner = '123';
-        const gameMock = new Game(gameId);
+        const gameMock = new Game(gameId, 10);
         
         const deleteSpy = jest.spyOn(gameMap,'delete');
 

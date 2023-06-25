@@ -16,19 +16,26 @@ services:
     ports:
       - "3000:3000"
       - "4000:4000"
+    environment:
+        - MONGO_URI=mongodb://admin:12345@mongodb:27017/test?authSource=test
     depends_on:
-      - mongodb
+        - mongodb
 
   mongodb:
     build:
       context: ./infrastructure/mongodb
+    restart: always
     ports:
-      - "3306:3306"
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root_password
     volumes:
-      - mongoDB_volume:/data/db
+      - mongodb_volume:/data/db
+
 
 volumes:
-  mongoDB_volume:
+  mongodb_volume:
 
 
 
