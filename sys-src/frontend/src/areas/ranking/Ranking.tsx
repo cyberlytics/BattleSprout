@@ -6,9 +6,10 @@ import {
     List,
     ListItem,
     ListItemText,
-    Button
+    Button,
 } from '@mui/material';
 import axios from 'axios';
+import { SERVER_URL } from '../../App';
 
 interface IRank {
     Name: string;
@@ -20,24 +21,25 @@ interface IRank {
 export const Ranking = () => {
     const [ranklist, setRanklist] = useState<IRank[]>([]);
 
-
     const fetchRanklist = async () => {
         try {
-        const response = await axios.get('http://localhost:3000/api/ranks');
-        const data = response.data;
+            const response = await axios.get(SERVER_URL + '/api/ranks');
+            const data = response.data;
 
-        const sortedRanklist = [...data].sort((a: IRank, b: IRank) => b.Points - a.Points);
+            const sortedRanklist = [...data].sort(
+                (a: IRank, b: IRank) => b.Points - a.Points
+            );
 
-        const updatedRanklist = sortedRanklist.map((item: IRank, index: number) => ({
-            Name: item.Name,
-            Points: item.Points,
-            Position: index + 1,
-        }));
-        setRanklist(updatedRanklist);
-        }
-        catch (error) 
-        {
-        console.error('Fehler beim Abrufen der Rangliste: ', error);
+            const updatedRanklist = sortedRanklist.map(
+                (item: IRank, index: number) => ({
+                    Name: item.Name,
+                    Points: item.Points,
+                    Position: index + 1,
+                })
+            );
+            setRanklist(updatedRanklist);
+        } catch (error) {
+            console.error('Fehler beim Abrufen der Rangliste: ', error);
         }
     };
 
@@ -75,33 +77,31 @@ export const Ranking = () => {
                 style={{
                     margin: 1,
                     alignItems: 'center',
-                    display: 'flex'
+                    display: 'flex',
                 }}
             >
-                <Typography 
+                <Typography
                     data-testid='Titel'
                     variant='h3'
-                    sx={{marginLeft: 3}}
+                    sx={{ marginLeft: 3 }}
                 >
                     Die Top 10 Spieler!
                 </Typography>
-                <Button onClick={fetchRanklist}> 
-                    REFRESH RANKLIST
-                </Button>
+                <Button onClick={fetchRanklist}>REFRESH RANKLIST</Button>
             </Grid>
 
-            <Divider sx={{margin: 5}}/>
+            <Divider sx={{ margin: 5 }} />
 
-            <List 
-                data-testid='Ranklist' 
-                sx={{ background: 'rgba(52,52,52,0.2)'}}
+            <List
+                data-testid='Ranklist'
+                sx={{ background: 'rgba(52,52,52,0.2)' }}
             >
                 {ranklist.map((value) => (
-                    <ListItem
-                        key={value.Points}
-                        sx={{padding: 1}}
-                    >
-                        <ListItemText primary={`PLATZ: ${value.Position} Name: ${value.Name}`} secondary={`Punkte: ${value.Points}`} />
+                    <ListItem key={value.Points} sx={{ padding: 1 }}>
+                        <ListItemText
+                            primary={`PLATZ: ${value.Position} Name: ${value.Name}`}
+                            secondary={`Punkte: ${value.Points}`}
+                        />
                     </ListItem>
                 ))}
             </List>
