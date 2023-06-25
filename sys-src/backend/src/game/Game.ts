@@ -45,8 +45,6 @@ export class Game {
 
     public joinGame(playerName: string): void {
 
-        handleInitGame(playerName, this.gameId, this.gameSize);
-
         if (this.players.length >= 2) {
             return;
         }
@@ -57,7 +55,7 @@ export class Game {
 
         this.gameState = GameState.SETUP;
 
-        
+        handleInitGame(playerName, this.gameId, this.gameSize);
 
     }
 

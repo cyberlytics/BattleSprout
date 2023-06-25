@@ -46,6 +46,7 @@ export const GameField = () => {
 
     let size = Number(location.state) || 10;
 
+
     const [plantTiles, setPlantTiles] = useState<PlantTile[]>([]);
     const [gameFieldSize, setGameFieldSize] = useState<number>(size);
     const [setupDone, setSetupDone] = useState<boolean>(false);
@@ -58,6 +59,8 @@ export const GameField = () => {
     const [usablePlants, setUsablePlants] = useState<number[]>(PlantLength);
 
     const [isSocketSetup, setIsSocketSetup] = useState<boolean>(false);
+
+    const [opponentName, setOpponentName] = useState<string>("");
 
     const [turn, setTurn] = useState<boolean>(false);
 
@@ -82,7 +85,9 @@ export const GameField = () => {
         console.log('handshake');
         const id = Math.random().toString(36);
         console.log('PlayerID ' + id);
-        socket.emit('authenticate', id);
+
+        let token = localStorage.getItem('token');
+        socket.emit('authenticate', token);
         setPlayerId(id);
 
         socket.emit('joinGame', gameId);
@@ -112,9 +117,10 @@ export const GameField = () => {
             setGameState(GameState.setup);
         })
 
-        socket.on('startGame', () => {
+        socket.on('startGame', (opponentName: string) => {
             console.log('Received Startgame');
             setGameState(GameState.playing);
+            setOpponentName(opponentName)
         });
 
         socket.on('gameOver', (winner: string) => {
@@ -294,7 +300,7 @@ export const GameField = () => {
                     <Card>
                         <CardContent>
                             <Typography variant='h4'>
-                                {'Beet von Unknown_User'}
+                                {'Beet von ' + opponentName}
                             </Typography>
                             <GridComponent
                                 gameState={gameState}

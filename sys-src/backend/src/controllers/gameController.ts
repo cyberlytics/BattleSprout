@@ -3,8 +3,6 @@ import { Game } from '../game/Game';
 import { gameMap } from '../models/GameMap';
 
 const createNewGame = (req: any, res: any) => {
-    //TODO: remove any
-    //TODO:Test if sending http request and initializing board works
 
     const { gamesize } = req.body;
     let gameSize = Number(gamesize);
