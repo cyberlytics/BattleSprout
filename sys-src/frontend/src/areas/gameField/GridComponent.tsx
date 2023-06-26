@@ -68,10 +68,8 @@ export const GridComponent = (props: IProps) => {
     }
 
     function handlePlayingCellClick(index: number) {
-        console.log('isUrTurn: ' + isUrTurn);
         if (!isUrTurn) return;
 
-        console.log('Its my turn!');
         const { x, y } = convertIndexToXY(index);
         socket.emit('setSplash', new Vector2(x, y));
     }

@@ -29,8 +29,6 @@ export const CreateGame = () => {
             if (response.data && response.data.gameId) {
                 const link = '/GameField/' + response.data.gameId;
                 navigate(link, { state: GameFieldSize });
-            } else {
-                console.log('The response does not contain a game ID.');
             }
         } catch (error) {
             console.error('An error occurred while creating the game:', error);

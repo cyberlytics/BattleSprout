@@ -87,7 +87,6 @@ const SocketContextComponent: React.FunctionComponent<
         console.info('Sending handshake to server...');
 
         socket.emit('handshake', (uid: string, users: string[]) => {
-            console.log('User handshake callback message received');
             SocketDispatch({ type: 'update_uid', payload: uid });
             SocketDispatch({ type: 'update_users', payload: users });
 
