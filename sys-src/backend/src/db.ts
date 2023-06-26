@@ -19,6 +19,7 @@ async function InsertOne(databaseName: string, collectionName: string, object: a
         return result;
     } catch (err) {
         console.error(err);
+        throw new Error('Failed to insert');
     }
 }
 
@@ -30,6 +31,7 @@ async function FindOne(databaseName: string, collectionName: string, query: any)
         return result;
     } catch (err) {
         console.error(err);
+        throw new Error('Failed to find');
     }
 }
 
@@ -39,8 +41,9 @@ async function UpdateOne(databaseName: string, collectionName: string, filter:an
         const collection: Collection<any> = db.collection(collectionName);
         const result = await collection.updateOne(filter,update);        
         return result;
-    } catch (err) {
+    } catch (err) {      
         console.error(err);
+        throw new Error('Failed to update');
     }
 }
 
