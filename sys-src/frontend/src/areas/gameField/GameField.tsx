@@ -3,6 +3,8 @@ import {
     Card,
     CardActions,
     CardContent,
+    CircularProgress,
+    Container,
     Fab,
     Grid,
     Paper,
@@ -35,14 +37,16 @@ export const GameField = () => {
     const gameId = params.id;
 
     const navigate = useNavigate();
-    console.log(gameId);
 
     const [socket] = useState(io(SOCKET_SERVER_URL));
     const [gameState, setGameState] = useState<GameState>(GameState.connecting);
     const location = useLocation();
-    console.log(location.state);
+
+    let size = Number(location.state) || 10;
+
+
     const [plantTiles, setPlantTiles] = useState<PlantTile[]>([]);
-    const [gameFieldSize, setGameFieldSize] = useState<number>(10);
+    const [gameFieldSize, setGameFieldSize] = useState<number>(size);
     const [setupDone, setSetupDone] = useState<boolean>(false);
     const [currentPlayer, setCurrentPlayer] = useState<string>("");
 
@@ -53,6 +57,8 @@ export const GameField = () => {
     const [usablePlants, setUsablePlants] = useState<number[]>(PlantLength);
 
     const [isSocketSetup, setIsSocketSetup] = useState<boolean>(false);
+
+    const [opponentName, setOpponentName] = useState<string>("");
 
     const [turn, setTurn] = useState<boolean>(false);
 
@@ -74,15 +80,13 @@ export const GameField = () => {
         setGameState(GameState.joining);
         socket.emit('handshake');
 
-        console.log('handshake');
         const id = Math.random().toString(36);
-        console.log('PlayerID ' + id);
-        socket.emit('authenticate', id);
+
+        let token = localStorage.getItem('token');
+        socket.emit('authenticate', token);
         setPlayerId(id);
 
         socket.emit('joinGame', gameId);
-
-        setGameState(GameState.setup);
 
         setPlayerId(id);
 
@@ -99,17 +103,20 @@ export const GameField = () => {
             }
         );
         socket.on('turnChanged', (playerNameOfNewTurn: string) => {
-            console.log('Received TurnChanged : ' + playerNameOfNewTurn);
             setCurrentPlayer(playerNameOfNewTurn);
         });
 
-        socket.on('startGame', () => {
-            console.log('Received Startgame');
+        socket.on('gameInit', (gameFieldSize: number) => {
+            setGameFieldSize(gameFieldSize);
+            setGameState(GameState.setup);
+        })
+
+        socket.on('startGame', (opponentName: string) => {
             setGameState(GameState.playing);
+            setOpponentName(opponentName)
         });
 
         socket.on('gameOver', (winner: string) => {
-            console.log('Received GameOver');
             handleGameOver(winner, playerId);
         });
 
@@ -133,9 +140,9 @@ export const GameField = () => {
 
         let endMessage = "";
         if(winner === playerId) {
-            endMessage = "You won!";
+            endMessage = "Du hast gewonnen!";
         }else {
-            endMessage = "You lost!";
+            endMessage = "Du hast verloren!";
         }
 
         navigate("/")
@@ -225,9 +232,9 @@ export const GameField = () => {
                 return 'Warten auf Gegner...';
             case GameState.playing:
                 if (currentPlayer === playerId) {
-                    return 'Du bist am Zug!';
+                    return 'Du bist am Zug - werfe deine Wasserbombe auf ein Feld deines Nachbars!';
                 }
-                return 'Warten auf den Gegnerzug...';
+                return 'Vorsicht - dein Nachbar wirft eine Wasserbombe...';
             case GameState.finished:
                 return 'Spiel zu Ende!';
             default:
@@ -238,13 +245,7 @@ export const GameField = () => {
     const copyGameLink = () => {
         if (gameId) {
             navigator.clipboard
-                .writeText(gameId)
-                .then(() => {
-                    console.log('Game link copied successfully!');
-                })
-                .catch((error) => {
-                    console.error('Failed to copy game link:', error);
-                });
+                .writeText(gameId)  
         }
     };
 
@@ -252,7 +253,11 @@ export const GameField = () => {
         switch (gameState) {
             case GameState.confirm:
                 return (
-                    <Button onClick={setReady} variant='contained'>
+                    <Button onClick={setReady} variant='contained'
+                        style={{
+                            marginTop: 250
+                        }}
+                    >
                         {'Bereit!'}
                     </Button>
                 );
@@ -265,7 +270,12 @@ export const GameField = () => {
                             />
                         </CardContent>
                         <CardActions>
-                            <Button onClick={setPlant} variant='contained'>
+                            <Button onClick={setPlant} variant='contained'
+                                style={{
+                                    marginLeft: 5,
+                                    marginBottom: 10
+                                }}
+                            >
                                 {'Pflanze setzen!'}
                             </Button>
                         </CardActions>
@@ -276,7 +286,7 @@ export const GameField = () => {
                     <Card>
                         <CardContent>
                             <Typography variant='h4'>
-                                {'Beet von Unknown_User'}
+                                {'Beet von ' + opponentName}
                             </Typography>
                             <GridComponent
                                 gameState={gameState}
@@ -295,10 +305,30 @@ export const GameField = () => {
         }
     }
 
+    function renderLeftContent() {
+        switch(gameState) {
+            case GameState.joining: return(<CircularProgress />);
+            default: return(<>
+            <Typography variant='h4'>{'Dein Beet'}</Typography>
+                            
+                            <GridComponent
+                                gameState={gameState}
+                                socket={socket}
+                                setupDone={setupDone}
+                                isUrTurn={currentPlayer === playerId}
+                                splashList={ourBoardSplashes}
+                                gameFieldSize={gameFieldSize}
+                                addPlantTile={addPlantTile}
+                            /></>)
+        }
+    }
+
+
+
     return (
         <>
             <Typography
-                variant='h2'
+                variant='h4'
                 style={{
                     color: '#45ad45',
                     margin: 30,
@@ -311,16 +341,7 @@ export const GameField = () => {
                 <Grid item>
                     <Card>
                         <CardContent>
-                            <Typography variant='h4'>{'Dein Beet'}</Typography>
-                            <GridComponent
-                                gameState={gameState}
-                                socket={socket}
-                                setupDone={setupDone}
-                                isUrTurn={currentPlayer === playerId}
-                                splashList={ourBoardSplashes}
-                                gameFieldSize={gameFieldSize}
-                                addPlantTile={addPlantTile}
-                            />
+                            {renderLeftContent()}
                         </CardContent>
                     </Card>
                 </Grid>

@@ -44,14 +44,17 @@ export const MainMenu = () => {
                         }}
                     />
                     <Typography
-                        variant='h4'
+                        variant='h5'
                         style={{
                             color: '#45ad45',
-                            margin: 30,
+                            marginBottom: 50,
+                            marginLeft: 'auto', 
+                            marginRight: 'auto',
+                            textAlign: 'center'
                         }}
                     >
                         {
-                            'Battleship war gestern - herzlich willkommen zu BattleSprout!'
+                            'Herzlich Willkommen zu BattleSprout - der freundlicheren Variante von BattleShips'
                         }
                     </Typography>
                 </Grid>

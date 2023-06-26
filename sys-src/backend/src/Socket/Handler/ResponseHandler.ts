@@ -14,6 +14,18 @@ export const handleTurnChanged = (playerNames: string[], playerNameCurrentTurn: 
     });
 }
 
+export const handleInitGame = (playerName: string, gameID:string, gamesize: number) => {
+
+    console.log("Initialize game parameters");
+    let connections = connectionList.filter(c => c.playerID == playerName);
+
+    if(!connections) return;
+    let connection = connections.find(c => c.gameID == gameID);
+
+    if(!connection) return;
+    connection.socket.emit('gameInit', gamesize);
+}
+
 
 export const handleStartGame = (playerNames: string[], gameId : string) => {
 
@@ -23,7 +35,8 @@ export const handleStartGame = (playerNames: string[], gameId : string) => {
     connections = connections.filter(c => c.gameID == gameId);
 
     connections.forEach(c => {
-        c.socket.emit('startGame');
+        let opponent = playerNames.filter(p => p != c.playerID)[0];
+        c.socket.emit('startGame', opponent);
     });
 }
 

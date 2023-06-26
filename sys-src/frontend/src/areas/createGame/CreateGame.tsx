@@ -24,13 +24,11 @@ export const CreateGame = () => {
 
     const createNewGame = async () => {
         try {
-            const response = await axios.post(SERVER_URL + '/newgame');
+            const response = await axios.post(SERVER_URL + '/newgame', {gamesize: GameFieldSize});
 
             if (response.data && response.data.gameId) {
                 const link = '/GameField/' + response.data.gameId;
                 navigate(link, { state: GameFieldSize });
-            } else {
-                console.log('The response does not contain a game ID.');
             }
         } catch (error) {
             console.error('An error occurred while creating the game:', error);
@@ -53,9 +51,17 @@ export const CreateGame = () => {
                 {'Spiel erstellen'}
             </Typography>
 
-            <Grid container>
+            <Grid container
+                style={{
+                    margin: 30
+                }}
+            >
                 <Grid item>
-                    <Card>
+                    <Card
+                        style={{
+                            padding: 50
+                        }}
+                    >
                         <CardContent>
                             <FormControl>
                                 <FormLabel id='radio-buttons-group-label'>

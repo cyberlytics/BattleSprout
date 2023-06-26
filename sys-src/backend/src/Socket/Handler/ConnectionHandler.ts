@@ -1,6 +1,6 @@
 import {Socket} from "socket.io";
 import {connectionList} from "../../models/ConnectionModel";
-
+import tokenService from "../../utilities/tokenService";
 
 export const handleHandshake = (socket: Socket) => {
 
@@ -8,9 +8,12 @@ export const handleHandshake = (socket: Socket) => {
     console.log('Client connected: ' + socket.id);
 }
 
-export const handleAuthenticate = (socket: Socket, playerId: string) => {
+export const handleAuthenticate = (socket: Socket, token: string) => {
 
     const connection = connectionList.find(c => c.socket.id == socket.id);
+
+    let payload = tokenService.verify(token)
+    let playerId = payload.info;
 
     if(connection){
         connection.playerID = playerId;

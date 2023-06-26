@@ -7,6 +7,7 @@ import {
     Button,
     Typography,
     InputAdornment,
+    CircularProgress,
 } from '@mui/material';
 import { AccountCircle, Lock } from '@mui/icons-material';
 import axios from 'axios';
@@ -18,6 +19,8 @@ export const Login = () => {
     const [password, setPasswort] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [checked, setChecked] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
+
     const navigate = useNavigate();
     const handleChange = (event: {
         target: { checked: boolean | ((prevState: boolean) => boolean) };
@@ -53,10 +56,15 @@ export const Login = () => {
         }
     }
 
+    async function handleLoginButtonClick() {
+        setLoading(true);
+        await CheckLoginData();
+        setLoading(false);
+    }
+
     return (
         <>
-            <Grid container spacing={2}>
-                <Grid item xs={xsValue} md={mdValue} lg={lgValue} />
+            <Grid container spacing={2} justifyContent='center'>
                 <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                     <Grid
                         container
@@ -77,7 +85,9 @@ export const Login = () => {
                             <TextField
                                 onChange={handleEmailChange}
                                 label='Email'
+                                value ={email}
                                 style={{ background: '#bbd8b1' }}
+                                disabled={loading}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
@@ -94,6 +104,7 @@ export const Login = () => {
                                 type='password'
                                 value={password}
                                 style={{ background: '#bbd8b1' }}
+                                disabled={loading}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position='start'>
@@ -110,6 +121,7 @@ export const Login = () => {
                                         checked={checked}
                                         onChange={handleChange}
                                         style={{ color: '#add0a2' }}
+                                        disabled={loading}
                                     />
                                 }
                                 label='Account merken'
@@ -117,16 +129,13 @@ export const Login = () => {
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
                             <Button
-                                onClick={CheckLoginData}
+                                onClick={handleLoginButtonClick}
                                 fullWidth
-                                style={{
-                                    background: '#bbd8b1',
-                                    color: 'black',
-                                    width: '110px',
-                                    height: '50px',
-                                }}
+                                disabled={loading}
+                                color='primary'
+                                variant='contained'
                             >
-                                Anmelden
+                                {loading ? <CircularProgress /> : 'Anmelden'}
                             </Button>
                         </Grid>
                         <Grid item xs={xsValue} md={mdValue} lg={lgValue}>
@@ -134,7 +143,8 @@ export const Login = () => {
                                 Noch kein Account? Jetzt
                                 <Button
                                     style={{ color: 'blue' }}
-                                    href='/signup'
+                                    onClick={() => navigate('/signup')}
+                                    disabled={loading}
                                 >
                                     registrieren!
                                 </Button>

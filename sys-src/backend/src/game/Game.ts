@@ -2,6 +2,7 @@ import {
     handleGameOver,
     handleSplash, handleStartGame,
     handleTurnChanged,
+    handleInitGame,
 } from '../Socket/Handler/ResponseHandler';
 import {PlantTile} from "./PlantTile";
 import {Vector2} from "./Vector2";
@@ -32,12 +33,14 @@ export class Game {
     private gameState: GameState;
 
     private gameId: string;
+    private gameSize: number;
 
-    constructor(gameId: string){
+    constructor(gameId: string, gameSize: number){
         this.players = [];
         this.currentPlayerIndex = 0;
         this.gameState = GameState.JOINING;
         this.gameId = gameId;
+        this.gameSize = gameSize;
     }
 
     public joinGame(playerName: string): void {
@@ -51,6 +54,8 @@ export class Game {
         this.players.push(new Player(playerName));
 
         this.gameState = GameState.SETUP;
+
+        handleInitGame(playerName, this.gameId, this.gameSize);
 
     }
 

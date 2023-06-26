@@ -1,6 +1,6 @@
 import { MongoClient, Collection, Db } from "mongodb";
 
-const uri: string = "mongodb://localhost:27017";
+const uri: string = process.env.MONGO_URI || "mongodb://localhost:27017";
 const client: MongoClient = new MongoClient(uri);
 
 async function connect(): Promise<void> {
@@ -19,6 +19,7 @@ async function InsertOne(databaseName: string, collectionName: string, object: a
         return result;
     } catch (err) {
         console.error(err);
+        throw new Error('Failed to insert');
     }
 }
 
@@ -30,11 +31,38 @@ async function FindOne(databaseName: string, collectionName: string, query: any)
         return result;
     } catch (err) {
         console.error(err);
+        throw new Error('Failed to find');
+    }
+}
+
+async function UpdateOne(databaseName: string, collectionName: string, filter:any , update: any): Promise<any> {
+    try {
+        const db: Db = client.db(databaseName);
+        const collection: Collection<any> = db.collection(collectionName);
+        const result = await collection.updateOne(filter,update);        
+        return result;
+    } catch (err) {      
+        console.error(err);
+        throw new Error('Failed to update');
+    }
+}
+
+async function find(databaseName: string, collectionName: string, query: any): Promise<any[]> {
+    try {
+        const db: Db = client.db(databaseName);
+        const collection: Collection<any> = db.collection(collectionName);
+        const result = await collection.find(query).toArray();
+        return result;
+    } catch (err) {
+        console.error(err);
+        throw err;
     }
 }
 
 export {
     connect,
     InsertOne,
-    FindOne
+    FindOne,
+    UpdateOne,
+    find
 };
