@@ -37,12 +37,10 @@ export const GameField = () => {
     const gameId = params.id;
 
     const navigate = useNavigate();
-    console.log(gameId);
 
     const [socket] = useState(io(SOCKET_SERVER_URL));
     const [gameState, setGameState] = useState<GameState>(GameState.connecting);
     const location = useLocation();
-    console.log("GameState: ", location.state);
 
     let size = Number(location.state) || 10;
 
@@ -82,9 +80,7 @@ export const GameField = () => {
         setGameState(GameState.joining);
         socket.emit('handshake');
 
-        console.log('handshake');
         const id = Math.random().toString(36);
-        console.log('PlayerID ' + id);
 
         let token = localStorage.getItem('token');
         socket.emit('authenticate', token);
@@ -107,24 +103,20 @@ export const GameField = () => {
             }
         );
         socket.on('turnChanged', (playerNameOfNewTurn: string) => {
-            console.log('Received TurnChanged : ' + playerNameOfNewTurn);
             setCurrentPlayer(playerNameOfNewTurn);
         });
 
         socket.on('gameInit', (gameFieldSize: number) => {
-            console.log('Player recieves game parameters', gameFieldSize);
             setGameFieldSize(gameFieldSize);
             setGameState(GameState.setup);
         })
 
         socket.on('startGame', (opponentName: string) => {
-            console.log('Received Startgame');
             setGameState(GameState.playing);
             setOpponentName(opponentName)
         });
 
         socket.on('gameOver', (winner: string) => {
-            console.log('Received GameOver');
             handleGameOver(winner, playerId);
         });
 
@@ -253,13 +245,7 @@ export const GameField = () => {
     const copyGameLink = () => {
         if (gameId) {
             navigator.clipboard
-                .writeText(gameId)
-                .then(() => {
-                    console.log('Game link copied successfully!');
-                })
-                .catch((error) => {
-                    console.error('Failed to copy game link:', error);
-                });
+                .writeText(gameId)  
         }
     };
 
