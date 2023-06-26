@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { Typography } from '@mui/material';
 import './PlantsAvailableListComponent.css';
 import { Divider, List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
 
