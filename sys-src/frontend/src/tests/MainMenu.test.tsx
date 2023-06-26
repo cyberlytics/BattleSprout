@@ -18,7 +18,7 @@ describe('MainMenu', () => {
     });
 
     test('opens and closes join game dialog', () => {
-        const { getByText, getByTestId } = render(<MainMenu />);
+        const { getByText } = render(<MainMenu />);
 
         const textContent = 'Geben Sie die Game ID zum Beitreten an:';
 
