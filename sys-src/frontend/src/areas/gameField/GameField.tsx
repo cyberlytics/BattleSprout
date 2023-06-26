@@ -3,6 +3,8 @@ import {
     Card,
     CardActions,
     CardContent,
+    CircularProgress,
+    Container,
     Fab,
     Grid,
     Paper,
@@ -40,9 +42,13 @@ export const GameField = () => {
     const [socket] = useState(io(SOCKET_SERVER_URL));
     const [gameState, setGameState] = useState<GameState>(GameState.connecting);
     const location = useLocation();
-    console.log(location.state);
+    console.log("GameState: ", location.state);
+
+    let size = Number(location.state) || 10;
+
+
     const [plantTiles, setPlantTiles] = useState<PlantTile[]>([]);
-    const [gameFieldSize, setGameFieldSize] = useState<number>(10);
+    const [gameFieldSize, setGameFieldSize] = useState<number>(size);
     const [setupDone, setSetupDone] = useState<boolean>(false);
     const [currentPlayer, setCurrentPlayer] = useState<string>("");
 
@@ -53,6 +59,8 @@ export const GameField = () => {
     const [usablePlants, setUsablePlants] = useState<number[]>(PlantLength);
 
     const [isSocketSetup, setIsSocketSetup] = useState<boolean>(false);
+
+    const [opponentName, setOpponentName] = useState<string>("");
 
     const [turn, setTurn] = useState<boolean>(false);
 
@@ -77,12 +85,12 @@ export const GameField = () => {
         console.log('handshake');
         const id = Math.random().toString(36);
         console.log('PlayerID ' + id);
-        socket.emit('authenticate', id);
+
+        let token = localStorage.getItem('token');
+        socket.emit('authenticate', token);
         setPlayerId(id);
 
         socket.emit('joinGame', gameId);
-
-        setGameState(GameState.setup);
 
         setPlayerId(id);
 
@@ -103,9 +111,16 @@ export const GameField = () => {
             setCurrentPlayer(playerNameOfNewTurn);
         });
 
-        socket.on('startGame', () => {
+        socket.on('gameInit', (gameFieldSize: number) => {
+            console.log('Player recieves game parameters', gameFieldSize);
+            setGameFieldSize(gameFieldSize);
+            setGameState(GameState.setup);
+        })
+
+        socket.on('startGame', (opponentName: string) => {
             console.log('Received Startgame');
             setGameState(GameState.playing);
+            setOpponentName(opponentName)
         });
 
         socket.on('gameOver', (winner: string) => {
@@ -285,7 +300,7 @@ export const GameField = () => {
                     <Card>
                         <CardContent>
                             <Typography variant='h4'>
-                                {'Beet von Unknown_User'}
+                                {'Beet von ' + opponentName}
                             </Typography>
                             <GridComponent
                                 gameState={gameState}
@@ -304,6 +319,26 @@ export const GameField = () => {
         }
     }
 
+    function renderLeftContent() {
+        switch(gameState) {
+            case GameState.joining: return(<CircularProgress />);
+            default: return(<>
+            <Typography variant='h4'>{'Dein Beet'}</Typography>
+                            
+                            <GridComponent
+                                gameState={gameState}
+                                socket={socket}
+                                setupDone={setupDone}
+                                isUrTurn={currentPlayer === playerId}
+                                splashList={ourBoardSplashes}
+                                gameFieldSize={gameFieldSize}
+                                addPlantTile={addPlantTile}
+                            /></>)
+        }
+    }
+
+
+
     return (
         <>
             <Typography
@@ -320,16 +355,7 @@ export const GameField = () => {
                 <Grid item>
                     <Card>
                         <CardContent>
-                            <Typography variant='h4'>{'Dein Beet'}</Typography>
-                            <GridComponent
-                                gameState={gameState}
-                                socket={socket}
-                                setupDone={setupDone}
-                                isUrTurn={currentPlayer === playerId}
-                                splashList={ourBoardSplashes}
-                                gameFieldSize={gameFieldSize}
-                                addPlantTile={addPlantTile}
-                            />
+                            {renderLeftContent()}
                         </CardContent>
                     </Card>
                 </Grid>

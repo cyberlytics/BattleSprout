@@ -24,7 +24,7 @@ export const CreateGame = () => {
 
     const createNewGame = async () => {
         try {
-            const response = await axios.post(SERVER_URL + '/newgame');
+            const response = await axios.post(SERVER_URL + '/newgame', {gamesize: GameFieldSize});
 
             if (response.data && response.data.gameId) {
                 const link = '/GameField/' + response.data.gameId;

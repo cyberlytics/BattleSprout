@@ -16,8 +16,7 @@ Danach könnt ihr mit folgendem Befehl ein Docker Volumen erstellen.
 docker volume create mongoDB_volume
 ```
 
-Dieses Docker Volumen ist eine Art mobiler Speicher und wird später von der Datenbank benutzt
-um die Daten persitent zu speichern.
+Dieses Docker Volumen ist eine Art mobiler Speicher und wird später von der Datenbank benutzt, um die Daten persitent zu speichern.
 
 
 ### Docker Image erstellen

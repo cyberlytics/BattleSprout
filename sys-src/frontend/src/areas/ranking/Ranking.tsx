@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Grid,
     Typography,
@@ -6,56 +6,67 @@ import {
     List,
     ListItem,
     ListItemText,
-    Button
+    Button,
 } from '@mui/material';
+import axios from 'axios';
+import { SERVER_URL } from '../../App';
 
 interface IRank {
     Name: string;
     Points: number;
+    Position: number;
 }
 
 //Rangliste
 export const Ranking = () => {
     const [ranklist, setRanklist] = useState<IRank[]>([]);
-    //Maximale Listenlänge
-    const MAX_Length = 10;
 
-    //ToDo: Richtige Namen/ScorePoint Werte übergeben
-    const score = Math.random();
-    const Username = 'Max Mustermann';
+    const fetchRanklist = async () => {
+        try {
+            const response = await axios.get(SERVER_URL + '/api/ranks');
+            const data = response.data;
 
-    //test-button um Liste zu füllen
-    const Add = (event: any): void => {
-        //Wenn die Liste voll ist wird geprüft, ob der neue Score-Wert höher als der letztplazierte Score ist
-        //Wenn ja -> letztplazierter wird entfernt und der Highscore des neuen Users wird eingetragen
-        if(ranklist.length === MAX_Length){
-            var lowest = Number.POSITIVE_INFINITY;
-            var tmp;
-            for (var i=ranklist.length-1; i>=0; i--){
-                tmp = ranklist[i].Points;
-                if(tmp<lowest)lowest = tmp;
-            }
-            if(score>lowest){
-                ranklist.pop();
-                const newScore = {Name: Username ,Points: score};
-                setRanklist([...ranklist,newScore]);
-            }
-        }else{
-            //Neuer Listen-Eintrag
-            const newScore = {Name: Username,Points: score};
-            setRanklist([...ranklist,newScore]);
+            const sortedRanklist = [...data].sort(
+                (a: IRank, b: IRank) => b.Points - a.Points
+            );
+
+            const updatedRanklist = sortedRanklist.map(
+                (item: IRank, index: number) => ({
+                    Name: item.Name,
+                    Points: item.Points,
+                    Position: index + 1,
+                })
+            );
+            setRanklist(updatedRanklist);
+        } catch (error) {
+            console.error('Fehler beim Abrufen der Rangliste: ', error);
         }
-    }
+    };
 
-    //Vergleicht ScorePoints und sortiert die Liste
-    ranklist.sort((a: {Points: number},b: {Points: number}) =>{
-        return compareScore(a,b);
-    });
+    useEffect(() => {
+        fetchRanklist();
+    }, []);
 
-    //Score vergleich Funktion
-    function compareScore(a: {Points: number},b: {Points: number}): number {
-        return(a.Points > b.Points ? -1 : 1);
-    }
+    //const Add = async (): Promise<void> => {
+    //Wenn die Liste voll ist wird geprüft, wird der letztplazierter entfernt und der Highscore des neuen Users wird eingetragen
+    //  const newRank: IRank = { Name: Username, Points: score, Position: 0 };
+
+    //  setRanklist((prevRanklist) => {
+    //    const updatedRanklist = [...prevRanklist, newRank];
+
+    //    updatedRanklist.sort((a, b) => b.Points - a.Points);
+
+    //    updatedRanklist.forEach((item, index) => {
+    //      item.Position = index + 1;
+    //    });
+
+    //    if (updatedRanklist.length > MAX_Length) {
+    //      updatedRanklist.splice(MAX_Length);
+    //    }
+
+    //    return updatedRanklist;
+    //  });
+    //};
 
     return (
         <>
@@ -66,33 +77,31 @@ export const Ranking = () => {
                 style={{
                     margin: 1,
                     alignItems: 'center',
-                    display: 'flex'
+                    display: 'flex',
                 }}
             >
-                <Typography 
+                <Typography
                     data-testid='Titel'
                     variant='h3'
-                    sx={{marginLeft: 3}}
+                    sx={{ marginLeft: 3 }}
                 >
                     Die Top 10 Spieler!
                 </Typography>
-                <Button onClick={Add}> 
-                    CLICK
-                </Button>
+                <Button onClick={fetchRanklist}>REFRESH RANKLIST</Button>
             </Grid>
 
-            <Divider sx={{margin: 5}}/>
+            <Divider sx={{ margin: 5 }} />
 
-            <List 
-                data-testid='Ranklist' 
-                sx={{ background: 'rgba(52,52,52,0.2)'}}
+            <List
+                data-testid='Ranklist'
+                sx={{ background: 'rgba(52,52,52,0.2)' }}
             >
                 {ranklist.map((value) => (
-                    <ListItem
-                        key={value.Name}
-                        sx={{padding: 1}}
-                    >
-                        <ListItemText primary={`Name: ${value.Name}`} secondary={`Punkte: ${value.Points}`} />
+                    <ListItem key={value.Points} sx={{ padding: 1 }}>
+                        <ListItemText
+                            primary={`PLATZ: ${value.Position} Name: ${value.Name}`}
+                            secondary={`Punkte: ${value.Points}`}
+                        />
                     </ListItem>
                 ))}
             </List>

@@ -10,8 +10,8 @@ import {Vector2} from "../game/Vector2";
 
 export const baseListener = (socket: Socket) => {
     socket.on('handshake', () => handleHandshake(socket));
-    socket.on('authenticate', (playerId: string) => {
-        handleAuthenticate(socket, playerId);
+    socket.on('authenticate', (token: string) => {
+        handleAuthenticate(socket, token);
     });
     socket.on('joinGame', (gameID: string) => {
         handleJoinGame(socket, gameID);

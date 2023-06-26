@@ -1,6 +1,6 @@
 import { MongoClient, Collection, Db } from "mongodb";
 
-const uri: string = "mongodb://127.0.0.1:27017";
+const uri: string = process.env.MONGO_URI || "mongodb://localhost:27017";
 const client: MongoClient = new MongoClient(uri);
 
 async function connect(): Promise<void> {
@@ -47,9 +47,22 @@ async function UpdateOne(databaseName: string, collectionName: string, filter:an
     }
 }
 
+async function find(databaseName: string, collectionName: string, query: any): Promise<any[]> {
+    try {
+        const db: Db = client.db(databaseName);
+        const collection: Collection<any> = db.collection(collectionName);
+        const result = await collection.find(query).toArray();
+        return result;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
+
 export {
     connect,
     InsertOne,
     FindOne,
-    UpdateOne
+    UpdateOne,
+    find
 };
