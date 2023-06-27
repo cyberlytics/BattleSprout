@@ -17,7 +17,7 @@ router.post("/api/login", async function(req: any, res: any){
         return res.status(401).send({message: "Wrong Password"});}
         
     let token = tokenService.generateAuthToken(req.body.email);   
-    res.status(200).send({data: token, message: "You are now logged in"});
+    res.status(200).send({data: { token: token , user: req.body.email }, message: "You are now logged in"});
 });
 
 

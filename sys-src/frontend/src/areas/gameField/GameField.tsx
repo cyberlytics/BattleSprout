@@ -80,17 +80,18 @@ export const GameField = () => {
         setGameState(GameState.joining);
         socket.emit('handshake');
 
-        const id = Math.random().toString(36);
+
 
         let token = localStorage.getItem('token');
         socket.emit('authenticate', token);
-        setPlayerId(id);
+
+        let user = localStorage.getItem('user');
+        setPlayerId(user!);
 
         socket.emit('joinGame', gameId);
 
-        setPlayerId(id);
 
-        registerSocketEvents(id);
+        registerSocketEvents(user!);
 
         setIsSocketSetup(true);
     }

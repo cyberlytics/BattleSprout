@@ -48,7 +48,8 @@ export const Login = () => {
         try {
             const url = SERVER_URL + '/api/login';
             const { data: res } = await axios.post(url, { email, password });
-            localStorage.setItem('token', res.data);
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('user', res.data.user);
             navigate('/');
             window.location.reload();
         } catch (error) {
